@@ -1,0 +1,7 @@
+dist
+coverage
+package-lock.json
+src/ui/routeTree.gen.ts
+
+# Prose: formatting is the author's, and re-padded tables only add diff noise.
+*.md

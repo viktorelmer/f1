@@ -1,0 +1,120 @@
+{
+  "app": {
+    "title": "F1 Manager"
+  },
+  "nav": {
+    "label": "Sections",
+    "sections": {
+      "hq": "HQ",
+      "car": "Car",
+      "weekend": "Weekend",
+      "people": "People",
+      "team": "Team",
+      "money": "Finance",
+      "media": "Media",
+      "championship": "Championship"
+    },
+    "tabs": {
+      "hq": {
+        "overview": "Overview"
+      },
+      "car": {
+        "specs": "Characteristics",
+        "development": "Development",
+        "upgrades": "Upgrades",
+        "philosophy": "Philosophy",
+        "reliability": "Reliability"
+      },
+      "weekend": {
+        "schedule": "Schedule",
+        "setup": "Setup",
+        "programmes": "Run programmes",
+        "strategy": "Strategy",
+        "race": "Race"
+      },
+      "people": {
+        "drivers": "Drivers",
+        "staff": "Staff",
+        "academy": "Academy",
+        "market": "Market",
+        "contracts": "Contracts"
+      },
+      "team": {
+        "departments": "Departments",
+        "infrastructure": "Infrastructure",
+        "morale": "Morale"
+      },
+      "money": {
+        "budget": "Budget",
+        "cost-cap": "Cost cap",
+        "sponsors": "Sponsors",
+        "forecast": "Forecast"
+      },
+      "media": {
+        "press": "Press",
+        "social": "Social media",
+        "reputation": "Reputation",
+        "crises": "Crises"
+      },
+      "championship": {
+        "standings": "Standings",
+        "calendar": "Calendar",
+        "rivals": "Rivals",
+        "regulations": "Regulations",
+        "history": "History"
+      }
+    },
+    "components": "Components",
+    "language": "Language"
+  },
+  "topBar": {
+    "date": "Date",
+    "nextEvent": "Next event",
+    "inDays_one": "in {{count}} day",
+    "inDays_other": "in {{count}} days",
+    "budget": "Budget",
+    "constructors": "Constructors",
+    "continue": "Continue"
+  },
+  "placeholder": {
+    "body": "This screen is empty for now. It will be filled in by the milestone that implements its system."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to HQ"
+  },
+  "demo": {
+    "title": "Components",
+    "intro": "Interface primitives, tokens and fonts. Every screen is built from these.",
+    "buttons": "Buttons",
+    "variants": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "ghost": "Ghost",
+      "danger": "Danger",
+      "disabled": "Disabled"
+    },
+    "table": "Table",
+    "tableCaption": "Lap times (mock data)",
+    "columns": {
+      "position": "Pos",
+      "driver": "Driver",
+      "team": "Team",
+      "lapTime": "Last lap",
+      "gap": "Gap",
+      "tyre": "Tyre"
+    },
+    "overlays": "Tooltip and dialog",
+    "tooltipTrigger": "Hover or focus me",
+    "tooltipContent": "Tooltips explain; they never hold the only copy of important data.",
+    "dialogTrigger": "Open dialog",
+    "dialogTitle": "Confirm pit stop",
+    "dialogDescription": "Call the driver in this lap and fit mediums?",
+    "dialogConfirm": "Box",
+    "dialogCancel": "Cancel",
+    "palette": "Palette",
+    "accent": "Team accent",
+    "typography": "Typography",
+    "typeSample": "Pit wall and engineering telemetry"
+  }
+}

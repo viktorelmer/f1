@@ -1,5 +1,12 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
 # IDE
 .idea/
+.DS_Store
 
 # Claude Code: personal, machine-local settings
 .claude/settings.local.json

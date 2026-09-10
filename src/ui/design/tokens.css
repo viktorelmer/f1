@@ -1,0 +1,95 @@
+/*
+ * Design tokens (plan section 6.1, finalised in M0 — see docs/systems/app-shell.md).
+ * Tokens live in Tailwind's theme namespaces, so each one is both a CSS variable
+ * (--color-panel) and a utility (bg-panel, text-lo, border-line).
+ *
+ * `static` emits every variable, used or not: SVG, charts and inline styles read tokens through
+ * var(), which Tailwind cannot see. Colour names must not collide with text sizes (2xs…xl, base):
+ * `text-base` would be ambiguous — which is why the ground colour is `ground`, not `base`.
+ */
+@import 'tailwindcss';
+
+@theme static {
+  /* Only our palette exists: Tailwind's default colours are switched off. */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Surfaces: deep blue-graphite, never pure black. */
+  --color-ground: #0c0f14;
+  --color-panel: #141922;
+  --color-raised: #1c2330;
+  --color-line: #2a3341;
+  --color-line-strong: #3a4557;
+  --color-overlay: rgb(6 8 11 / 0.72);
+
+  /* Text. */
+  --color-hi: #e8edf5;
+  --color-lo: #8593a8;
+
+  /* Player team colour. Neutral until a career starts; set at runtime by applyAccent(). */
+  --color-accent: #5b7fb8;
+  --color-accent-fg: #e8edf5;
+
+  /* Meaning. */
+  --color-positive: #34d399;
+  --color-negative: #f04e4e;
+
+  /* Tyre compounds. */
+  --color-tyre-soft: #e5342e;
+  --color-tyre-medium: #f2c438;
+  --color-tyre-hard: #f0f0f0;
+  --color-tyre-inter: #43b02a;
+  --color-tyre-wet: #1e6fd9;
+
+  /* Typography: condensed grotesque for the interface, tabular mono for every number. */
+  --font-sans: 'Roboto Condensed Variable', 'Roboto Condensed', 'Arial Narrow', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  --text-2xs: 11px;
+  --text-2xs--line-height: 16px;
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 13px;
+  --text-sm--line-height: 20px;
+  --text-base: 14px;
+  --text-base--line-height: 20px;
+  --text-lg: 16px;
+  --text-lg--line-height: 24px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+
+  /* Rounding is small and only where it means something. */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /* Dense layout: a table row is 28px on the 4px grid (spacing step stays Tailwind's 0.25rem). */
+  --spacing-row: 28px;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background: var(--color-ground);
+    color: var(--color-hi);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The focus ring is always light: a dark team accent would vanish on the dark ground. */
+  :focus-visible {
+    outline: 1px solid var(--color-hi);
+    outline-offset: 2px;
+  }
+}

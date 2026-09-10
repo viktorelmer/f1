@@ -1,0 +1,122 @@
+{
+  "app": {
+    "title": "F1 Manager"
+  },
+  "nav": {
+    "label": "Разделы",
+    "sections": {
+      "hq": "Штаб",
+      "car": "Болид",
+      "weekend": "Уик-энд",
+      "people": "Люди",
+      "team": "Команда",
+      "money": "Деньги",
+      "media": "Медиа",
+      "championship": "Чемпионат"
+    },
+    "tabs": {
+      "hq": {
+        "overview": "Обзор"
+      },
+      "car": {
+        "specs": "Характеристики",
+        "development": "Разработка",
+        "upgrades": "Апгрейды",
+        "philosophy": "Философия",
+        "reliability": "Надёжность"
+      },
+      "weekend": {
+        "schedule": "Расписание",
+        "setup": "Сетап",
+        "programmes": "Программы заездов",
+        "strategy": "Стратегия",
+        "race": "Гонка"
+      },
+      "people": {
+        "drivers": "Пилоты",
+        "staff": "Персонал",
+        "academy": "Академия",
+        "market": "Рынок",
+        "contracts": "Контракты"
+      },
+      "team": {
+        "departments": "Департаменты",
+        "infrastructure": "Инфраструктура",
+        "morale": "Мораль"
+      },
+      "money": {
+        "budget": "Бюджет",
+        "cost-cap": "Бюджетный потолок",
+        "sponsors": "Спонсоры",
+        "forecast": "Прогноз"
+      },
+      "media": {
+        "press": "Пресса",
+        "social": "Соцсети",
+        "reputation": "Репутация",
+        "crises": "Кризисы"
+      },
+      "championship": {
+        "standings": "Таблицы",
+        "calendar": "Календарь",
+        "rivals": "Соперники",
+        "regulations": "Регламент",
+        "history": "История"
+      }
+    },
+    "components": "Компоненты",
+    "language": "Язык"
+  },
+  "topBar": {
+    "date": "Дата",
+    "nextEvent": "Следующее событие",
+    "inDays_one": "через {{count}} день",
+    "inDays_few": "через {{count}} дня",
+    "inDays_many": "через {{count}} дней",
+    "inDays_other": "через {{count}} дня",
+    "budget": "Бюджет",
+    "constructors": "Кубок конструкторов",
+    "continue": "Продолжить"
+  },
+  "placeholder": {
+    "body": "Экран пока пуст. Его наполнит веха, в которой появится соответствующая система."
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "back": "Вернуться в штаб"
+  },
+  "demo": {
+    "title": "Компоненты",
+    "intro": "Примитивы интерфейса, токены и шрифты. Из них собирается каждый экран.",
+    "buttons": "Кнопки",
+    "variants": {
+      "primary": "Основная",
+      "secondary": "Обычная",
+      "ghost": "Тихая",
+      "danger": "Опасная",
+      "disabled": "Неактивная"
+    },
+    "table": "Таблица",
+    "tableCaption": "Времена кругов (моковые данные)",
+    "columns": {
+      "position": "Поз",
+      "driver": "Пилот",
+      "team": "Команда",
+      "lapTime": "Круг",
+      "gap": "Разрыв",
+      "tyre": "Шины"
+    },
+    "overlays": "Подсказка и диалог",
+    "tooltipTrigger": "Наведи или сфокусируй",
+    "tooltipContent": "Подсказка объясняет, но никогда не хранит единственную копию важных данных.",
+    "dialogTrigger": "Открыть диалог",
+    "dialogTitle": "Подтвердить пит-стоп",
+    "dialogDescription": "Позвать пилота в боксы на этом круге и поставить средние шины?",
+    "dialogConfirm": "В боксы",
+    "dialogCancel": "Отмена",
+    "palette": "Палитра",
+    "accent": "Цвет команды",
+    "typography": "Типографика",
+    "typeSample": "Пит-уолл и инженерная телеметрия"
+  }
+}
