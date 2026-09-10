@@ -1,0 +1,99 @@
+{
+  "entryFeeM": 200,
+  "depositM": 40,
+  "chassis": {
+    "frontWing": 68,
+    "rearWing": 68,
+    "floor": 66,
+    "sidepods": 69,
+    "suspension": 68,
+    "brakes": 70,
+    "gearbox": 70
+  },
+  "facilities": {
+    "windTunnel": 0,
+    "cfdCluster": 0,
+    "simulator": 0,
+    "compositesShop": 0,
+    "dynoBench": 0,
+    "medicalCentre": 0,
+    "headquarters": 0,
+    "marketingSuite": 0
+  },
+  "departments": {
+    "aerodynamics": {
+      "headcount": 35,
+      "quality": 52
+    },
+    "design": {
+      "headcount": 43,
+      "quality": 52
+    },
+    "production": {
+      "headcount": 95,
+      "quality": 52
+    },
+    "vehicleDynamics": {
+      "headcount": 15,
+      "quality": 52
+    },
+    "raceTeam": {
+      "headcount": 19,
+      "quality": 52
+    },
+    "dataAnalysis": {
+      "headcount": 11,
+      "quality": 52
+    },
+    "marketing": {
+      "headcount": 13,
+      "quality": 52
+    },
+    "commercial": {
+      "headcount": 8,
+      "quality": 52
+    }
+  },
+  "startingStaff": [
+    {
+      "staffId": "marta-dominguez",
+      "salaryM": 3.5,
+      "untilSeason": 2028
+    },
+    {
+      "staffId": "rachel-wainwright",
+      "salaryM": 0.35,
+      "untilSeason": 2028
+    },
+    {
+      "staffId": "andrew-holloway",
+      "salaryM": 0.35,
+      "untilSeason": 2028
+    },
+    {
+      "staffId": "emily-ashworth",
+      "salaryM": 0.3,
+      "untilSeason": 2028
+    },
+    {
+      "staffId": "james-thornton",
+      "salaryM": 0.3,
+      "untilSeason": 2028
+    },
+    {
+      "staffId": "charlotte-dunmore",
+      "salaryM": 0.6,
+      "untilSeason": 2028
+    }
+  ],
+  "character": {
+    "developmentAggression": 0.5,
+    "riskAppetite": 0.5,
+    "youthFocus": 0.5,
+    "spendingEfficiency": 0.7,
+    "sandbagging": 0
+  },
+  "hiddenRanges": {
+    "correlationBias": [-0.25, 0.05]
+  }
+}

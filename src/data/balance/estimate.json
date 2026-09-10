@@ -1,0 +1,40 @@
+{
+  "intervalZ": {
+    "value": 1.2816,
+    "why": "z-score of a two-sided 80% interval: an honest observer's range contains the truth four times in five. Wide enough to be useful, narrow enough that a miss happens and is felt."
+  },
+  "confidenceLabels": {
+    "medium": {
+      "value": 0.4,
+      "why": "Confidence at or above this reads 'medium'. Below it the interval spans well over half of what the observer would call 'knowing nothing'."
+    },
+    "high": {
+      "value": 0.75,
+      "why": "Confidence at or above this reads 'high': the interval is under a quarter of the know-nothing width."
+    }
+  },
+  "quantities": {
+    "driver.potential": {
+      "value": {
+        "min": 1,
+        "max": 100,
+        "wideSd": 15
+      },
+      "why": "Potential uses the 1..100 attribute scale. An sd of 15 points means the observer cannot tell a midfield driver from a future champion, so confidence is zero there."
+    }
+  },
+  "scouting": {
+    "potentialSdAtSkill1": {
+      "value": 12,
+      "why": "The weakest scout's first read on potential: an 80% interval about ±15 points wide. Close to guessing, but not quite."
+    },
+    "potentialSdAtSkill100": {
+      "value": 3,
+      "why": "The best scout's first read: about ±4 points. Still an estimate — only working with the driver narrows it further (plan 4.1)."
+    },
+    "ownDriverSdFactor": {
+      "value": 0.6,
+      "why": "A team reads its own contracted drivers better than rivals do: a season of working together (plan 4.1) cuts the spread of the first estimate to 60%."
+    }
+  }
+}

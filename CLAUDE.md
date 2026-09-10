@@ -6,29 +6,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `f1-manager-plan.md` (Russian, ~790 lines) is the full design and development spec for a browser-based Formula 1 team-manager game. The plan is the source of truth: read the relevant section before implementing anything, and treat section 10 ("Зафиксированные решения") as fixed — those decisions change only via a new ADR, not by inference during implementation.
 
-Work proceeds strictly milestone by milestone (M0 → M12, section 7). Do not start the next milestone until the current one passes its Definition of Done. The user's typical task framing is "implement milestone MN from the plan" (the `/milestone` skill). Progress is recorded in `docs/CHANGELOG.md`; **M0 (scaffold) is done** — see `docs/adr/001-m0-scaffold.md`. All docs (`docs/`) are written in Russian.
+Work proceeds strictly milestone by milestone (M0 → M12, section 7). Do not start the next milestone until the current one passes its Definition of Done. The user's typical task framing is "implement milestone MN from the plan" (the `/milestone` skill). Progress is recorded in `docs/CHANGELOG.md`; **M0 (scaffold) and M1 (domain and content) are done** — see `docs/adr/001-m0-scaffold.md` and `docs/adr/002-m1-domain-and-content.md`. All docs (`docs/`) are written in Russian.
 
 ## Non-negotiable invariants
 
 These come from plan section 0 and are the reason the architecture looks the way it does. Violating any of them silently breaks tests, replays, and balancing.
 
-1. **`src/sim/` is pure TypeScript.** No React imports, no `Math.random()`, and no JS `Date` at all — not even deterministic `Date.UTC`; the game calendar is `GameDate` (`src/sim/types/game-date.ts`), an integer day count since 1970-01-01 (ADR 001). Only the passed-in seed and the passed-in game time. Enforced three ways: `.claude/hooks/check-sim-purity.sh` on every edit, ESLint layering rules (tested in `tests/eslint-layers.test.ts`), and `tsconfig.sim.json`, which type-checks `src/sim/` without DOM types.
-2. **Determinism.** One seed per playthrough, with *named substreams* (`rng('race:2027:monza:incidents')`) so adding a new system never shifts randomness in existing ones. `simulateRace(input: RaceInput): RaceResult` is a pure function — same input, byte-identical output.
-3. **`Estimate<T>` is the only way uncertainty reaches the player** (section 4.1). Truth lives in world state; estimates are produced by `observe(truth, precision, rng)` and narrowed by `refine(prior, observation)`. Truth must never be embedded in an `Estimate`. Precision has two independent parts: *spread* (interval width) and *bias* (systematic error, never displayed). Estimates are computed at defined moments (session end, day tick, R&D stage) and **stored in state** — never recomputed on render.
-4. **One `decide()` contract for player delegates and rival-team AI** (section 5.19): `decide<TContext, TDecision>(context, competence, intent, rng)`. There is no separate "AI logic" — rivals call the same function with their staff's parameters. Fixed in M1, before the first decision-making system.
-5. **Balance constants live in `src/data/balance/*.json`**, each value commented — never hardcoded in logic.
-6. **Content is data, not code.** Tracks, teams, drivers, car parts load from JSON packs validated by Zod, so players can substitute their own. The default pack is fictional (recognizable archetypes, not real names); no realistic/licensed pack goes in the repo.
-7. **A design-note in `docs/systems/` precedes any large system.** Every milestone ends with Vitest tests, a short `docs/adr/NNN-*.md`, and a `docs/CHANGELOG.md` update.
-8. **UI screens are built against mock data first** (`src/ui/mocks/`), then wired to state. All uncertain values render through the single `Estimate` display component (section 6.6) — including in demo copy: never write an interval like "21–23 s" as plain text.
+1. **`src/sim/` is pure TypeScript.** No React imports, no `Math.random()`, and no JS `Date` at all — not even deterministic `Date.UTC`; the game calendar is `GameDate` (`src/sim/types/game-date.ts`), an integer day count since 1970-01-01 (ADR 001). Only the passed-in seed and the passed-in game time. Enforced three ways: `.claude/hooks/check-sim-purity.sh` on every edit, ESLint layering rules (tested in `tests/eslint-layers.test.ts`), and `tsconfig.sim.json`, which type-checks `src/sim/` without DOM types — so host APIs like `structuredClone` are unavailable too (use `src/sim/util/clone.ts`). `src/data/` is imported by the sim and carries the same import restrictions.
+2. **Determinism.** One seed per playthrough; every process draws from its own *named stream*: `streams(world.seed)('race:2027:r05:incidents')` (`src/sim/rng/rng.ts`, xoshiro128**). Streams are derived afresh from (seed, name) and never saved. **Build stream names from ids and dates, never from array indices or iteration order** — that is what keeps a new pack entry or a new system from shifting anyone else's randomness. `simulateRace(input: RaceInput): RaceResult` is a pure function — same input, byte-identical output. Every new seeded process gets a determinism test pinned to a `fingerprint()` hash (`src/sim/util/hash.ts`).
+3. **`Estimate<T>` is the only way uncertainty reaches the player** (section 4.1, `src/sim/knowledge/estimate.ts`). Truth lives in world state; estimates come from `observe(truth, precision, rng, context)` and are narrowed by `refine(prior, measure(...))`. Truth and bias never enter an `Estimate` — only `measure()` touches them. Precision has two independent parts: *spread* (`sd`, interval width) and *bias* (systematic error, never displayed). Estimates are computed at defined moments (session end, day tick, R&D stage) and **stored in state** — never recomputed on render. Each team, AI included, has its own estimates in `world.knowledge[teamId]`; the AI decides on those, never on the truth.
+4. **One `decide()` contract for player delegates and rival-team AI** (section 5.19, `src/sim/decide/decide.ts`): `(context, competence: DecisionMakerProfile, intent: Intent<Goal>, rng) => Decision<T>`, where `Decision` carries the choice *and* every option considered with its perceived score and reasons. Systems implement it on top of the shared `chooseByScore()`; there is no separate "AI logic" — rivals pass their staff's profile and their team character as intent.
+5. **Balance constants live in `src/data/balance/*.json`**, every value written as `{ "value": …, "why": "…" }` — the loader (`src/data/balance/index.ts`) rejects a value without a real comment. Logic reads `balance.<file>.<key>`; never hardcode a tunable number.
+6. **Content is data, not code.** Tracks, teams, drivers, staff, engines, regulations and calendars load from JSON packs validated by `parsePack()` (`src/data/schema/pack.ts`), so players can substitute their own; pack types are inferred from the Zod schemas. The default pack is fictional (recognizable archetypes, not real names or brands; Latin script only); no realistic/licensed pack goes in the repo. Track geometry is real (bacinger/f1-circuits, MIT) and generated by `npm run pack:geometry`.
+7. **Hidden truth lives only in `world.hidden`**, seed-derived knowledge only in `world.knowledge` (ADR 002). The UI gets the world without `hidden`. Everything else in a freshly created world must be identical for every seed — a test compares it byte for byte.
+8. **A design-note in `docs/systems/` precedes any large system.** Every milestone ends with Vitest tests, a short `docs/adr/NNN-*.md`, and a `docs/CHANGELOG.md` update.
+9. **UI screens are built against mock data first** (`src/ui/mocks/`), then wired to state. All uncertain values render through the single `Estimate` display component (section 6.6) — including in demo copy: never write an interval like "21–23 s" as plain text.
 
 ## Architecture
 
-Stack (section 3.1): React 19 + TS strict, Vite, Zustand + Immer, TanStack Router, Tailwind + CSS variables, Radix primitives, D3-scale/shape with hand-rolled SVG (no d3-selection), Recharts, Motion, Comlink + Web Worker, Dexie (IndexedDB saves), seedrandom or a custom PCG32, Zod, Vitest + Testing Library. No backend, no online play in v1; desktop-first (min 1280×800); ru + en via i18n from day one. Libraries are installed in the milestone that first needs them — as of M0 Zustand, Comlink, Dexie, Zod, D3, Recharts and Motion are not yet installed. TypeScript is pinned to 6.0 because typescript-eslint does not support 7.x yet.
+Stack (section 3.1): React 19 + TS strict, Vite, Zustand + Immer, TanStack Router, Tailwind + CSS variables, Radix primitives, D3-scale/shape with hand-rolled SVG (no d3-selection), Recharts, Motion, Comlink + Web Worker, Dexie (IndexedDB saves), an own xoshiro128** RNG, Zod 4, Vitest + Testing Library. No backend, no online play in v1; desktop-first (min 1280×800); ru + en via i18n from day one. Libraries are installed in the milestone that first needs them — as of M1 Zustand, Comlink, Dexie, D3, Recharts and Motion are not yet installed. TypeScript is pinned to 6.0 because typescript-eslint does not support 7.x yet.
 
-Layering (section 3.2) — the dependency direction is one-way, `sim` ← `app` ← `ui`; import through the `@/` alias (`@/sim/...`):
+Layering (section 3.2) — the dependency direction is one-way, `sim` ← `app` ← `ui` (with `data` below `sim`); import through the `@/` alias (`@/sim/...`):
 
-- `src/sim/` — engine, race, season, car, people, finance, media, ai, rng, types. The whole game runs here, headless.
-- `src/data/` — `packs/default/`, `balance/`, `schema/` (Zod).
+- `src/sim/` — engine, race, season, car, people, finance, media, ai, rng, types, plus `knowledge/` (estimates), `decide/` (decision contract, delegation), `world/` (`createWorld`, `checkWorld`, hidden values, initial knowledge) and `util/` (hash, clone). The whole game runs here, headless. `types/world.ts` holds the domain model (`World` and every entity).
+- `src/data/` — `packs/default/` (JSON content; `loadDefaultPack()`), `balance/` (`{value, why}` JSON + loader), `schema/` (Zod: `pack.ts`, `balance.ts`).
 - `src/app/` — Zustand slices, the Web Worker wrapper, save serialization + version migrations. This is the only bridge between sim and UI.
 - `src/ui/` — `design/` tokens (`tokens.css`) and primitives (Button, Panel, Table, Tooltip, Dialog), `screens/`, `widgets/`, `shell/` (top bar, sidebar, section tabs), `mocks/`, and `routes/`.
 - `src/i18n/` — `locales/{en,ru}.json`; `en.json` is the type reference for keys, and a test keeps `ru.json` in step (including every plural form Russian needs).
@@ -65,6 +66,7 @@ npm run format:check
 npm test               # all Vitest projects once
 npm run test:watch
 npm run sim:batch -- --seasons 100   # balancing batch runner; exits 1 until M2 adds the race core
+npm run pack:geometry  # rebuild src/data/packs/default/geometry.json from bacinger/f1-circuits (cached in .cache/)
 ```
 
 Single test file / single test / one project:
@@ -72,8 +74,10 @@ Single test file / single test / one project:
 ```bash
 npx vitest run src/sim/types/game-date.test.ts
 npx vitest run -t "rejects dates that do not exist"
-npx vitest run --project sim     # node env: src/sim/**/*.test.ts and tests/
+npx vitest run --project sim     # node env: src/{sim,data}/**/*.test.ts and tests/
 npx vitest run --project ui      # jsdom env: src/{app,ui,i18n}/**/*.test.{ts,tsx}
 ```
 
-A sim test goes next to its module as `*.test.ts`; UI tests use Testing Library and query by role and accessible name (UI tests always run in English — see `src/test/setup.ts`).
+A sim test goes next to its module as `*.test.ts`; UI tests use Testing Library and query by role and accessible name (UI tests always run in English — see `src/test/setup.ts`). When a pinned determinism hash changes, that is a behaviour change to every seeded result: re-pin it only when the change is intended, and say so in the milestone's ADR.
+
+Node scripts that import game code run through `tsx` with the `@/` alias resolved from tsconfig, e.g. `npx tsx --tsconfig tsconfig.node.json scripts/x.ts`. The default pack imports statically (no `import.meta.glob`) so it loads the same in Vite and in `tsx`.

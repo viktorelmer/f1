@@ -60,4 +60,17 @@ describe('layering rules (sim <- app <- ui)', () => {
       ),
     ).toEqual([]);
   });
+
+  it('keeps src/data/ as pure as the sim that imports it', async () => {
+    for (const code of [
+      "import { useState } from 'react';\nexport const s = useState;",
+      "import { x } from '@/app/store/x';\nexport const y = x;",
+      "import { Button } from '../../ui/design/Button';\nexport const b = Button;",
+    ]) {
+      expect(await layerViolations(code, 'src/data/schema/fixture.ts')).toContain('no-restricted-imports');
+    }
+    const ok =
+      "import { z } from 'zod';\nimport { gameDate } from '@/sim/types/game-date';\nexport { z, gameDate };";
+    expect(await layerViolations(ok, 'src/data/schema/fixture.ts')).toEqual([]);
+  });
 });

@@ -1,0 +1,26 @@
+{
+  "noiseSdAtSkill0": {
+    "value": 0.22,
+    "why": "Perception noise on option scores (scores are fractions of the best achievable outcome, 0..1) for a decision maker with no skill: options within ~20% of each other look alike."
+  },
+  "noiseSdAtSkill1": {
+    "value": 0.025,
+    "why": "Noise for a top specialist: they usually land within 3–5% of the best option, i.e. the 90–97% of achievable result that plan 5.19 asks for."
+  },
+  "blunderChanceAtConsistency0": {
+    "value": 0.12,
+    "why": "How often an erratic decision maker badly misjudges one option. Weak staff lose by spread, not by average (plan 5.19)."
+  },
+  "blunderChanceAtConsistency1": {
+    "value": 0.005,
+    "why": "Even the steadiest person misreads a situation about once in two hundred decisions."
+  },
+  "blunderSize": {
+    "value": 0.35,
+    "why": "Size of a blunder, in score units: large enough to promote a clearly bad option over the best one."
+  },
+  "rapportNoiseReduction": {
+    "value": 0.5,
+    "why": "Share of perception noise removed at full rapport with the player: a long-standing working relationship halves the gap to what the player would have picked (plan 5.19)."
+  }
+}

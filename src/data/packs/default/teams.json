@@ -1,0 +1,1597 @@
+[
+  {
+    "id": "marlowe",
+    "name": "Marlowe Racing",
+    "shortName": "Marlowe",
+    "colours": {
+      "primary": "#FF8000",
+      "secondary": "#0B1C2C"
+    },
+    "base": {
+      "country": "GB",
+      "city": "Wokeham"
+    },
+    "founded": 1963,
+    "history": {
+      "seasons": 60,
+      "constructorsTitles": 10,
+      "driversTitles": 13,
+      "wins": 201,
+      "podiums": 522,
+      "lastSeasons": [2, 1, 1]
+    },
+    "engine": {
+      "supplierId": "vortex",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 90,
+      "rearWing": 89,
+      "floor": 92,
+      "sidepods": 88,
+      "suspension": 91,
+      "brakes": 88,
+      "gearbox": 87
+    },
+    "facilities": {
+      "windTunnel": 5,
+      "cfdCluster": 5,
+      "simulator": 5,
+      "compositesShop": 4,
+      "dynoBench": 1,
+      "medicalCentre": 4,
+      "headquarters": 5,
+      "marketingSuite": 5
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 130,
+        "quality": 89
+      },
+      "design": {
+        "headcount": 160,
+        "quality": 85
+      },
+      "production": {
+        "headcount": 352,
+        "quality": 90
+      },
+      "vehicleDynamics": {
+        "headcount": 59,
+        "quality": 84
+      },
+      "raceTeam": {
+        "headcount": 72,
+        "quality": 85
+      },
+      "dataAnalysis": {
+        "headcount": 49,
+        "quality": 90
+      },
+      "marketing": {
+        "headcount": 51,
+        "quality": 87
+      },
+      "commercial": {
+        "headcount": 30,
+        "quality": 86
+      }
+    },
+    "finances": {
+      "cashM": 95,
+      "debtM": 20,
+      "heritageBonusM": 45
+    },
+    "sponsors": [
+      {
+        "id": "marlowe-orbitel",
+        "brand": "Orbitel",
+        "slot": "title",
+        "annualValueM": 58,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 2,
+            "position": null,
+            "bonusM": 9
+          }
+        ]
+      },
+      {
+        "id": "marlowe-kairo-bank",
+        "brand": "Kairo Bank",
+        "slot": "sidepod",
+        "annualValueM": 22,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 6,
+            "bonusM": 4
+          }
+        ]
+      },
+      {
+        "id": "marlowe-lumen-optics",
+        "brand": "Lumen Optics",
+        "slot": "rear-wing",
+        "annualValueM": 12,
+        "untilSeason": 2029,
+        "kpis": []
+      },
+      {
+        "id": "marlowe-northgate-tools",
+        "brand": "Northgate Tools",
+        "slot": "overalls",
+        "annualValueM": 4,
+        "untilSeason": 2027,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 90,
+      "paddock": 88,
+      "fia": 75,
+      "sponsors": 90,
+      "press": 82
+    },
+    "ownerExpectations": {
+      "targetPosition": 1,
+      "patienceSeasons": 2
+    },
+    "character": {
+      "developmentAggression": 0.6,
+      "riskAppetite": 0.5,
+      "youthFocus": 0.6,
+      "spendingEfficiency": 0.8,
+      "sandbagging": 0.3
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.05, 0.05]
+    }
+  },
+  {
+    "id": "argent",
+    "name": "Argent Grand Prix",
+    "shortName": "Argent",
+    "colours": {
+      "primary": "#C0C6CC",
+      "secondary": "#00A19C"
+    },
+    "base": {
+      "country": "GB",
+      "city": "Brackmoor"
+    },
+    "founded": 1954,
+    "history": {
+      "seasons": 17,
+      "constructorsTitles": 8,
+      "driversTitles": 9,
+      "wins": 126,
+      "podiums": 301,
+      "lastSeasons": [4, 2, 2]
+    },
+    "engine": {
+      "supplierId": "vortex",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 88,
+      "rearWing": 87,
+      "floor": 89,
+      "sidepods": 90,
+      "suspension": 88,
+      "brakes": 89,
+      "gearbox": 90
+    },
+    "facilities": {
+      "windTunnel": 5,
+      "cfdCluster": 5,
+      "simulator": 5,
+      "compositesShop": 5,
+      "dynoBench": 5,
+      "medicalCentre": 5,
+      "headquarters": 5,
+      "marketingSuite": 5
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 129,
+        "quality": 89
+      },
+      "design": {
+        "headcount": 157,
+        "quality": 90
+      },
+      "production": {
+        "headcount": 357,
+        "quality": 85
+      },
+      "vehicleDynamics": {
+        "headcount": 56,
+        "quality": 91
+      },
+      "raceTeam": {
+        "headcount": 77,
+        "quality": 88
+      },
+      "dataAnalysis": {
+        "headcount": 44,
+        "quality": 86
+      },
+      "marketing": {
+        "headcount": 53,
+        "quality": 86
+      },
+      "commercial": {
+        "headcount": 28,
+        "quality": 92
+      }
+    },
+    "finances": {
+      "cashM": 110,
+      "debtM": 0,
+      "heritageBonusM": 40
+    },
+    "sponsors": [
+      {
+        "id": "argent-helix-systems",
+        "brand": "Helix Systems",
+        "slot": "title",
+        "annualValueM": 60,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 2,
+            "position": null,
+            "bonusM": 9
+          }
+        ]
+      },
+      {
+        "id": "argent-aurum-watches",
+        "brand": "Aurum Watches",
+        "slot": "sidepod",
+        "annualValueM": 18,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 6,
+            "bonusM": 4
+          }
+        ]
+      },
+      {
+        "id": "argent-petrova-energy",
+        "brand": "Petrova Energy",
+        "slot": "engine-cover",
+        "annualValueM": 15,
+        "untilSeason": 2029,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 88,
+      "paddock": 90,
+      "fia": 82,
+      "sponsors": 92,
+      "press": 80
+    },
+    "ownerExpectations": {
+      "targetPosition": 1,
+      "patienceSeasons": 2
+    },
+    "character": {
+      "developmentAggression": 0.7,
+      "riskAppetite": 0.4,
+      "youthFocus": 0.7,
+      "spendingEfficiency": 0.85,
+      "sandbagging": 0.6
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.08, 0.04]
+    }
+  },
+  {
+    "id": "voltage",
+    "name": "Voltage Racing",
+    "shortName": "Voltage",
+    "colours": {
+      "primary": "#1E2A5E",
+      "secondary": "#E6002D"
+    },
+    "base": {
+      "country": "GB",
+      "city": "Kingsmere"
+    },
+    "founded": 2005,
+    "history": {
+      "seasons": 22,
+      "constructorsTitles": 6,
+      "driversTitles": 8,
+      "wins": 124,
+      "podiums": 283,
+      "lastSeasons": [3, 3, 3]
+    },
+    "engine": {
+      "supplierId": "tenshi",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 89,
+      "rearWing": 88,
+      "floor": 88,
+      "sidepods": 87,
+      "suspension": 89,
+      "brakes": 87,
+      "gearbox": 88
+    },
+    "facilities": {
+      "windTunnel": 5,
+      "cfdCluster": 5,
+      "simulator": 5,
+      "compositesShop": 5,
+      "dynoBench": 3,
+      "medicalCentre": 4,
+      "headquarters": 5,
+      "marketingSuite": 5
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 138,
+        "quality": 85
+      },
+      "design": {
+        "headcount": 147,
+        "quality": 88
+      },
+      "production": {
+        "headcount": 401,
+        "quality": 86
+      },
+      "vehicleDynamics": {
+        "headcount": 59,
+        "quality": 91
+      },
+      "raceTeam": {
+        "headcount": 69,
+        "quality": 89
+      },
+      "dataAnalysis": {
+        "headcount": 40,
+        "quality": 87
+      },
+      "marketing": {
+        "headcount": 45,
+        "quality": 87
+      },
+      "commercial": {
+        "headcount": 32,
+        "quality": 87
+      }
+    },
+    "finances": {
+      "cashM": 90,
+      "debtM": 10,
+      "heritageBonusM": 30
+    },
+    "sponsors": [
+      {
+        "id": "voltage-surge-energy-drink",
+        "brand": "Surge Energy Drink",
+        "slot": "title",
+        "annualValueM": 50,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 2,
+            "position": null,
+            "bonusM": 8
+          }
+        ]
+      },
+      {
+        "id": "voltage-cobalt-trading",
+        "brand": "Cobalt Trading",
+        "slot": "sidepod",
+        "annualValueM": 25,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 6,
+            "bonusM": 5
+          }
+        ]
+      },
+      {
+        "id": "voltage-nimbus-cloud",
+        "brand": "Nimbus Cloud",
+        "slot": "rear-wing",
+        "annualValueM": 14,
+        "untilSeason": 2029,
+        "kpis": []
+      },
+      {
+        "id": "voltage-tesselate",
+        "brand": "Tesselate",
+        "slot": "cap",
+        "annualValueM": 3,
+        "untilSeason": 2027,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 92,
+      "paddock": 84,
+      "fia": 68,
+      "sponsors": 88,
+      "press": 78
+    },
+    "ownerExpectations": {
+      "targetPosition": 1,
+      "patienceSeasons": 1
+    },
+    "character": {
+      "developmentAggression": 0.8,
+      "riskAppetite": 0.7,
+      "youthFocus": 0.8,
+      "spendingEfficiency": 0.75,
+      "sandbagging": 0.2
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.12, 0.02]
+    }
+  },
+  {
+    "id": "scuderia-rossa",
+    "name": "Scuderia Rossa",
+    "shortName": "Rossa",
+    "colours": {
+      "primary": "#DC0000",
+      "secondary": "#FFEB00"
+    },
+    "base": {
+      "country": "IT",
+      "city": "Castelvetro"
+    },
+    "founded": 1929,
+    "history": {
+      "seasons": 77,
+      "constructorsTitles": 16,
+      "driversTitles": 15,
+      "wins": 248,
+      "podiums": 823,
+      "lastSeasons": [2, 4, 4]
+    },
+    "engine": {
+      "supplierId": "rosso",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 86,
+      "rearWing": 87,
+      "floor": 85,
+      "sidepods": 88,
+      "suspension": 86,
+      "brakes": 88,
+      "gearbox": 89
+    },
+    "facilities": {
+      "windTunnel": 5,
+      "cfdCluster": 4,
+      "simulator": 5,
+      "compositesShop": 5,
+      "dynoBench": 5,
+      "medicalCentre": 4,
+      "headquarters": 5,
+      "marketingSuite": 5
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 118,
+        "quality": 87
+      },
+      "design": {
+        "headcount": 160,
+        "quality": 84
+      },
+      "production": {
+        "headcount": 338,
+        "quality": 88
+      },
+      "vehicleDynamics": {
+        "headcount": 53,
+        "quality": 88
+      },
+      "raceTeam": {
+        "headcount": 66,
+        "quality": 87
+      },
+      "dataAnalysis": {
+        "headcount": 39,
+        "quality": 89
+      },
+      "marketing": {
+        "headcount": 43,
+        "quality": 85
+      },
+      "commercial": {
+        "headcount": 30,
+        "quality": 87
+      }
+    },
+    "finances": {
+      "cashM": 120,
+      "debtM": 0,
+      "heritageBonusM": 90
+    },
+    "sponsors": [
+      {
+        "id": "scuderia-rossa-veloce-motors",
+        "brand": "Veloce Motors",
+        "slot": "title",
+        "annualValueM": 55,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 2,
+            "position": null,
+            "bonusM": 8
+          }
+        ]
+      },
+      {
+        "id": "scuderia-rossa-sartori-bank",
+        "brand": "Sartori Bank",
+        "slot": "sidepod",
+        "annualValueM": 30,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 6,
+            "bonusM": 6
+          }
+        ]
+      },
+      {
+        "id": "scuderia-rossa-mercurio-logistics",
+        "brand": "Mercurio Logistics",
+        "slot": "engine-cover",
+        "annualValueM": 16,
+        "untilSeason": 2029,
+        "kpis": []
+      },
+      {
+        "id": "scuderia-rossa-etna-apparel",
+        "brand": "Etna Apparel",
+        "slot": "overalls",
+        "annualValueM": 5,
+        "untilSeason": 2027,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 98,
+      "paddock": 86,
+      "fia": 88,
+      "sponsors": 95,
+      "press": 85
+    },
+    "ownerExpectations": {
+      "targetPosition": 1,
+      "patienceSeasons": 1
+    },
+    "character": {
+      "developmentAggression": 0.6,
+      "riskAppetite": 0.6,
+      "youthFocus": 0.3,
+      "spendingEfficiency": 0.55,
+      "sandbagging": 0.2
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.2, 0]
+    }
+  },
+  {
+    "id": "kestrel",
+    "name": "Kestrel Grand Prix",
+    "shortName": "Kestrel",
+    "colours": {
+      "primary": "#041E42",
+      "secondary": "#00A3E0"
+    },
+    "base": {
+      "country": "GB",
+      "city": "Grovebury"
+    },
+    "founded": 1977,
+    "history": {
+      "seasons": 50,
+      "constructorsTitles": 9,
+      "driversTitles": 7,
+      "wins": 114,
+      "podiums": 313,
+      "lastSeasons": [9, 5, 5]
+    },
+    "engine": {
+      "supplierId": "vortex",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 83,
+      "rearWing": 82,
+      "floor": 84,
+      "sidepods": 82,
+      "suspension": 83,
+      "brakes": 81,
+      "gearbox": 82
+    },
+    "facilities": {
+      "windTunnel": 4,
+      "cfdCluster": 4,
+      "simulator": 4,
+      "compositesShop": 4,
+      "dynoBench": 1,
+      "medicalCentre": 3,
+      "headquarters": 4,
+      "marketingSuite": 3
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 107,
+        "quality": 78
+      },
+      "design": {
+        "headcount": 122,
+        "quality": 81
+      },
+      "production": {
+        "headcount": 312,
+        "quality": 82
+      },
+      "vehicleDynamics": {
+        "headcount": 47,
+        "quality": 79
+      },
+      "raceTeam": {
+        "headcount": 61,
+        "quality": 80
+      },
+      "dataAnalysis": {
+        "headcount": 36,
+        "quality": 84
+      },
+      "marketing": {
+        "headcount": 35,
+        "quality": 82
+      },
+      "commercial": {
+        "headcount": 21,
+        "quality": 81
+      }
+    },
+    "finances": {
+      "cashM": 60,
+      "debtM": 35,
+      "heritageBonusM": 25
+    },
+    "sponsors": [
+      {
+        "id": "kestrel-atlas-analytics",
+        "brand": "Atlas Analytics",
+        "slot": "title",
+        "annualValueM": 35,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 6,
+            "position": null,
+            "bonusM": 5
+          }
+        ]
+      },
+      {
+        "id": "kestrel-harbour-ale",
+        "brand": "Harbour Ale",
+        "slot": "sidepod",
+        "annualValueM": 9,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 10,
+            "bonusM": 2
+          }
+        ]
+      },
+      {
+        "id": "kestrel-quill-insurance",
+        "brand": "Quill Insurance",
+        "slot": "rear-wing",
+        "annualValueM": 7,
+        "untilSeason": 2029,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 80,
+      "paddock": 78,
+      "fia": 80,
+      "sponsors": 72,
+      "press": 76
+    },
+    "ownerExpectations": {
+      "targetPosition": 5,
+      "patienceSeasons": 3
+    },
+    "character": {
+      "developmentAggression": 0.7,
+      "riskAppetite": 0.6,
+      "youthFocus": 0.6,
+      "spendingEfficiency": 0.85,
+      "sandbagging": 0.1
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.06, 0.06]
+    }
+  },
+  {
+    "id": "verdant",
+    "name": "Verdant Racing",
+    "shortName": "Verdant",
+    "colours": {
+      "primary": "#00594F",
+      "secondary": "#CEDC00"
+    },
+    "base": {
+      "country": "GB",
+      "city": "Silverdale"
+    },
+    "founded": 2021,
+    "history": {
+      "seasons": 6,
+      "constructorsTitles": 0,
+      "driversTitles": 0,
+      "wins": 0,
+      "podiums": 9,
+      "lastSeasons": [5, 7, 6]
+    },
+    "engine": {
+      "supplierId": "tenshi",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 82,
+      "rearWing": 81,
+      "floor": 80,
+      "sidepods": 82,
+      "suspension": 81,
+      "brakes": 82,
+      "gearbox": 81
+    },
+    "facilities": {
+      "windTunnel": 5,
+      "cfdCluster": 5,
+      "simulator": 4,
+      "compositesShop": 4,
+      "dynoBench": 2,
+      "medicalCentre": 4,
+      "headquarters": 5,
+      "marketingSuite": 4
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 126,
+        "quality": 83
+      },
+      "design": {
+        "headcount": 147,
+        "quality": 86
+      },
+      "production": {
+        "headcount": 326,
+        "quality": 80
+      },
+      "vehicleDynamics": {
+        "headcount": 50,
+        "quality": 84
+      },
+      "raceTeam": {
+        "headcount": 63,
+        "quality": 84
+      },
+      "dataAnalysis": {
+        "headcount": 37,
+        "quality": 83
+      },
+      "marketing": {
+        "headcount": 45,
+        "quality": 81
+      },
+      "commercial": {
+        "headcount": 27,
+        "quality": 79
+      }
+    },
+    "finances": {
+      "cashM": 150,
+      "debtM": 0,
+      "heritageBonusM": 12
+    },
+    "sponsors": [
+      {
+        "id": "verdant-cognita-ai",
+        "brand": "Cognita AI",
+        "slot": "title",
+        "annualValueM": 45,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 4,
+            "position": null,
+            "bonusM": 7
+          }
+        ]
+      },
+      {
+        "id": "verdant-arbor-rail",
+        "brand": "Arbor Rail",
+        "slot": "sidepod",
+        "annualValueM": 14,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 8,
+            "bonusM": 3
+          }
+        ]
+      },
+      {
+        "id": "verdant-juniper-spirits",
+        "brand": "Juniper Spirits",
+        "slot": "rear-wing",
+        "annualValueM": 8,
+        "untilSeason": 2029,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 78,
+      "paddock": 80,
+      "fia": 74,
+      "sponsors": 80,
+      "press": 74
+    },
+    "ownerExpectations": {
+      "targetPosition": 3,
+      "patienceSeasons": 2
+    },
+    "character": {
+      "developmentAggression": 0.9,
+      "riskAppetite": 0.7,
+      "youthFocus": 0.2,
+      "spendingEfficiency": 0.45,
+      "sandbagging": 0.3
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.15, 0.08]
+    }
+  },
+  {
+    "id": "spark",
+    "name": "Spark Racing",
+    "shortName": "Spark",
+    "colours": {
+      "primary": "#1634CC",
+      "secondary": "#FFFFFF"
+    },
+    "base": {
+      "country": "IT",
+      "city": "Faenzano"
+    },
+    "founded": 1985,
+    "history": {
+      "seasons": 40,
+      "constructorsTitles": 0,
+      "driversTitles": 0,
+      "wins": 2,
+      "podiums": 5,
+      "lastSeasons": [8, 6, 7]
+    },
+    "engine": {
+      "supplierId": "tenshi",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 80,
+      "rearWing": 79,
+      "floor": 80,
+      "sidepods": 79,
+      "suspension": 80,
+      "brakes": 79,
+      "gearbox": 80
+    },
+    "facilities": {
+      "windTunnel": 3,
+      "cfdCluster": 4,
+      "simulator": 3,
+      "compositesShop": 3,
+      "dynoBench": 0,
+      "medicalCentre": 3,
+      "headquarters": 3,
+      "marketingSuite": 3
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 93,
+        "quality": 74
+      },
+      "design": {
+        "headcount": 107,
+        "quality": 74
+      },
+      "production": {
+        "headcount": 222,
+        "quality": 78
+      },
+      "vehicleDynamics": {
+        "headcount": 39,
+        "quality": 74
+      },
+      "raceTeam": {
+        "headcount": 50,
+        "quality": 77
+      },
+      "dataAnalysis": {
+        "headcount": 30,
+        "quality": 77
+      },
+      "marketing": {
+        "headcount": 29,
+        "quality": 78
+      },
+      "commercial": {
+        "headcount": 18,
+        "quality": 72
+      }
+    },
+    "finances": {
+      "cashM": 40,
+      "debtM": 5,
+      "heritageBonusM": 10
+    },
+    "sponsors": [
+      {
+        "id": "spark-tessera-pay",
+        "brand": "Tessera Pay",
+        "slot": "title",
+        "annualValueM": 30,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 8,
+            "position": null,
+            "bonusM": 5
+          }
+        ]
+      },
+      {
+        "id": "spark-brio-coffee",
+        "brand": "Brio Coffee",
+        "slot": "sidepod",
+        "annualValueM": 6,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 10,
+            "bonusM": 1
+          }
+        ]
+      }
+    ],
+    "reputation": {
+      "fans": 70,
+      "paddock": 72,
+      "fia": 76,
+      "sponsors": 68,
+      "press": 70
+    },
+    "ownerExpectations": {
+      "targetPosition": 7,
+      "patienceSeasons": 3
+    },
+    "character": {
+      "developmentAggression": 0.5,
+      "riskAppetite": 0.6,
+      "youthFocus": 0.95,
+      "spendingEfficiency": 0.8,
+      "sandbagging": 0.1
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.08, 0.04]
+    }
+  },
+  {
+    "id": "frontier",
+    "name": "Frontier Racing",
+    "shortName": "Frontier",
+    "colours": {
+      "primary": "#B6BABD",
+      "secondary": "#E10600"
+    },
+    "base": {
+      "country": "US",
+      "city": "Mooresburg"
+    },
+    "founded": 2016,
+    "history": {
+      "seasons": 11,
+      "constructorsTitles": 0,
+      "driversTitles": 0,
+      "wins": 0,
+      "podiums": 0,
+      "lastSeasons": [7, 8, 8]
+    },
+    "engine": {
+      "supplierId": "rosso",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 79,
+      "rearWing": 78,
+      "floor": 79,
+      "sidepods": 80,
+      "suspension": 78,
+      "brakes": 79,
+      "gearbox": 79
+    },
+    "facilities": {
+      "windTunnel": 2,
+      "cfdCluster": 3,
+      "simulator": 3,
+      "compositesShop": 3,
+      "dynoBench": 0,
+      "medicalCentre": 2,
+      "headquarters": 3,
+      "marketingSuite": 2
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 77,
+        "quality": 75
+      },
+      "design": {
+        "headcount": 82,
+        "quality": 75
+      },
+      "production": {
+        "headcount": 188,
+        "quality": 75
+      },
+      "vehicleDynamics": {
+        "headcount": 31,
+        "quality": 68
+      },
+      "raceTeam": {
+        "headcount": 35,
+        "quality": 74
+      },
+      "dataAnalysis": {
+        "headcount": 22,
+        "quality": 74
+      },
+      "marketing": {
+        "headcount": 27,
+        "quality": 70
+      },
+      "commercial": {
+        "headcount": 17,
+        "quality": 74
+      }
+    },
+    "finances": {
+      "cashM": 30,
+      "debtM": 15,
+      "heritageBonusM": 5
+    },
+    "sponsors": [
+      {
+        "id": "frontier-ridgeline-trucks",
+        "brand": "Ridgeline Trucks",
+        "slot": "title",
+        "annualValueM": 28,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 8,
+            "position": null,
+            "bonusM": 4
+          }
+        ]
+      },
+      {
+        "id": "frontier-keystone-tools",
+        "brand": "Keystone Tools",
+        "slot": "sidepod",
+        "annualValueM": 6,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 10,
+            "bonusM": 1
+          }
+        ]
+      },
+      {
+        "id": "frontier-mapleway",
+        "brand": "Mapleway",
+        "slot": "cap",
+        "annualValueM": 2,
+        "untilSeason": 2029,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 66,
+      "paddock": 64,
+      "fia": 72,
+      "sponsors": 64,
+      "press": 62
+    },
+    "ownerExpectations": {
+      "targetPosition": 7,
+      "patienceSeasons": 2
+    },
+    "character": {
+      "developmentAggression": 0.4,
+      "riskAppetite": 0.5,
+      "youthFocus": 0.5,
+      "spendingEfficiency": 0.95,
+      "sandbagging": 0.1
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.1, 0.05]
+    }
+  },
+  {
+    "id": "nordwerk",
+    "name": "Nordwerk Motorsport",
+    "shortName": "Nordwerk",
+    "colours": {
+      "primary": "#9A9FA6",
+      "secondary": "#C8102E"
+    },
+    "base": {
+      "country": "CH",
+      "city": "Hinwyl"
+    },
+    "founded": 1993,
+    "history": {
+      "seasons": 33,
+      "constructorsTitles": 0,
+      "driversTitles": 0,
+      "wins": 1,
+      "podiums": 28,
+      "lastSeasons": [11, 9, 9]
+    },
+    "engine": {
+      "supplierId": "nordwerk",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 78,
+      "rearWing": 78,
+      "floor": 79,
+      "sidepods": 77,
+      "suspension": 78,
+      "brakes": 78,
+      "gearbox": 77
+    },
+    "facilities": {
+      "windTunnel": 5,
+      "cfdCluster": 4,
+      "simulator": 3,
+      "compositesShop": 4,
+      "dynoBench": 4,
+      "medicalCentre": 3,
+      "headquarters": 4,
+      "marketingSuite": 3
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 103,
+        "quality": 77
+      },
+      "design": {
+        "headcount": 129,
+        "quality": 76
+      },
+      "production": {
+        "headcount": 271,
+        "quality": 77
+      },
+      "vehicleDynamics": {
+        "headcount": 42,
+        "quality": 82
+      },
+      "raceTeam": {
+        "headcount": 50,
+        "quality": 81
+      },
+      "dataAnalysis": {
+        "headcount": 34,
+        "quality": 76
+      },
+      "marketing": {
+        "headcount": 36,
+        "quality": 75
+      },
+      "commercial": {
+        "headcount": 20,
+        "quality": 80
+      }
+    },
+    "finances": {
+      "cashM": 120,
+      "debtM": 0,
+      "heritageBonusM": 8
+    },
+    "sponsors": [
+      {
+        "id": "nordwerk-nova-fintech",
+        "brand": "Nova Fintech",
+        "slot": "title",
+        "annualValueM": 32,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 6,
+            "position": null,
+            "bonusM": 5
+          }
+        ]
+      },
+      {
+        "id": "nordwerk-alpenstahl",
+        "brand": "Alpenstahl",
+        "slot": "sidepod",
+        "annualValueM": 10,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 10,
+            "bonusM": 2
+          }
+        ]
+      }
+    ],
+    "reputation": {
+      "fans": 68,
+      "paddock": 70,
+      "fia": 78,
+      "sponsors": 72,
+      "press": 66
+    },
+    "ownerExpectations": {
+      "targetPosition": 5,
+      "patienceSeasons": 3
+    },
+    "character": {
+      "developmentAggression": 0.7,
+      "riskAppetite": 0.4,
+      "youthFocus": 0.5,
+      "spendingEfficiency": 0.6,
+      "sandbagging": 0.2
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.03, 0.08]
+    }
+  },
+  {
+    "id": "bleu-alpin",
+    "name": "Bleu Alpin F1 Team",
+    "shortName": "Alpin",
+    "colours": {
+      "primary": "#0078C1",
+      "secondary": "#FF87BC"
+    },
+    "base": {
+      "country": "GB",
+      "city": "Enstone Vale"
+    },
+    "founded": 1981,
+    "history": {
+      "seasons": 45,
+      "constructorsTitles": 2,
+      "driversTitles": 2,
+      "wins": 21,
+      "podiums": 100,
+      "lastSeasons": [6, 10, 10]
+    },
+    "engine": {
+      "supplierId": "vortex",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 77,
+      "rearWing": 77,
+      "floor": 76,
+      "sidepods": 78,
+      "suspension": 77,
+      "brakes": 76,
+      "gearbox": 77
+    },
+    "facilities": {
+      "windTunnel": 4,
+      "cfdCluster": 3,
+      "simulator": 3,
+      "compositesShop": 3,
+      "dynoBench": 0,
+      "medicalCentre": 3,
+      "headquarters": 4,
+      "marketingSuite": 3
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 79,
+        "quality": 70
+      },
+      "design": {
+        "headcount": 102,
+        "quality": 71
+      },
+      "production": {
+        "headcount": 230,
+        "quality": 71
+      },
+      "vehicleDynamics": {
+        "headcount": 35,
+        "quality": 71
+      },
+      "raceTeam": {
+        "headcount": 41,
+        "quality": 76
+      },
+      "dataAnalysis": {
+        "headcount": 23,
+        "quality": 75
+      },
+      "marketing": {
+        "headcount": 29,
+        "quality": 71
+      },
+      "commercial": {
+        "headcount": 18,
+        "quality": 71
+      }
+    },
+    "finances": {
+      "cashM": 55,
+      "debtM": 10,
+      "heritageBonusM": 20
+    },
+    "sponsors": [
+      {
+        "id": "bleu-alpin-azura-telecom",
+        "brand": "Azura Telecom",
+        "slot": "title",
+        "annualValueM": 30,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 7,
+            "position": null,
+            "bonusM": 5
+          }
+        ]
+      },
+      {
+        "id": "bleu-alpin-mistral-water",
+        "brand": "Mistral Water",
+        "slot": "sidepod",
+        "annualValueM": 8,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 10,
+            "bonusM": 2
+          }
+        ]
+      },
+      {
+        "id": "bleu-alpin-plume-cosmetics",
+        "brand": "Plume Cosmetics",
+        "slot": "rear-wing",
+        "annualValueM": 6,
+        "untilSeason": 2029,
+        "kpis": []
+      }
+    ],
+    "reputation": {
+      "fans": 72,
+      "paddock": 66,
+      "fia": 78,
+      "sponsors": 70,
+      "press": 68
+    },
+    "ownerExpectations": {
+      "targetPosition": 6,
+      "patienceSeasons": 2
+    },
+    "character": {
+      "developmentAggression": 0.5,
+      "riskAppetite": 0.6,
+      "youthFocus": 0.6,
+      "spendingEfficiency": 0.6,
+      "sandbagging": 0.1
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.1, 0.05]
+    }
+  },
+  {
+    "id": "monarch",
+    "name": "Monarch Racing",
+    "shortName": "Monarch",
+    "colours": {
+      "primary": "#1A1A1A",
+      "secondary": "#C9A227"
+    },
+    "base": {
+      "country": "US",
+      "city": "Carmelton"
+    },
+    "founded": 2026,
+    "history": {
+      "seasons": 1,
+      "constructorsTitles": 0,
+      "driversTitles": 0,
+      "wins": 0,
+      "podiums": 0,
+      "lastSeasons": [null, null, 11]
+    },
+    "engine": {
+      "supplierId": "rosso",
+      "untilSeason": 2030
+    },
+    "chassis": {
+      "frontWing": 74,
+      "rearWing": 74,
+      "floor": 73,
+      "sidepods": 75,
+      "suspension": 74,
+      "brakes": 74,
+      "gearbox": 75
+    },
+    "facilities": {
+      "windTunnel": 3,
+      "cfdCluster": 3,
+      "simulator": 3,
+      "compositesShop": 3,
+      "dynoBench": 0,
+      "medicalCentre": 3,
+      "headquarters": 4,
+      "marketingSuite": 4
+    },
+    "departments": {
+      "aerodynamics": {
+        "headcount": 79,
+        "quality": 78
+      },
+      "design": {
+        "headcount": 92,
+        "quality": 76
+      },
+      "production": {
+        "headcount": 222,
+        "quality": 77
+      },
+      "vehicleDynamics": {
+        "headcount": 37,
+        "quality": 76
+      },
+      "raceTeam": {
+        "headcount": 48,
+        "quality": 73
+      },
+      "dataAnalysis": {
+        "headcount": 27,
+        "quality": 78
+      },
+      "marketing": {
+        "headcount": 30,
+        "quality": 77
+      },
+      "commercial": {
+        "headcount": 17,
+        "quality": 78
+      }
+    },
+    "finances": {
+      "cashM": 200,
+      "debtM": 0,
+      "heritageBonusM": 0
+    },
+    "sponsors": [
+      {
+        "id": "monarch-pinnacle-motors",
+        "brand": "Pinnacle Motors",
+        "slot": "title",
+        "annualValueM": 40,
+        "untilSeason": 2027,
+        "kpis": [
+          {
+            "kind": "constructors-position",
+            "target": 8,
+            "position": null,
+            "bonusM": 6
+          }
+        ]
+      },
+      {
+        "id": "monarch-crestline-bank",
+        "brand": "Crestline Bank",
+        "slot": "sidepod",
+        "annualValueM": 12,
+        "untilSeason": 2028,
+        "kpis": [
+          {
+            "kind": "top-n-finishes",
+            "target": 8,
+            "position": 10,
+            "bonusM": 2
+          }
+        ]
+      }
+    ],
+    "reputation": {
+      "fans": 70,
+      "paddock": 62,
+      "fia": 70,
+      "sponsors": 76,
+      "press": 72
+    },
+    "ownerExpectations": {
+      "targetPosition": 7,
+      "patienceSeasons": 4
+    },
+    "character": {
+      "developmentAggression": 0.8,
+      "riskAppetite": 0.6,
+      "youthFocus": 0.2,
+      "spendingEfficiency": 0.5,
+      "sandbagging": 0.1
+    },
+    "hiddenRanges": {
+      "correlationBias": [-0.2, 0.1]
+    }
+  }
+]

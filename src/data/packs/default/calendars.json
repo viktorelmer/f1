@@ -1,0 +1,144 @@
+[
+  {
+    "season": 2027,
+    "preseasonTest": {
+      "trackId": "al-rimal",
+      "startDate": "2027-02-24",
+      "days": 3
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "trackId": "lakeside-park",
+        "raceDate": "2027-03-07",
+        "sprint": false
+      },
+      {
+        "round": 2,
+        "trackId": "huangpu",
+        "raceDate": "2027-03-14",
+        "sprint": true
+      },
+      {
+        "round": 3,
+        "trackId": "isewan",
+        "raceDate": "2027-03-28",
+        "sprint": false
+      },
+      {
+        "round": 4,
+        "trackId": "al-rimal",
+        "raceDate": "2027-04-11",
+        "sprint": false
+      },
+      {
+        "round": 5,
+        "trackId": "corniche",
+        "raceDate": "2027-04-18",
+        "sprint": false
+      },
+      {
+        "round": 6,
+        "trackId": "saint-laurent",
+        "raceDate": "2027-05-23",
+        "sprint": true
+      },
+      {
+        "round": 7,
+        "trackId": "porto-rocca",
+        "raceDate": "2027-06-06",
+        "sprint": false
+      },
+      {
+        "round": 8,
+        "trackId": "valles",
+        "raceDate": "2027-06-13",
+        "sprint": false
+      },
+      {
+        "round": 9,
+        "trackId": "murtal",
+        "raceDate": "2027-06-27",
+        "sprint": false
+      },
+      {
+        "round": 10,
+        "trackId": "northfield",
+        "raceDate": "2027-07-04",
+        "sprint": true
+      },
+      {
+        "round": 11,
+        "trackId": "hautes-fagnes",
+        "raceDate": "2027-07-18",
+        "sprint": false
+      },
+      {
+        "round": 12,
+        "trackId": "danube",
+        "raceDate": "2027-07-25",
+        "sprint": false
+      },
+      {
+        "round": 13,
+        "trackId": "noordzee",
+        "raceDate": "2027-08-22",
+        "sprint": true
+      },
+      {
+        "round": 14,
+        "trackId": "parco-reale",
+        "raceDate": "2027-09-05",
+        "sprint": false
+      },
+      {
+        "round": 15,
+        "trackId": "caspian",
+        "raceDate": "2027-09-19",
+        "sprint": false
+      },
+      {
+        "round": 16,
+        "trackId": "marina-lights",
+        "raceDate": "2027-10-03",
+        "sprint": true
+      },
+      {
+        "round": 17,
+        "trackId": "lone-star",
+        "raceDate": "2027-10-24",
+        "sprint": false
+      },
+      {
+        "round": 18,
+        "trackId": "tenochtitlan",
+        "raceDate": "2027-10-31",
+        "sprint": false
+      },
+      {
+        "round": 19,
+        "trackId": "represa",
+        "raceDate": "2027-11-14",
+        "sprint": true
+      },
+      {
+        "round": 20,
+        "trackId": "neon-boulevard",
+        "raceDate": "2027-11-20",
+        "sprint": false
+      },
+      {
+        "round": 21,
+        "trackId": "pearl-coast",
+        "raceDate": "2027-11-28",
+        "sprint": false
+      },
+      {
+        "round": 22,
+        "trackId": "falcon-island",
+        "raceDate": "2027-12-05",
+        "sprint": false
+      }
+    ]
+  }
+]

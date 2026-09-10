@@ -1,0 +1,50 @@
+[
+  {
+    "id": "vortex",
+    "name": "Vortex Powertrains",
+    "worksTeamId": "argent",
+    "spec": {
+      "power": 88,
+      "ersDeployment": 87,
+      "fuelEfficiency": 85,
+      "reliability": 86
+    },
+    "customerPriceM": 17
+  },
+  {
+    "id": "rosso",
+    "name": "Rosso Motori",
+    "worksTeamId": "scuderia-rossa",
+    "spec": {
+      "power": 87,
+      "ersDeployment": 84,
+      "fuelEfficiency": 82,
+      "reliability": 82
+    },
+    "customerPriceM": 16
+  },
+  {
+    "id": "tenshi",
+    "name": "Tenshi Power",
+    "worksTeamId": "verdant",
+    "spec": {
+      "power": 85,
+      "ersDeployment": 88,
+      "fuelEfficiency": 86,
+      "reliability": 80
+    },
+    "customerPriceM": 15
+  },
+  {
+    "id": "nordwerk",
+    "name": "Nordwerk Antriebe",
+    "worksTeamId": "nordwerk",
+    "spec": {
+      "power": 80,
+      "ersDeployment": 82,
+      "fuelEfficiency": 80,
+      "reliability": 77
+    },
+    "customerPriceM": 14
+  }
+]

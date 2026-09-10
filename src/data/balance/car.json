@@ -1,0 +1,46 @@
+{
+  "downforceLow": {
+    "value": { "frontWing": 0.3, "floor": 0.3, "rearWing": 0.2, "suspension": 0.2 },
+    "why": "Slow-corner downforce: the front wing sets turn-in, the floor carries the load, and ride control from the suspension matters at low speed. Starting weights; M2 calibrates."
+  },
+  "downforceHigh": {
+    "value": { "floor": 0.5, "frontWing": 0.2, "rearWing": 0.2, "sidepods": 0.1 },
+    "why": "High-speed downforce in the ground-effect era comes mostly from the floor; the sidepods feed it clean air."
+  },
+  "drag": {
+    "value": { "sidepods": 0.4, "rearWing": 0.3, "floor": 0.3 },
+    "why": "Drag efficiency of the parts; the car's drag rating is 100 minus this, so better parts mean less drag for the same downforce."
+  },
+  "dirtyAirTolerance": {
+    "value": { "floor": 0.6, "frontWing": 0.4 },
+    "why": "How much of its grip the car keeps in the wake of another: underfloor downforce is robust, a wing-dependent front end is not."
+  },
+  "mechanicalGrip": {
+    "value": { "suspension": 0.75, "floor": 0.25 },
+    "why": "Grip that does not depend on speed: mostly suspension kinematics, some from how stable the platform keeps the floor."
+  },
+  "brakingStability": {
+    "value": { "brakes": 0.6, "suspension": 0.4 },
+    "why": "Stability on the brakes: the brake system itself plus how the suspension controls pitch."
+  },
+  "rideHeightSensitivity": {
+    "value": { "floor": 0.6, "suspension": 0.4 },
+    "why": "Porpoising resistance of the parts; the car's sensitivity rating is 100 minus this."
+  },
+  "tyreManagement": {
+    "value": { "suspension": 0.5, "floor": 0.2, "brakes": 0.15, "sidepods": 0.15 },
+    "why": "How gently the car treats its tyres: suspension compliance first, then aero platform stability, brake and cooling temperatures."
+  },
+  "chassisReliability": {
+    "value": { "gearbox": 0.5, "sidepods": 0.3, "brakes": 0.2 },
+    "why": "Chassis side of reliability: gearbox failures, cooling (sidepods) and brakes are the usual non-engine retirements."
+  },
+  "overweightKgAtRating0": {
+    "value": 16,
+    "why": "Kilograms above the minimum weight for a car whose parts all rate 0; falls linearly to 0 kg at rating 100. Real cars were 5–15 kg over in 2022."
+  },
+  "powerUnitShareOfReliability": {
+    "value": 0.6,
+    "why": "The power unit causes most mechanical retirements, so it carries 60% of overall reliability; the chassis the rest."
+  }
+}

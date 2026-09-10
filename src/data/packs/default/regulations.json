@@ -1,0 +1,28 @@
+[
+  {
+    "season": 2027,
+    "points": {
+      "race": [25, 18, 15, 12, 10, 8, 6, 4, 2, 1],
+      "sprint": [8, 7, 6, 5, 4, 3, 2, 1]
+    },
+    "costCapM": 215,
+    "costCapExemptTopEarners": 3,
+    "aeroTestingAllowancePct": [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 115, 115],
+    "componentLimits": {
+      "ice": 4,
+      "turbocharger": 4,
+      "mguH": 4,
+      "mguK": 4,
+      "energyStore": 2,
+      "controlElectronics": 2,
+      "exhaust": 4,
+      "gearbox": 5
+    },
+    "minWeightKg": 768,
+    "tyreSetsPerWeekend": {
+      "standard": 13,
+      "sprint": 12
+    },
+    "rookieFp1SessionsPerTeam": 4
+  }
+]

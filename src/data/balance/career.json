@@ -1,0 +1,61 @@
+{
+  "founder": {
+    "startingCapitalM": {
+      "value": 520,
+      "why": "Investor capital for a new team in $M, before the FIA entry fee and deposit. After them it leaves about one cost-capped season of runway: survival is the first goal (plan 5.11)."
+    },
+    "customerSpecPenalty": {
+      "value": {
+        "power": 4,
+        "ersDeployment": 3,
+        "fuelEfficiency": 2
+      },
+      "why": "Rating points a founder team's customer power unit trails the works spec by — 'a generation behind' (plan 5.11). Customer deals of existing teams get the works spec."
+    },
+    "heritageFreeSeasons": {
+      "value": 2,
+      "why": "Seasons a new team earns no historic prize money, only championship position and sponsors (plan 5.11)."
+    },
+    "startingReputation": {
+      "value": 0,
+      "why": "A new team's reputation on every axis: zero, so good drivers and engineers will not come yet (plan 5.11)."
+    },
+    "pointsBySeason": {
+      "value": 3,
+      "why": "Owners of a new team expect its first points by this season (plan 5.11)."
+    },
+    "topFiveBySeason": {
+      "value": 6,
+      "why": "…and a top-five constructors' finish by this season (plan 5.11)."
+    },
+    "driverSalaryM": {
+      "value": 1,
+      "why": "Salary in $M a founder team pays each of its first two drivers: the only drivers who will come are free agents, rookies and pay drivers (plan 5.11)."
+    },
+    "driverContractSeasons": {
+      "value": 2,
+      "why": "Seasons a founder team first signs its drivers for: long enough to build around, short enough to replace them once the team can attract better."
+    },
+    "engineDealSeasons": {
+      "value": 3,
+      "why": "Length of a founder team customer engine deal in seasons: suppliers want commitment from a newcomer, and switching early is not an option."
+    }
+  },
+  "startingDepartment": {
+    "value": {
+      "morale": 70,
+      "workload": 50
+    },
+    "why": "Every department starts a career settled: morale 70 (content, not euphoric) and half-loaded, so neither over- nor under-work shapes the first weeks."
+  },
+  "principalReputation": {
+    "takeover": {
+      "value": 50,
+      "why": "A principal hired to run an existing team starts with a neutral personal reputation: the paddock knows the name, not yet the record."
+    },
+    "founder": {
+      "value": 35,
+      "why": "A founder is an unknown quantity in the paddock; personal reputation starts below a hired principal and is earned through results and media (plan 5.19)."
+    }
+  }
+}

@@ -1,0 +1,860 @@
+[
+  {
+    "id": "al-rimal",
+    "name": "Al-Rimal International Circuit",
+    "country": "BH",
+    "lengthKm": 5.412,
+    "laps": 57,
+    "baseLapTime": 90.5,
+    "pitLoss": 23,
+    "drsZones": 3,
+    "profile": {
+      "aeroSensitivity": 0.5,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 5,
+      "highSpeedCorners": 3,
+      "tyreDegFactor": 1.35,
+      "trackEvolution": 0.5,
+      "overtakingDifficulty": 0.3,
+      "safetyCarProbability": 0.35,
+      "brakeWear": 0.8,
+      "fuelPerLap": 1.75
+    },
+    "weather": {
+      "rainChance": 0.02,
+      "airTempC": [22, 30],
+      "trackTempOffsetC": [5, 12],
+      "windKph": [5, 25]
+    },
+    "factorySetup": {
+      "frontWing": 61,
+      "rearWing": 61,
+      "brakeBias": 60,
+      "frontRideHeight": 52,
+      "rearRideHeight": 57,
+      "suspensionStiffness": 52,
+      "camber": 46,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  },
+  {
+    "id": "corniche",
+    "name": "Corniche Harbour Circuit",
+    "country": "SA",
+    "lengthKm": 6.174,
+    "laps": 50,
+    "baseLapTime": 87.5,
+    "pitLoss": 20,
+    "drsZones": 3,
+    "profile": {
+      "aeroSensitivity": 0.45,
+      "powerSensitivity": 0.75,
+      "lowSpeedCorners": 3,
+      "highSpeedCorners": 10,
+      "tyreDegFactor": 0.85,
+      "trackEvolution": 0.6,
+      "overtakingDifficulty": 0.45,
+      "safetyCarProbability": 0.7,
+      "brakeWear": 0.5,
+      "fuelPerLap": 1.95
+    },
+    "weather": {
+      "rainChance": 0.02,
+      "airTempC": [25, 32],
+      "trackTempOffsetC": [3, 8],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 55,
+      "rearWing": 54,
+      "brakeBias": 57,
+      "frontRideHeight": 45,
+      "rearRideHeight": 50,
+      "suspensionStiffness": 80,
+      "camber": 62,
+      "toe": 50,
+      "gearRatios": 74
+    }
+  },
+  {
+    "id": "lakeside-park",
+    "name": "Lakeside Park Circuit",
+    "country": "AU",
+    "lengthKm": 5.278,
+    "laps": 58,
+    "baseLapTime": 76.5,
+    "pitLoss": 19,
+    "drsZones": 4,
+    "profile": {
+      "aeroSensitivity": 0.55,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 4,
+      "highSpeedCorners": 5,
+      "tyreDegFactor": 0.9,
+      "trackEvolution": 0.7,
+      "overtakingDifficulty": 0.5,
+      "safetyCarProbability": 0.6,
+      "brakeWear": 0.5,
+      "fuelPerLap": 1.65
+    },
+    "weather": {
+      "rainChance": 0.2,
+      "airTempC": [15, 26],
+      "trackTempOffsetC": [8, 20],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 64,
+      "rearWing": 64,
+      "brakeBias": 57,
+      "frontRideHeight": 50,
+      "rearRideHeight": 55,
+      "suspensionStiffness": 60,
+      "camber": 51,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  },
+  {
+    "id": "isewan",
+    "name": "Isewan Figure-Eight",
+    "country": "JP",
+    "lengthKm": 5.807,
+    "laps": 53,
+    "baseLapTime": 88.5,
+    "pitLoss": 22,
+    "drsZones": 1,
+    "profile": {
+      "aeroSensitivity": 0.9,
+      "powerSensitivity": 0.5,
+      "lowSpeedCorners": 3,
+      "highSpeedCorners": 9,
+      "tyreDegFactor": 1.3,
+      "trackEvolution": 0.4,
+      "overtakingDifficulty": 0.7,
+      "safetyCarProbability": 0.3,
+      "brakeWear": 0.45,
+      "fuelPerLap": 1.8
+    },
+    "weather": {
+      "rainChance": 0.3,
+      "airTempC": [12, 22],
+      "trackTempOffsetC": [5, 15],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 90,
+      "rearWing": 93,
+      "brakeBias": 57,
+      "frontRideHeight": 46,
+      "rearRideHeight": 51,
+      "suspensionStiffness": 76,
+      "camber": 60,
+      "toe": 50,
+      "gearRatios": 58
+    }
+  },
+  {
+    "id": "huangpu",
+    "name": "Huangpu International Circuit",
+    "country": "CN",
+    "lengthKm": 5.451,
+    "laps": 56,
+    "baseLapTime": 93,
+    "pitLoss": 23,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.6,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 5,
+      "highSpeedCorners": 5,
+      "tyreDegFactor": 1.15,
+      "trackEvolution": 0.55,
+      "overtakingDifficulty": 0.35,
+      "safetyCarProbability": 0.4,
+      "brakeWear": 0.6,
+      "fuelPerLap": 1.75
+    },
+    "weather": {
+      "rainChance": 0.25,
+      "airTempC": [12, 24],
+      "trackTempOffsetC": [6, 16],
+      "windKph": [5, 25]
+    },
+    "factorySetup": {
+      "frontWing": 67,
+      "rearWing": 68,
+      "brakeBias": 58,
+      "frontRideHeight": 50,
+      "rearRideHeight": 55,
+      "suspensionStiffness": 60,
+      "camber": 50,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  },
+  {
+    "id": "porto-rocca",
+    "name": "Porto Rocca Street Circuit",
+    "country": "MC",
+    "lengthKm": 3.337,
+    "laps": 78,
+    "baseLapTime": 70.5,
+    "pitLoss": 20,
+    "drsZones": 1,
+    "profile": {
+      "aeroSensitivity": 0.95,
+      "powerSensitivity": 0.15,
+      "lowSpeedCorners": 12,
+      "highSpeedCorners": 1,
+      "tyreDegFactor": 0.5,
+      "trackEvolution": 0.95,
+      "overtakingDifficulty": 0.98,
+      "safetyCarProbability": 0.65,
+      "brakeWear": 0.7,
+      "fuelPerLap": 1.05
+    },
+    "weather": {
+      "rainChance": 0.15,
+      "airTempC": [18, 26],
+      "trackTempOffsetC": [10, 22],
+      "windKph": [0, 20]
+    },
+    "factorySetup": {
+      "frontWing": 92,
+      "rearWing": 95,
+      "brakeBias": 59,
+      "frontRideHeight": 62,
+      "rearRideHeight": 66,
+      "suspensionStiffness": 38,
+      "camber": 35,
+      "toe": 50,
+      "gearRatios": 35
+    }
+  },
+  {
+    "id": "valles",
+    "name": "Circuit del Valles",
+    "country": "ES",
+    "lengthKm": 4.657,
+    "laps": 66,
+    "baseLapTime": 72.5,
+    "pitLoss": 22,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.85,
+      "powerSensitivity": 0.45,
+      "lowSpeedCorners": 4,
+      "highSpeedCorners": 6,
+      "tyreDegFactor": 1.3,
+      "trackEvolution": 0.45,
+      "overtakingDifficulty": 0.7,
+      "safetyCarProbability": 0.25,
+      "brakeWear": 0.45,
+      "fuelPerLap": 1.4
+    },
+    "weather": {
+      "rainChance": 0.1,
+      "airTempC": [20, 30],
+      "trackTempOffsetC": [10, 25],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 87,
+      "rearWing": 90,
+      "brakeBias": 57,
+      "frontRideHeight": 49,
+      "rearRideHeight": 54,
+      "suspensionStiffness": 64,
+      "camber": 53,
+      "toe": 50,
+      "gearRatios": 54
+    }
+  },
+  {
+    "id": "saint-laurent",
+    "name": "Circuit Saint-Laurent",
+    "country": "CA",
+    "lengthKm": 4.361,
+    "laps": 70,
+    "baseLapTime": 71.5,
+    "pitLoss": 18,
+    "drsZones": 3,
+    "profile": {
+      "aeroSensitivity": 0.3,
+      "powerSensitivity": 0.8,
+      "lowSpeedCorners": 7,
+      "highSpeedCorners": 2,
+      "tyreDegFactor": 0.9,
+      "trackEvolution": 0.75,
+      "overtakingDifficulty": 0.35,
+      "safetyCarProbability": 0.65,
+      "brakeWear": 0.95,
+      "fuelPerLap": 1.45
+    },
+    "weather": {
+      "rainChance": 0.3,
+      "airTempC": [16, 28],
+      "trackTempOffsetC": [8, 20],
+      "windKph": [5, 25]
+    },
+    "factorySetup": {
+      "frontWing": 44,
+      "rearWing": 42,
+      "brakeBias": 62,
+      "frontRideHeight": 62,
+      "rearRideHeight": 66,
+      "suspensionStiffness": 38,
+      "camber": 42,
+      "toe": 50,
+      "gearRatios": 77
+    }
+  },
+  {
+    "id": "murtal",
+    "name": "Murtal Ring",
+    "country": "AT",
+    "lengthKm": 4.318,
+    "laps": 71,
+    "baseLapTime": 64,
+    "pitLoss": 21,
+    "drsZones": 3,
+    "profile": {
+      "aeroSensitivity": 0.45,
+      "powerSensitivity": 0.75,
+      "lowSpeedCorners": 3,
+      "highSpeedCorners": 5,
+      "tyreDegFactor": 1,
+      "trackEvolution": 0.45,
+      "overtakingDifficulty": 0.35,
+      "safetyCarProbability": 0.4,
+      "brakeWear": 0.75,
+      "fuelPerLap": 1.3
+    },
+    "weather": {
+      "rainChance": 0.3,
+      "airTempC": [16, 30],
+      "trackTempOffsetC": [10, 22],
+      "windKph": [0, 25]
+    },
+    "factorySetup": {
+      "frontWing": 55,
+      "rearWing": 54,
+      "brakeBias": 60,
+      "frontRideHeight": 50,
+      "rearRideHeight": 55,
+      "suspensionStiffness": 60,
+      "camber": 52,
+      "toe": 50,
+      "gearRatios": 74
+    }
+  },
+  {
+    "id": "northfield",
+    "name": "Northfield Aerodrome Circuit",
+    "country": "GB",
+    "lengthKm": 5.891,
+    "laps": 52,
+    "baseLapTime": 85.5,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.9,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 3,
+      "highSpeedCorners": 8,
+      "tyreDegFactor": 1.25,
+      "trackEvolution": 0.4,
+      "overtakingDifficulty": 0.45,
+      "safetyCarProbability": 0.35,
+      "brakeWear": 0.4,
+      "fuelPerLap": 1.95
+    },
+    "weather": {
+      "rainChance": 0.4,
+      "airTempC": [14, 26],
+      "trackTempOffsetC": [6, 16],
+      "windKph": [10, 40]
+    },
+    "factorySetup": {
+      "frontWing": 88,
+      "rearWing": 91,
+      "brakeBias": 56,
+      "frontRideHeight": 47,
+      "rearRideHeight": 52,
+      "suspensionStiffness": 72,
+      "camber": 58,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  },
+  {
+    "id": "danube",
+    "name": "Danube Ring",
+    "country": "HU",
+    "lengthKm": 4.381,
+    "laps": 70,
+    "baseLapTime": 75.5,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.85,
+      "powerSensitivity": 0.3,
+      "lowSpeedCorners": 9,
+      "highSpeedCorners": 2,
+      "tyreDegFactor": 1.05,
+      "trackEvolution": 0.55,
+      "overtakingDifficulty": 0.85,
+      "safetyCarProbability": 0.3,
+      "brakeWear": 0.55,
+      "fuelPerLap": 1.35
+    },
+    "weather": {
+      "rainChance": 0.2,
+      "airTempC": [22, 34],
+      "trackTempOffsetC": [10, 25],
+      "windKph": [0, 20]
+    },
+    "factorySetup": {
+      "frontWing": 90,
+      "rearWing": 93,
+      "brakeBias": 58,
+      "frontRideHeight": 53,
+      "rearRideHeight": 58,
+      "suspensionStiffness": 48,
+      "camber": 40,
+      "toe": 50,
+      "gearRatios": 45
+    }
+  },
+  {
+    "id": "hautes-fagnes",
+    "name": "Circuit des Hautes Fagnes",
+    "country": "BE",
+    "lengthKm": 7.004,
+    "laps": 44,
+    "baseLapTime": 103.5,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.6,
+      "powerSensitivity": 0.85,
+      "lowSpeedCorners": 3,
+      "highSpeedCorners": 8,
+      "tyreDegFactor": 1.05,
+      "trackEvolution": 0.4,
+      "overtakingDifficulty": 0.3,
+      "safetyCarProbability": 0.5,
+      "brakeWear": 0.5,
+      "fuelPerLap": 2.35
+    },
+    "weather": {
+      "rainChance": 0.5,
+      "airTempC": [12, 24],
+      "trackTempOffsetC": [4, 14],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 63,
+      "rearWing": 63,
+      "brakeBias": 57,
+      "frontRideHeight": 47,
+      "rearRideHeight": 52,
+      "suspensionStiffness": 72,
+      "camber": 58,
+      "toe": 50,
+      "gearRatios": 80
+    }
+  },
+  {
+    "id": "noordzee",
+    "name": "Noordzee Dunes Circuit",
+    "country": "NL",
+    "lengthKm": 4.259,
+    "laps": 72,
+    "baseLapTime": 70,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.9,
+      "powerSensitivity": 0.35,
+      "lowSpeedCorners": 5,
+      "highSpeedCorners": 6,
+      "tyreDegFactor": 1.1,
+      "trackEvolution": 0.6,
+      "overtakingDifficulty": 0.85,
+      "safetyCarProbability": 0.45,
+      "brakeWear": 0.35,
+      "fuelPerLap": 1.35
+    },
+    "weather": {
+      "rainChance": 0.3,
+      "airTempC": [15, 24],
+      "trackTempOffsetC": [6, 16],
+      "windKph": [10, 45]
+    },
+    "factorySetup": {
+      "frontWing": 92,
+      "rearWing": 95,
+      "brakeBias": 56,
+      "frontRideHeight": 49,
+      "rearRideHeight": 54,
+      "suspensionStiffness": 64,
+      "camber": 52,
+      "toe": 50,
+      "gearRatios": 48
+    }
+  },
+  {
+    "id": "parco-reale",
+    "name": "Autodromo del Parco Reale",
+    "country": "IT",
+    "lengthKm": 5.793,
+    "laps": 53,
+    "baseLapTime": 79.5,
+    "pitLoss": 24,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.15,
+      "powerSensitivity": 1,
+      "lowSpeedCorners": 3,
+      "highSpeedCorners": 3,
+      "tyreDegFactor": 0.8,
+      "trackEvolution": 0.45,
+      "overtakingDifficulty": 0.25,
+      "safetyCarProbability": 0.35,
+      "brakeWear": 0.85,
+      "fuelPerLap": 1.75
+    },
+    "weather": {
+      "rainChance": 0.15,
+      "airTempC": [18, 30],
+      "trackTempOffsetC": [8, 20],
+      "windKph": [0, 20]
+    },
+    "factorySetup": {
+      "frontWing": 29,
+      "rearWing": 26,
+      "brakeBias": 61,
+      "frontRideHeight": 52,
+      "rearRideHeight": 57,
+      "suspensionStiffness": 52,
+      "camber": 48,
+      "toe": 50,
+      "gearRatios": 90
+    }
+  },
+  {
+    "id": "caspian",
+    "name": "Caspian City Circuit",
+    "country": "AZ",
+    "lengthKm": 6.003,
+    "laps": 51,
+    "baseLapTime": 101,
+    "pitLoss": 20,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.4,
+      "powerSensitivity": 0.9,
+      "lowSpeedCorners": 12,
+      "highSpeedCorners": 2,
+      "tyreDegFactor": 0.75,
+      "trackEvolution": 0.8,
+      "overtakingDifficulty": 0.3,
+      "safetyCarProbability": 0.8,
+      "brakeWear": 0.9,
+      "fuelPerLap": 1.9
+    },
+    "weather": {
+      "rainChance": 0.05,
+      "airTempC": [18, 28],
+      "trackTempOffsetC": [6, 16],
+      "windKph": [10, 50]
+    },
+    "factorySetup": {
+      "frontWing": 48,
+      "rearWing": 47,
+      "brakeBias": 61,
+      "frontRideHeight": 62,
+      "rearRideHeight": 66,
+      "suspensionStiffness": 38,
+      "camber": 37,
+      "toe": 50,
+      "gearRatios": 84
+    }
+  },
+  {
+    "id": "marina-lights",
+    "name": "Marina Lights Street Circuit",
+    "country": "SG",
+    "lengthKm": 4.928,
+    "laps": 62,
+    "baseLapTime": 90,
+    "pitLoss": 29,
+    "drsZones": 3,
+    "profile": {
+      "aeroSensitivity": 0.9,
+      "powerSensitivity": 0.3,
+      "lowSpeedCorners": 14,
+      "highSpeedCorners": 1,
+      "tyreDegFactor": 1,
+      "trackEvolution": 0.8,
+      "overtakingDifficulty": 0.85,
+      "safetyCarProbability": 0.95,
+      "brakeWear": 0.9,
+      "fuelPerLap": 1.65
+    },
+    "weather": {
+      "rainChance": 0.35,
+      "airTempC": [27, 32],
+      "trackTempOffsetC": [2, 6],
+      "windKph": [0, 15]
+    },
+    "factorySetup": {
+      "frontWing": 92,
+      "rearWing": 95,
+      "brakeBias": 61,
+      "frontRideHeight": 62,
+      "rearRideHeight": 66,
+      "suspensionStiffness": 38,
+      "camber": 33,
+      "toe": 50,
+      "gearRatios": 45
+    }
+  },
+  {
+    "id": "lone-star",
+    "name": "Lone Star Grand Prix Circuit",
+    "country": "US",
+    "lengthKm": 5.513,
+    "laps": 56,
+    "baseLapTime": 93.5,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.7,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 7,
+      "highSpeedCorners": 6,
+      "tyreDegFactor": 1.2,
+      "trackEvolution": 0.55,
+      "overtakingDifficulty": 0.35,
+      "safetyCarProbability": 0.45,
+      "brakeWear": 0.65,
+      "fuelPerLap": 1.85
+    },
+    "weather": {
+      "rainChance": 0.1,
+      "airTempC": [18, 30],
+      "trackTempOffsetC": [8, 20],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 74,
+      "rearWing": 76,
+      "brakeBias": 59,
+      "frontRideHeight": 49,
+      "rearRideHeight": 54,
+      "suspensionStiffness": 64,
+      "camber": 50,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  },
+  {
+    "id": "tenochtitlan",
+    "name": "Autodromo Tenochtitlan",
+    "country": "MX",
+    "lengthKm": 4.304,
+    "laps": 71,
+    "baseLapTime": 76,
+    "pitLoss": 22,
+    "drsZones": 3,
+    "profile": {
+      "aeroSensitivity": 0.8,
+      "powerSensitivity": 0.55,
+      "lowSpeedCorners": 7,
+      "highSpeedCorners": 3,
+      "tyreDegFactor": 0.85,
+      "trackEvolution": 0.7,
+      "overtakingDifficulty": 0.45,
+      "safetyCarProbability": 0.4,
+      "brakeWear": 0.6,
+      "fuelPerLap": 1.3
+    },
+    "weather": {
+      "rainChance": 0.1,
+      "airTempC": [18, 26],
+      "trackTempOffsetC": [15, 30],
+      "windKph": [0, 20]
+    },
+    "factorySetup": {
+      "frontWing": 82,
+      "rearWing": 84,
+      "brakeBias": 58,
+      "frontRideHeight": 52,
+      "rearRideHeight": 57,
+      "suspensionStiffness": 52,
+      "camber": 44,
+      "toe": 50,
+      "gearRatios": 61
+    }
+  },
+  {
+    "id": "represa",
+    "name": "Autodromo da Represa",
+    "country": "BR",
+    "lengthKm": 4.309,
+    "laps": 71,
+    "baseLapTime": 69.5,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.55,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 5,
+      "highSpeedCorners": 4,
+      "tyreDegFactor": 1,
+      "trackEvolution": 0.5,
+      "overtakingDifficulty": 0.3,
+      "safetyCarProbability": 0.6,
+      "brakeWear": 0.6,
+      "fuelPerLap": 1.4
+    },
+    "weather": {
+      "rainChance": 0.45,
+      "airTempC": [18, 30],
+      "trackTempOffsetC": [8, 25],
+      "windKph": [5, 30]
+    },
+    "factorySetup": {
+      "frontWing": 64,
+      "rearWing": 64,
+      "brakeBias": 58,
+      "frontRideHeight": 51,
+      "rearRideHeight": 56,
+      "suspensionStiffness": 56,
+      "camber": 48,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  },
+  {
+    "id": "neon-boulevard",
+    "name": "Neon Boulevard Circuit",
+    "country": "US",
+    "lengthKm": 6.201,
+    "laps": 50,
+    "baseLapTime": 92.5,
+    "pitLoss": 21,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.2,
+      "powerSensitivity": 0.95,
+      "lowSpeedCorners": 7,
+      "highSpeedCorners": 3,
+      "tyreDegFactor": 0.6,
+      "trackEvolution": 0.9,
+      "overtakingDifficulty": 0.25,
+      "safetyCarProbability": 0.55,
+      "brakeWear": 0.8,
+      "fuelPerLap": 1.9
+    },
+    "weather": {
+      "rainChance": 0.02,
+      "airTempC": [5, 15],
+      "trackTempOffsetC": [0, 5],
+      "windKph": [0, 35]
+    },
+    "factorySetup": {
+      "frontWing": 34,
+      "rearWing": 31,
+      "brakeBias": 60,
+      "frontRideHeight": 62,
+      "rearRideHeight": 66,
+      "suspensionStiffness": 38,
+      "camber": 44,
+      "toe": 50,
+      "gearRatios": 87
+    }
+  },
+  {
+    "id": "pearl-coast",
+    "name": "Pearl Coast Circuit",
+    "country": "QA",
+    "lengthKm": 5.419,
+    "laps": 57,
+    "baseLapTime": 81,
+    "pitLoss": 26,
+    "drsZones": 1,
+    "profile": {
+      "aeroSensitivity": 0.75,
+      "powerSensitivity": 0.45,
+      "lowSpeedCorners": 2,
+      "highSpeedCorners": 10,
+      "tyreDegFactor": 1.45,
+      "trackEvolution": 0.5,
+      "overtakingDifficulty": 0.6,
+      "safetyCarProbability": 0.3,
+      "brakeWear": 0.35,
+      "fuelPerLap": 1.8
+    },
+    "weather": {
+      "rainChance": 0.02,
+      "airTempC": [22, 30],
+      "trackTempOffsetC": [2, 8],
+      "windKph": [5, 35]
+    },
+    "factorySetup": {
+      "frontWing": 80,
+      "rearWing": 82,
+      "brakeBias": 56,
+      "frontRideHeight": 45,
+      "rearRideHeight": 50,
+      "suspensionStiffness": 80,
+      "camber": 63,
+      "toe": 50,
+      "gearRatios": 54
+    }
+  },
+  {
+    "id": "falcon-island",
+    "name": "Falcon Island Circuit",
+    "country": "AE",
+    "lengthKm": 5.281,
+    "laps": 58,
+    "baseLapTime": 82.5,
+    "pitLoss": 22,
+    "drsZones": 2,
+    "profile": {
+      "aeroSensitivity": 0.55,
+      "powerSensitivity": 0.6,
+      "lowSpeedCorners": 8,
+      "highSpeedCorners": 3,
+      "tyreDegFactor": 0.8,
+      "trackEvolution": 0.55,
+      "overtakingDifficulty": 0.5,
+      "safetyCarProbability": 0.3,
+      "brakeWear": 0.6,
+      "fuelPerLap": 1.7
+    },
+    "weather": {
+      "rainChance": 0.01,
+      "airTempC": [24, 30],
+      "trackTempOffsetC": [3, 10],
+      "windKph": [0, 25]
+    },
+    "factorySetup": {
+      "frontWing": 64,
+      "rearWing": 64,
+      "brakeBias": 58,
+      "frontRideHeight": 52,
+      "rearRideHeight": 57,
+      "suspensionStiffness": 52,
+      "camber": 43,
+      "toe": 50,
+      "gearRatios": 64
+    }
+  }
+]

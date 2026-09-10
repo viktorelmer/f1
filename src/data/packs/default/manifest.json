@@ -1,0 +1,11 @@
+{
+  "id": "default",
+  "name": "Default fictional world",
+  "version": "1.0.0",
+  "formatVersion": 1,
+  "startDate": "2027-01-04",
+  "license": "Content: part of this repository. Track geometry: MIT (see attribution).",
+  "attribution": [
+    "Track geometry derived from bacinger/f1-circuits (https://github.com/bacinger/f1-circuits), MIT License, Copyright (c) 2019-2025 Tomislav Bacinger. Not affiliated with or endorsed by Formula One Licensing B.V."
+  ]
+}

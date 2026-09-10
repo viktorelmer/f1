@@ -94,6 +94,12 @@ export default defineConfig([
     files: TESTS.map((glob) => `src/sim/${glob}`),
     rules: { 'no-restricted-globals': 'off' },
   },
+  {
+    // The sim imports schemas, balance and packs from data/, so data/ must stay just as free of
+    // React, app/ and ui/ — or the engine picks them up second-hand.
+    files: ['src/data/**/*.ts'],
+    rules: { 'no-restricted-imports': simRestrictedImports },
+  },
 
   {
     files: ['scripts/**/*.ts', 'tests/**/*.ts', 'vite.config.ts'],

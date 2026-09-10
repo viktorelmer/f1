@@ -1,0 +1,2787 @@
+[
+  {
+    "id": "liam-whitaker",
+    "name": "Liam Whitaker",
+    "nationality": "GB",
+    "birthDate": "1999-11-13",
+    "attributes": {
+      "pace": 93,
+      "consistency": 88,
+      "racecraft": 90,
+      "tyreManagement": 87,
+      "wetSkill": 90,
+      "qualifying": 92,
+      "starts": 86,
+      "feedback": 88,
+      "adaptability": 87,
+      "stamina": 92
+    },
+    "personality": {
+      "ego": 55,
+      "loyalty": 80,
+      "marketability": 88,
+      "mediaSkill": 80,
+      "risk": 55
+    },
+    "state": {
+      "form": 80,
+      "morale": 78,
+      "fitness": 92,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [92, 94],
+      "growthRate": [0.9, 1.1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "marlowe",
+      "role": "race",
+      "salaryM": 32,
+      "fromSeason": 2025,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.064,
+        "perPodium": 0.32,
+        "title": 5
+      },
+      "buyoutM": 48,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "callum-reid",
+    "name": "Callum Reid",
+    "nationality": "AU",
+    "birthDate": "2001-04-06",
+    "attributes": {
+      "pace": 92,
+      "consistency": 91,
+      "racecraft": 88,
+      "tyreManagement": 89,
+      "wetSkill": 84,
+      "qualifying": 90,
+      "starts": 85,
+      "feedback": 84,
+      "adaptability": 90,
+      "stamina": 93
+    },
+    "personality": {
+      "ego": 35,
+      "loyalty": 75,
+      "marketability": 72,
+      "mediaSkill": 62,
+      "risk": 45
+    },
+    "state": {
+      "form": 82,
+      "morale": 80,
+      "fitness": 94,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [92, 96],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "marlowe",
+      "role": "race",
+      "salaryM": 28,
+      "fromSeason": 2026,
+      "untilSeason": 2029,
+      "bonuses": {
+        "perPoint": 0.056,
+        "perPodium": 0.28,
+        "title": 4
+      },
+      "buyoutM": 42,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "henry-ashdown",
+    "name": "Henry Ashdown",
+    "nationality": "GB",
+    "birthDate": "1998-02-15",
+    "attributes": {
+      "pace": 91,
+      "consistency": 92,
+      "racecraft": 87,
+      "tyreManagement": 88,
+      "wetSkill": 86,
+      "qualifying": 94,
+      "starts": 84,
+      "feedback": 91,
+      "adaptability": 88,
+      "stamina": 91
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 85,
+      "marketability": 82,
+      "mediaSkill": 85,
+      "risk": 50
+    },
+    "state": {
+      "form": 80,
+      "morale": 76,
+      "fitness": 93,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [91, 93],
+      "growthRate": [0.9, 1.1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "argent",
+      "role": "race",
+      "salaryM": 30,
+      "fromSeason": 2026,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.06,
+        "perPodium": 0.3,
+        "title": 5
+      },
+      "buyoutM": 45,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "enzo-marchetti",
+    "name": "Enzo Marchetti",
+    "nationality": "IT",
+    "birthDate": "2006-08-25",
+    "attributes": {
+      "pace": 87,
+      "consistency": 80,
+      "racecraft": 82,
+      "tyreManagement": 80,
+      "wetSkill": 85,
+      "qualifying": 86,
+      "starts": 83,
+      "feedback": 76,
+      "adaptability": 84,
+      "stamina": 90
+    },
+    "personality": {
+      "ego": 40,
+      "loyalty": 82,
+      "marketability": 80,
+      "mediaSkill": 60,
+      "risk": 65
+    },
+    "state": {
+      "form": 75,
+      "morale": 80,
+      "fitness": 95,
+      "fatigue": 5
+    },
+    "hiddenRanges": {
+      "potential": [88, 98],
+      "growthRate": [1.1, 1.5],
+      "injuryProneness": [0.05, 0.2]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "argent",
+      "role": "race",
+      "salaryM": 8,
+      "fromSeason": 2025,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.016,
+        "perPodium": 0.08,
+        "title": 1
+      },
+      "buyoutM": 12,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "daan-vermeer",
+    "name": "Daan Vermeer",
+    "nationality": "NL",
+    "birthDate": "1997-09-30",
+    "attributes": {
+      "pace": 98,
+      "consistency": 94,
+      "racecraft": 97,
+      "tyreManagement": 92,
+      "wetSkill": 97,
+      "qualifying": 96,
+      "starts": 92,
+      "feedback": 90,
+      "adaptability": 95,
+      "stamina": 95
+    },
+    "personality": {
+      "ego": 80,
+      "loyalty": 70,
+      "marketability": 95,
+      "mediaSkill": 60,
+      "risk": 75
+    },
+    "state": {
+      "form": 88,
+      "morale": 85,
+      "fitness": 95,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [97, 99],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "voltage",
+      "role": "race",
+      "salaryM": 55,
+      "fromSeason": 2024,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.11,
+        "perPodium": 0.55,
+        "title": 8
+      },
+      "buyoutM": 150,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "kenji-arakawa",
+    "name": "Kenji Arakawa",
+    "nationality": "JP",
+    "birthDate": "2000-05-11",
+    "attributes": {
+      "pace": 88,
+      "consistency": 80,
+      "racecraft": 85,
+      "tyreManagement": 82,
+      "wetSkill": 83,
+      "qualifying": 88,
+      "starts": 84,
+      "feedback": 79,
+      "adaptability": 83,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 70,
+      "marketability": 75,
+      "mediaSkill": 58,
+      "risk": 70
+    },
+    "state": {
+      "form": 70,
+      "morale": 65,
+      "fitness": 90,
+      "fatigue": 12
+    },
+    "hiddenRanges": {
+      "potential": [88, 91],
+      "growthRate": [0.9, 1.1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "voltage",
+      "role": "race",
+      "salaryM": 7,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.014,
+        "perPodium": 0.07,
+        "title": 1
+      },
+      "buyoutM": 11,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "marcus-hale",
+    "name": "Marcus Hale",
+    "nationality": "GB",
+    "birthDate": "1985-01-07",
+    "attributes": {
+      "pace": 89,
+      "consistency": 93,
+      "racecraft": 94,
+      "tyreManagement": 92,
+      "wetSkill": 95,
+      "qualifying": 88,
+      "starts": 88,
+      "feedback": 95,
+      "adaptability": 90,
+      "stamina": 84
+    },
+    "personality": {
+      "ego": 70,
+      "loyalty": 75,
+      "marketability": 99,
+      "mediaSkill": 92,
+      "risk": 50
+    },
+    "state": {
+      "form": 72,
+      "morale": 70,
+      "fitness": 85,
+      "fatigue": 15
+    },
+    "hiddenRanges": {
+      "potential": [89, 90],
+      "growthRate": [0.5, 0.8],
+      "injuryProneness": [0.1, 0.25]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "role": "race",
+      "salaryM": 50,
+      "fromSeason": 2025,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.1,
+        "perPodium": 0.5,
+        "title": 8
+      },
+      "buyoutM": 75,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "julien-castellane",
+    "name": "Julien Castellane",
+    "nationality": "MC",
+    "birthDate": "1997-10-16",
+    "attributes": {
+      "pace": 93,
+      "consistency": 88,
+      "racecraft": 90,
+      "tyreManagement": 85,
+      "wetSkill": 88,
+      "qualifying": 97,
+      "starts": 87,
+      "feedback": 88,
+      "adaptability": 88,
+      "stamina": 91
+    },
+    "personality": {
+      "ego": 55,
+      "loyalty": 90,
+      "marketability": 88,
+      "mediaSkill": 78,
+      "risk": 60
+    },
+    "state": {
+      "form": 80,
+      "morale": 72,
+      "fitness": 93,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [93, 95],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "role": "race",
+      "salaryM": 34,
+      "fromSeason": 2024,
+      "untilSeason": 2029,
+      "bonuses": {
+        "perPoint": 0.068,
+        "perPodium": 0.34,
+        "title": 5
+      },
+      "buyoutM": 51,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "alvaro-medina",
+    "name": "Álvaro Medina",
+    "nationality": "ES",
+    "birthDate": "1994-09-01",
+    "attributes": {
+      "pace": 89,
+      "consistency": 91,
+      "racecraft": 90,
+      "tyreManagement": 90,
+      "wetSkill": 86,
+      "qualifying": 88,
+      "starts": 87,
+      "feedback": 93,
+      "adaptability": 89,
+      "stamina": 90
+    },
+    "personality": {
+      "ego": 50,
+      "loyalty": 75,
+      "marketability": 80,
+      "mediaSkill": 75,
+      "risk": 45
+    },
+    "state": {
+      "form": 78,
+      "morale": 80,
+      "fitness": 91,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [89, 90],
+      "growthRate": [0.7, 0.9],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "kestrel",
+      "role": "race",
+      "salaryM": 18,
+      "fromSeason": 2025,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.036,
+        "perPodium": 0.18,
+        "title": 3
+      },
+      "buyoutM": 27,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "niran-chaiwat",
+    "name": "Niran Chaiwat",
+    "nationality": "TH",
+    "birthDate": "1996-03-23",
+    "attributes": {
+      "pace": 88,
+      "consistency": 89,
+      "racecraft": 88,
+      "tyreManagement": 91,
+      "wetSkill": 85,
+      "qualifying": 86,
+      "starts": 85,
+      "feedback": 88,
+      "adaptability": 88,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 30,
+      "loyalty": 85,
+      "marketability": 70,
+      "mediaSkill": 80,
+      "risk": 40
+    },
+    "state": {
+      "form": 76,
+      "morale": 82,
+      "fitness": 92,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [88, 89],
+      "growthRate": [0.7, 0.9],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "kestrel",
+      "role": "race",
+      "salaryM": 12,
+      "fromSeason": 2025,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.024,
+        "perPodium": 0.12,
+        "title": 2
+      },
+      "buyoutM": 18,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "rodrigo-valdes",
+    "name": "Rodrigo Valdés",
+    "nationality": "ES",
+    "birthDate": "1981-07-29",
+    "attributes": {
+      "pace": 87,
+      "consistency": 93,
+      "racecraft": 97,
+      "tyreManagement": 94,
+      "wetSkill": 92,
+      "qualifying": 86,
+      "starts": 94,
+      "feedback": 96,
+      "adaptability": 93,
+      "stamina": 82
+    },
+    "personality": {
+      "ego": 75,
+      "loyalty": 55,
+      "marketability": 90,
+      "mediaSkill": 90,
+      "risk": 60
+    },
+    "state": {
+      "form": 70,
+      "morale": 68,
+      "fitness": 84,
+      "fatigue": 18
+    },
+    "hiddenRanges": {
+      "potential": [87, 88],
+      "growthRate": [0.4, 0.7],
+      "injuryProneness": [0.15, 0.3]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "verdant",
+      "role": "race",
+      "salaryM": 22,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.044,
+        "perPodium": 0.22,
+        "title": 3
+      },
+      "buyoutM": 33,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "dylan-kaine",
+    "name": "Dylan Kaine",
+    "nationality": "CA",
+    "birthDate": "1998-10-29",
+    "attributes": {
+      "pace": 82,
+      "consistency": 78,
+      "racecraft": 80,
+      "tyreManagement": 82,
+      "wetSkill": 85,
+      "qualifying": 80,
+      "starts": 82,
+      "feedback": 76,
+      "adaptability": 78,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 45,
+      "loyalty": 99,
+      "marketability": 60,
+      "mediaSkill": 55,
+      "risk": 45
+    },
+    "state": {
+      "form": 65,
+      "morale": 70,
+      "fitness": 88,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [82, 84],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "verdant",
+      "role": "race",
+      "salaryM": 5,
+      "fromSeason": 2024,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.01,
+        "perPodium": 0.05,
+        "title": 1
+      },
+      "buyoutM": 8,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "yanis-belkacem",
+    "name": "Yanis Belkacem",
+    "nationality": "FR",
+    "birthDate": "2004-09-28",
+    "attributes": {
+      "pace": 87,
+      "consistency": 82,
+      "racecraft": 85,
+      "tyreManagement": 82,
+      "wetSkill": 82,
+      "qualifying": 88,
+      "starts": 83,
+      "feedback": 78,
+      "adaptability": 85,
+      "stamina": 90
+    },
+    "personality": {
+      "ego": 55,
+      "loyalty": 75,
+      "marketability": 75,
+      "mediaSkill": 60,
+      "risk": 65
+    },
+    "state": {
+      "form": 78,
+      "morale": 82,
+      "fitness": 94,
+      "fatigue": 6
+    },
+    "hiddenRanges": {
+      "potential": [86, 95],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "spark",
+      "role": "race",
+      "salaryM": 3,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.006,
+        "perPodium": 0.03,
+        "title": 0
+      },
+      "buyoutM": 5,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "tama-rangi",
+    "name": "Tama Rangi",
+    "nationality": "NZ",
+    "birthDate": "2002-02-02",
+    "attributes": {
+      "pace": 85,
+      "consistency": 80,
+      "racecraft": 86,
+      "tyreManagement": 81,
+      "wetSkill": 80,
+      "qualifying": 85,
+      "starts": 85,
+      "feedback": 78,
+      "adaptability": 82,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 70,
+      "marketability": 65,
+      "mediaSkill": 55,
+      "risk": 70
+    },
+    "state": {
+      "form": 70,
+      "morale": 72,
+      "fitness": 92,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [85, 90],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "spark",
+      "role": "race",
+      "salaryM": 2.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.005,
+        "perPodium": 0.03,
+        "title": 0
+      },
+      "buyoutM": 4,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "mathis-leroux",
+    "name": "Mathis Leroux",
+    "nationality": "FR",
+    "birthDate": "1996-09-17",
+    "attributes": {
+      "pace": 86,
+      "consistency": 87,
+      "racecraft": 86,
+      "tyreManagement": 86,
+      "wetSkill": 87,
+      "qualifying": 87,
+      "starts": 85,
+      "feedback": 84,
+      "adaptability": 86,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 50,
+      "loyalty": 70,
+      "marketability": 72,
+      "mediaSkill": 70,
+      "risk": 50
+    },
+    "state": {
+      "form": 74,
+      "morale": 76,
+      "fitness": 91,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [86, 87],
+      "growthRate": [0.7, 0.9],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "frontier",
+      "role": "race",
+      "salaryM": 8,
+      "fromSeason": 2025,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.016,
+        "perPodium": 0.08,
+        "title": 1
+      },
+      "buyoutM": 12,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "oscar-pennington",
+    "name": "Oscar Pennington",
+    "nationality": "GB",
+    "birthDate": "2005-05-08",
+    "attributes": {
+      "pace": 86,
+      "consistency": 81,
+      "racecraft": 84,
+      "tyreManagement": 81,
+      "wetSkill": 80,
+      "qualifying": 86,
+      "starts": 84,
+      "feedback": 77,
+      "adaptability": 85,
+      "stamina": 91
+    },
+    "personality": {
+      "ego": 45,
+      "loyalty": 80,
+      "marketability": 78,
+      "mediaSkill": 72,
+      "risk": 60
+    },
+    "state": {
+      "form": 80,
+      "morale": 84,
+      "fitness": 95,
+      "fatigue": 6
+    },
+    "hiddenRanges": {
+      "potential": [87, 95],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "frontier",
+      "role": "race",
+      "salaryM": 3,
+      "fromSeason": 2025,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.006,
+        "perPodium": 0.03,
+        "title": 0
+      },
+      "buyoutM": 5,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "stefan-bruckner",
+    "name": "Stefan Brückner",
+    "nationality": "DE",
+    "birthDate": "1987-08-19",
+    "attributes": {
+      "pace": 86,
+      "consistency": 90,
+      "racecraft": 85,
+      "tyreManagement": 88,
+      "wetSkill": 86,
+      "qualifying": 87,
+      "starts": 84,
+      "feedback": 90,
+      "adaptability": 88,
+      "stamina": 86
+    },
+    "personality": {
+      "ego": 40,
+      "loyalty": 80,
+      "marketability": 68,
+      "mediaSkill": 76,
+      "risk": 40
+    },
+    "state": {
+      "form": 78,
+      "morale": 84,
+      "fitness": 88,
+      "fatigue": 12
+    },
+    "hiddenRanges": {
+      "potential": [86, 87],
+      "growthRate": [0.5, 0.8],
+      "injuryProneness": [0.1, 0.2]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "nordwerk",
+      "role": "race",
+      "salaryM": 10,
+      "fromSeason": 2025,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.02,
+        "perPodium": 0.1,
+        "title": 2
+      },
+      "buyoutM": 15,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "caio-ferraz",
+    "name": "Caio Ferraz",
+    "nationality": "BR",
+    "birthDate": "2004-10-14",
+    "attributes": {
+      "pace": 85,
+      "consistency": 83,
+      "racecraft": 83,
+      "tyreManagement": 83,
+      "wetSkill": 84,
+      "qualifying": 85,
+      "starts": 82,
+      "feedback": 80,
+      "adaptability": 84,
+      "stamina": 90
+    },
+    "personality": {
+      "ego": 35,
+      "loyalty": 80,
+      "marketability": 76,
+      "mediaSkill": 65,
+      "risk": 55
+    },
+    "state": {
+      "form": 72,
+      "morale": 78,
+      "fitness": 94,
+      "fatigue": 6
+    },
+    "hiddenRanges": {
+      "potential": [86, 94],
+      "growthRate": [1, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "nordwerk",
+      "role": "race",
+      "salaryM": 2.5,
+      "fromSeason": 2025,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.005,
+        "perPodium": 0.03,
+        "title": 0
+      },
+      "buyoutM": 4,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "theo-marchand",
+    "name": "Théo Marchand",
+    "nationality": "FR",
+    "birthDate": "1996-02-07",
+    "attributes": {
+      "pace": 88,
+      "consistency": 86,
+      "racecraft": 87,
+      "tyreManagement": 85,
+      "wetSkill": 88,
+      "qualifying": 89,
+      "starts": 85,
+      "feedback": 86,
+      "adaptability": 86,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 55,
+      "loyalty": 80,
+      "marketability": 82,
+      "mediaSkill": 78,
+      "risk": 55
+    },
+    "state": {
+      "form": 74,
+      "morale": 70,
+      "fitness": 91,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [88, 89],
+      "growthRate": [0.7, 0.9],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "role": "race",
+      "salaryM": 14,
+      "fromSeason": 2025,
+      "untilSeason": 2028,
+      "bonuses": {
+        "perPoint": 0.028,
+        "perPodium": 0.14,
+        "title": 2
+      },
+      "buyoutM": 21,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "tomas-ibarra",
+    "name": "Tomás Ibarra",
+    "nationality": "AR",
+    "birthDate": "2003-05-27",
+    "attributes": {
+      "pace": 84,
+      "consistency": 78,
+      "racecraft": 83,
+      "tyreManagement": 80,
+      "wetSkill": 80,
+      "qualifying": 84,
+      "starts": 82,
+      "feedback": 76,
+      "adaptability": 83,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 50,
+      "loyalty": 75,
+      "marketability": 88,
+      "mediaSkill": 75,
+      "risk": 70
+    },
+    "state": {
+      "form": 66,
+      "morale": 70,
+      "fitness": 93,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [84, 91],
+      "growthRate": [0.9, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 6,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "role": "race",
+      "salaryM": 2,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.004,
+        "perPodium": 0.02,
+        "title": 0
+      },
+      "buyoutM": 3,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "emiliano-cruz",
+    "name": "Emiliano Cruz",
+    "nationality": "MX",
+    "birthDate": "1990-01-26",
+    "attributes": {
+      "pace": 86,
+      "consistency": 83,
+      "racecraft": 89,
+      "tyreManagement": 92,
+      "wetSkill": 84,
+      "qualifying": 83,
+      "starts": 86,
+      "feedback": 88,
+      "adaptability": 85,
+      "stamina": 87
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 70,
+      "marketability": 92,
+      "mediaSkill": 80,
+      "risk": 45
+    },
+    "state": {
+      "form": 70,
+      "morale": 75,
+      "fitness": 88,
+      "fatigue": 12
+    },
+    "hiddenRanges": {
+      "potential": [86, 86],
+      "growthRate": [0.5, 0.7],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 15,
+    "contract": {
+      "teamId": "monarch",
+      "role": "race",
+      "salaryM": 9,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.018,
+        "perPodium": 0.09,
+        "title": 1
+      },
+      "buyoutM": 14,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "mikael-lindqvist",
+    "name": "Mikael Lindqvist",
+    "nationality": "FI",
+    "birthDate": "1989-08-28",
+    "attributes": {
+      "pace": 87,
+      "consistency": 88,
+      "racecraft": 83,
+      "tyreManagement": 87,
+      "wetSkill": 85,
+      "qualifying": 88,
+      "starts": 86,
+      "feedback": 90,
+      "adaptability": 86,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 30,
+      "loyalty": 85,
+      "marketability": 70,
+      "mediaSkill": 65,
+      "risk": 35
+    },
+    "state": {
+      "form": 72,
+      "morale": 78,
+      "fitness": 90,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [87, 87],
+      "growthRate": [0.5, 0.7],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "monarch",
+      "role": "race",
+      "salaryM": 8,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0.016,
+        "perPodium": 0.08,
+        "title": 1
+      },
+      "buyoutM": 12,
+      "numberOne": true
+    }
+  },
+  {
+    "id": "felipe-duarte",
+    "name": "Felipe Duarte",
+    "nationality": "BR",
+    "birthDate": "2005-03-12",
+    "attributes": {
+      "pace": 84,
+      "consistency": 84,
+      "racecraft": 78,
+      "tyreManagement": 78,
+      "wetSkill": 84,
+      "qualifying": 80,
+      "starts": 82,
+      "feedback": 80,
+      "adaptability": 82,
+      "stamina": 83
+    },
+    "personality": {
+      "ego": 54,
+      "loyalty": 80,
+      "marketability": 42,
+      "mediaSkill": 70,
+      "risk": 77
+    },
+    "state": {
+      "form": 73,
+      "morale": 75,
+      "fitness": 93,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [84, 93],
+      "growthRate": [1, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "marlowe",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "frederik-holm",
+    "name": "Frederik Holm",
+    "nationality": "DK",
+    "birthDate": "2004-11-02",
+    "attributes": {
+      "pace": 83,
+      "consistency": 79,
+      "racecraft": 83,
+      "tyreManagement": 84,
+      "wetSkill": 85,
+      "qualifying": 85,
+      "starts": 81,
+      "feedback": 74,
+      "adaptability": 82,
+      "stamina": 84
+    },
+    "personality": {
+      "ego": 43,
+      "loyalty": 69,
+      "marketability": 57,
+      "mediaSkill": 30,
+      "risk": 63
+    },
+    "state": {
+      "form": 66,
+      "morale": 73,
+      "fitness": 89,
+      "fatigue": 11
+    },
+    "hiddenRanges": {
+      "potential": [82, 90],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "argent",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "isaac-hadley",
+    "name": "Isaac Hadley",
+    "nationality": "GB",
+    "birthDate": "2007-06-19",
+    "attributes": {
+      "pace": 78,
+      "consistency": 79,
+      "racecraft": 82,
+      "tyreManagement": 79,
+      "wetSkill": 79,
+      "qualifying": 82,
+      "starts": 76,
+      "feedback": 73,
+      "adaptability": 80,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 76,
+      "loyalty": 42,
+      "marketability": 49,
+      "mediaSkill": 62,
+      "risk": 76
+    },
+    "state": {
+      "form": 67,
+      "morale": 66,
+      "fitness": 94,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [85, 97],
+      "growthRate": [1.2, 1.6],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "voltage",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "dino-ravelli",
+    "name": "Dino Ravelli",
+    "nationality": "IT",
+    "birthDate": "2004-01-30",
+    "attributes": {
+      "pace": 81,
+      "consistency": 81,
+      "racecraft": 83,
+      "tyreManagement": 82,
+      "wetSkill": 79,
+      "qualifying": 82,
+      "starts": 78,
+      "feedback": 80,
+      "adaptability": 82,
+      "stamina": 86
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 45,
+      "marketability": 54,
+      "mediaSkill": 44,
+      "risk": 60
+    },
+    "state": {
+      "form": 66,
+      "morale": 68,
+      "fitness": 93,
+      "fatigue": 7
+    },
+    "hiddenRanges": {
+      "potential": [82, 89],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "luke-brennan",
+    "name": "Luke Brennan",
+    "nationality": "US",
+    "birthDate": "2003-08-08",
+    "attributes": {
+      "pace": 82,
+      "consistency": 75,
+      "racecraft": 79,
+      "tyreManagement": 78,
+      "wetSkill": 77,
+      "qualifying": 84,
+      "starts": 79,
+      "feedback": 74,
+      "adaptability": 80,
+      "stamina": 83
+    },
+    "personality": {
+      "ego": 37,
+      "loyalty": 42,
+      "marketability": 78,
+      "mediaSkill": 51,
+      "risk": 49
+    },
+    "state": {
+      "form": 76,
+      "morale": 71,
+      "fitness": 95,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [80, 86],
+      "growthRate": [0.8, 1.1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "kestrel",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "ferran-vidal",
+    "name": "Ferran Vidal",
+    "nationality": "ES",
+    "birthDate": "2002-12-11",
+    "attributes": {
+      "pace": 79,
+      "consistency": 79,
+      "racecraft": 85,
+      "tyreManagement": 78,
+      "wetSkill": 77,
+      "qualifying": 78,
+      "starts": 81,
+      "feedback": 84,
+      "adaptability": 80,
+      "stamina": 84
+    },
+    "personality": {
+      "ego": 52,
+      "loyalty": 72,
+      "marketability": 69,
+      "mediaSkill": 47,
+      "risk": 38
+    },
+    "state": {
+      "form": 66,
+      "morale": 66,
+      "fitness": 94,
+      "fatigue": 5
+    },
+    "hiddenRanges": {
+      "potential": [80, 84],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "verdant",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "arvid-lind",
+    "name": "Arvid Lind",
+    "nationality": "SE",
+    "birthDate": "2006-06-06",
+    "attributes": {
+      "pace": 80,
+      "consistency": 77,
+      "racecraft": 76,
+      "tyreManagement": 82,
+      "wetSkill": 82,
+      "qualifying": 85,
+      "starts": 83,
+      "feedback": 77,
+      "adaptability": 79,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 69,
+      "loyalty": 43,
+      "marketability": 33,
+      "mediaSkill": 42,
+      "risk": 42
+    },
+    "state": {
+      "form": 68,
+      "morale": 76,
+      "fitness": 89,
+      "fatigue": 11
+    },
+    "hiddenRanges": {
+      "potential": [83, 94],
+      "growthRate": [1.1, 1.5],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "spark",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "ryo-hirano",
+    "name": "Ryo Hirano",
+    "nationality": "JP",
+    "birthDate": "2005-09-21",
+    "attributes": {
+      "pace": 79,
+      "consistency": 81,
+      "racecraft": 78,
+      "tyreManagement": 80,
+      "wetSkill": 76,
+      "qualifying": 79,
+      "starts": 82,
+      "feedback": 76,
+      "adaptability": 79,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 68,
+      "loyalty": 62,
+      "marketability": 76,
+      "mediaSkill": 79,
+      "risk": 54
+    },
+    "state": {
+      "form": 71,
+      "morale": 70,
+      "fitness": 94,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [80, 88],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "frontier",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "jonas-kraft",
+    "name": "Jonas Kraft",
+    "nationality": "DE",
+    "birthDate": "2005-04-03",
+    "attributes": {
+      "pace": 82,
+      "consistency": 74,
+      "racecraft": 79,
+      "tyreManagement": 77,
+      "wetSkill": 82,
+      "qualifying": 80,
+      "starts": 82,
+      "feedback": 79,
+      "adaptability": 76,
+      "stamina": 86
+    },
+    "personality": {
+      "ego": 71,
+      "loyalty": 52,
+      "marketability": 32,
+      "mediaSkill": 57,
+      "risk": 42
+    },
+    "state": {
+      "form": 77,
+      "morale": 75,
+      "fitness": 95,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [80, 88],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "nordwerk",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "paul-arnoux",
+    "name": "Paul Arnoux",
+    "nationality": "FR",
+    "birthDate": "2004-07-15",
+    "attributes": {
+      "pace": 82,
+      "consistency": 75,
+      "racecraft": 76,
+      "tyreManagement": 75,
+      "wetSkill": 83,
+      "qualifying": 79,
+      "starts": 78,
+      "feedback": 76,
+      "adaptability": 80,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 41,
+      "loyalty": 64,
+      "marketability": 36,
+      "mediaSkill": 79,
+      "risk": 44
+    },
+    "state": {
+      "form": 77,
+      "morale": 77,
+      "fitness": 90,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [81, 89],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "cole-harrington",
+    "name": "Cole Harrington",
+    "nationality": "US",
+    "birthDate": "1996-05-20",
+    "attributes": {
+      "pace": 81,
+      "consistency": 90,
+      "racecraft": 87,
+      "tyreManagement": 85,
+      "wetSkill": 78,
+      "qualifying": 84,
+      "starts": 80,
+      "feedback": 81,
+      "adaptability": 80,
+      "stamina": 86
+    },
+    "personality": {
+      "ego": 66,
+      "loyalty": 37,
+      "marketability": 62,
+      "mediaSkill": 47,
+      "risk": 74
+    },
+    "state": {
+      "form": 63,
+      "morale": 67,
+      "fitness": 89,
+      "fatigue": 6
+    },
+    "hiddenRanges": {
+      "potential": [82, 83],
+      "growthRate": [0.6, 0.8],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": {
+      "teamId": "monarch",
+      "role": "reserve",
+      "salaryM": 0.5,
+      "fromSeason": 2026,
+      "untilSeason": 2027,
+      "bonuses": {
+        "perPoint": 0,
+        "perPodium": 0,
+        "title": 0
+      },
+      "buyoutM": 1,
+      "numberOne": false
+    }
+  },
+  {
+    "id": "pierre-dumont",
+    "name": "Pierre Dumont",
+    "nationality": "FR",
+    "birthDate": "1994-06-21",
+    "attributes": {
+      "pace": 82,
+      "consistency": 84,
+      "racecraft": 86,
+      "tyreManagement": 85,
+      "wetSkill": 84,
+      "qualifying": 81,
+      "starts": 88,
+      "feedback": 88,
+      "adaptability": 87,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 64,
+      "loyalty": 77,
+      "marketability": 65,
+      "mediaSkill": 73,
+      "risk": 51
+    },
+    "state": {
+      "form": 72,
+      "morale": 73,
+      "fitness": 88,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [84, 85],
+      "growthRate": [0.6, 0.8],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "nico-hartmann",
+    "name": "Nico Hartmann",
+    "nationality": "DE",
+    "birthDate": "1990-03-14",
+    "attributes": {
+      "pace": 87,
+      "consistency": 83,
+      "racecraft": 85,
+      "tyreManagement": 84,
+      "wetSkill": 85,
+      "qualifying": 89,
+      "starts": 82,
+      "feedback": 90,
+      "adaptability": 81,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 67,
+      "loyalty": 50,
+      "marketability": 62,
+      "mediaSkill": 68,
+      "risk": 63
+    },
+    "state": {
+      "form": 64,
+      "morale": 77,
+      "fitness": 92,
+      "fatigue": 6
+    },
+    "hiddenRanges": {
+      "potential": [84, 84],
+      "growthRate": [0.5, 0.7],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "kasper-magnar",
+    "name": "Kasper Magnar",
+    "nationality": "DK",
+    "birthDate": "1992-10-05",
+    "attributes": {
+      "pace": 83,
+      "consistency": 85,
+      "racecraft": 83,
+      "tyreManagement": 85,
+      "wetSkill": 85,
+      "qualifying": 84,
+      "starts": 79,
+      "feedback": 84,
+      "adaptability": 86,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 42,
+      "loyalty": 57,
+      "marketability": 54,
+      "mediaSkill": 58,
+      "risk": 64
+    },
+    "state": {
+      "form": 65,
+      "morale": 73,
+      "fitness": 88,
+      "fatigue": 11
+    },
+    "hiddenRanges": {
+      "potential": [83, 84],
+      "growthRate": [0.5, 0.8],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "danny-callaghan",
+    "name": "Danny Callaghan",
+    "nationality": "AU",
+    "birthDate": "1989-07-01",
+    "attributes": {
+      "pace": 85,
+      "consistency": 90,
+      "racecraft": 83,
+      "tyreManagement": 82,
+      "wetSkill": 88,
+      "qualifying": 83,
+      "starts": 81,
+      "feedback": 86,
+      "adaptability": 83,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 59,
+      "loyalty": 71,
+      "marketability": 60,
+      "mediaSkill": 38,
+      "risk": 37
+    },
+    "state": {
+      "form": 66,
+      "morale": 69,
+      "fitness": 90,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [84, 85],
+      "growthRate": [0.5, 0.7],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "wei-zhang",
+    "name": "Wei Zhang",
+    "nationality": "CN",
+    "birthDate": "1999-05-30",
+    "attributes": {
+      "pace": 80,
+      "consistency": 88,
+      "racecraft": 86,
+      "tyreManagement": 79,
+      "wetSkill": 81,
+      "qualifying": 82,
+      "starts": 82,
+      "feedback": 85,
+      "adaptability": 77,
+      "stamina": 87
+    },
+    "personality": {
+      "ego": 55,
+      "loyalty": 71,
+      "marketability": 73,
+      "mediaSkill": 58,
+      "risk": 78
+    },
+    "state": {
+      "form": 76,
+      "morale": 77,
+      "fitness": 94,
+      "fatigue": 7
+    },
+    "hiddenRanges": {
+      "potential": [81, 83],
+      "growthRate": [0.7, 0.9],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 10,
+    "contract": null
+  },
+  {
+    "id": "tyler-grant",
+    "name": "Tyler Grant",
+    "nationality": "US",
+    "birthDate": "2000-12-31",
+    "attributes": {
+      "pace": 80,
+      "consistency": 86,
+      "racecraft": 81,
+      "tyreManagement": 80,
+      "wetSkill": 74,
+      "qualifying": 82,
+      "starts": 76,
+      "feedback": 81,
+      "adaptability": 81,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 31,
+      "loyalty": 55,
+      "marketability": 71,
+      "mediaSkill": 74,
+      "risk": 59
+    },
+    "state": {
+      "form": 65,
+      "morale": 75,
+      "fitness": 91,
+      "fatigue": 5
+    },
+    "hiddenRanges": {
+      "potential": [79, 83],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 8,
+    "contract": null
+  },
+  {
+    "id": "andres-castellano",
+    "name": "Andrés Castellano",
+    "nationality": "VE",
+    "birthDate": "2001-02-14",
+    "attributes": {
+      "pace": 79,
+      "consistency": 79,
+      "racecraft": 78,
+      "tyreManagement": 79,
+      "wetSkill": 80,
+      "qualifying": 76,
+      "starts": 80,
+      "feedback": 83,
+      "adaptability": 76,
+      "stamina": 86
+    },
+    "personality": {
+      "ego": 79,
+      "loyalty": 40,
+      "marketability": 72,
+      "mediaSkill": 75,
+      "risk": 64
+    },
+    "state": {
+      "form": 67,
+      "morale": 78,
+      "fitness": 87,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [78, 83],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 18,
+    "contract": null
+  },
+  {
+    "id": "rahul-mehta",
+    "name": "Rahul Mehta",
+    "nationality": "IN",
+    "birthDate": "2002-08-19",
+    "attributes": {
+      "pace": 78,
+      "consistency": 79,
+      "racecraft": 79,
+      "tyreManagement": 75,
+      "wetSkill": 76,
+      "qualifying": 74,
+      "starts": 80,
+      "feedback": 78,
+      "adaptability": 78,
+      "stamina": 90
+    },
+    "personality": {
+      "ego": 59,
+      "loyalty": 78,
+      "marketability": 55,
+      "mediaSkill": 32,
+      "risk": 72
+    },
+    "state": {
+      "form": 69,
+      "morale": 77,
+      "fitness": 87,
+      "fatigue": 11
+    },
+    "hiddenRanges": {
+      "potential": [77, 84],
+      "growthRate": [0.9, 1.1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 14,
+    "contract": null
+  },
+  {
+    "id": "saif-al-mansouri",
+    "name": "Saif Al-Mansouri",
+    "nationality": "AE",
+    "birthDate": "2003-04-22",
+    "attributes": {
+      "pace": 77,
+      "consistency": 77,
+      "racecraft": 77,
+      "tyreManagement": 77,
+      "wetSkill": 81,
+      "qualifying": 80,
+      "starts": 73,
+      "feedback": 74,
+      "adaptability": 77,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 36,
+      "loyalty": 72,
+      "marketability": 47,
+      "mediaSkill": 56,
+      "risk": 33
+    },
+    "state": {
+      "form": 65,
+      "morale": 65,
+      "fitness": 88,
+      "fatigue": 5
+    },
+    "hiddenRanges": {
+      "potential": [76, 84],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 25,
+    "contract": null
+  },
+  {
+    "id": "maxim-fournier",
+    "name": "Maxim Fournier",
+    "nationality": "CA",
+    "birthDate": "2003-09-09",
+    "attributes": {
+      "pace": 74,
+      "consistency": 78,
+      "racecraft": 75,
+      "tyreManagement": 78,
+      "wetSkill": 80,
+      "qualifying": 81,
+      "starts": 80,
+      "feedback": 73,
+      "adaptability": 78,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 76,
+      "loyalty": 74,
+      "marketability": 65,
+      "mediaSkill": 71,
+      "risk": 61
+    },
+    "state": {
+      "form": 62,
+      "morale": 69,
+      "fitness": 87,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [77, 82],
+      "growthRate": [0.8, 1],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 20,
+    "contract": null
+  },
+  {
+    "id": "jin-ho-park",
+    "name": "Jin-ho Park",
+    "nationality": "KR",
+    "birthDate": "2004-01-17",
+    "attributes": {
+      "pace": 78,
+      "consistency": 78,
+      "racecraft": 76,
+      "tyreManagement": 72,
+      "wetSkill": 78,
+      "qualifying": 81,
+      "starts": 75,
+      "feedback": 77,
+      "adaptability": 80,
+      "stamina": 87
+    },
+    "personality": {
+      "ego": 67,
+      "loyalty": 43,
+      "marketability": 63,
+      "mediaSkill": 75,
+      "risk": 66
+    },
+    "state": {
+      "form": 74,
+      "morale": 78,
+      "fitness": 94,
+      "fatigue": 4
+    },
+    "hiddenRanges": {
+      "potential": [78, 87],
+      "growthRate": [1, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 12,
+    "contract": null
+  },
+  {
+    "id": "leo-fontaine",
+    "name": "Leo Fontaine",
+    "nationality": "FR",
+    "birthDate": "2006-02-11",
+    "attributes": {
+      "pace": 79,
+      "consistency": 76,
+      "racecraft": 81,
+      "tyreManagement": 76,
+      "wetSkill": 82,
+      "qualifying": 83,
+      "starts": 76,
+      "feedback": 70,
+      "adaptability": 77,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 47,
+      "loyalty": 65,
+      "marketability": 61,
+      "mediaSkill": 45,
+      "risk": 36
+    },
+    "state": {
+      "form": 68,
+      "morale": 79,
+      "fitness": 85,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [81, 93],
+      "growthRate": [1.1, 1.5],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "mika-salonen",
+    "name": "Mika Salonen",
+    "nationality": "FI",
+    "birthDate": "2005-11-28",
+    "attributes": {
+      "pace": 78,
+      "consistency": 75,
+      "racecraft": 75,
+      "tyreManagement": 76,
+      "wetSkill": 80,
+      "qualifying": 78,
+      "starts": 74,
+      "feedback": 73,
+      "adaptability": 75,
+      "stamina": 83
+    },
+    "personality": {
+      "ego": 54,
+      "loyalty": 36,
+      "marketability": 52,
+      "mediaSkill": 73,
+      "risk": 32
+    },
+    "state": {
+      "form": 72,
+      "morale": 66,
+      "fitness": 89,
+      "fatigue": 11
+    },
+    "hiddenRanges": {
+      "potential": [80, 90],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "gabriel-rocha",
+    "name": "Gabriel Rocha",
+    "nationality": "BR",
+    "birthDate": "2006-07-07",
+    "attributes": {
+      "pace": 81,
+      "consistency": 75,
+      "racecraft": 79,
+      "tyreManagement": 76,
+      "wetSkill": 81,
+      "qualifying": 83,
+      "starts": 76,
+      "feedback": 70,
+      "adaptability": 78,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 47,
+      "loyalty": 35,
+      "marketability": 38,
+      "mediaSkill": 56,
+      "risk": 33
+    },
+    "state": {
+      "form": 78,
+      "morale": 69,
+      "fitness": 87,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [80, 92],
+      "growthRate": [1, 1.5],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 3,
+    "contract": null
+  },
+  {
+    "id": "hugo-lindgren",
+    "name": "Hugo Lindgren",
+    "nationality": "SE",
+    "birthDate": "2007-03-03",
+    "attributes": {
+      "pace": 77,
+      "consistency": 70,
+      "racecraft": 71,
+      "tyreManagement": 75,
+      "wetSkill": 75,
+      "qualifying": 76,
+      "starts": 74,
+      "feedback": 74,
+      "adaptability": 73,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 32,
+      "marketability": 75,
+      "mediaSkill": 78,
+      "risk": 56
+    },
+    "state": {
+      "form": 71,
+      "morale": 75,
+      "fitness": 91,
+      "fatigue": 5
+    },
+    "hiddenRanges": {
+      "potential": [80, 94],
+      "growthRate": [1.2, 1.6],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "sebastian-ortega",
+    "name": "Sebastián Ortega",
+    "nationality": "MX",
+    "birthDate": "2005-10-10",
+    "attributes": {
+      "pace": 74,
+      "consistency": 75,
+      "racecraft": 76,
+      "tyreManagement": 78,
+      "wetSkill": 76,
+      "qualifying": 82,
+      "starts": 76,
+      "feedback": 74,
+      "adaptability": 78,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 40,
+      "loyalty": 56,
+      "marketability": 64,
+      "mediaSkill": 37,
+      "risk": 33
+    },
+    "state": {
+      "form": 69,
+      "morale": 66,
+      "fitness": 90,
+      "fatigue": 7
+    },
+    "hiddenRanges": {
+      "potential": [78, 88],
+      "growthRate": [0.9, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 5,
+    "contract": null
+  },
+  {
+    "id": "nathan-price",
+    "name": "Nathan Price",
+    "nationality": "GB",
+    "birthDate": "2006-12-01",
+    "attributes": {
+      "pace": 75,
+      "consistency": 72,
+      "racecraft": 76,
+      "tyreManagement": 77,
+      "wetSkill": 82,
+      "qualifying": 81,
+      "starts": 79,
+      "feedback": 78,
+      "adaptability": 79,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 55,
+      "loyalty": 56,
+      "marketability": 45,
+      "mediaSkill": 71,
+      "risk": 54
+    },
+    "state": {
+      "form": 72,
+      "morale": 68,
+      "fitness": 88,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [80, 91],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "kai-weber",
+    "name": "Kai Weber",
+    "nationality": "DE",
+    "birthDate": "2006-05-16",
+    "attributes": {
+      "pace": 75,
+      "consistency": 74,
+      "racecraft": 74,
+      "tyreManagement": 71,
+      "wetSkill": 76,
+      "qualifying": 82,
+      "starts": 76,
+      "feedback": 76,
+      "adaptability": 79,
+      "stamina": 82
+    },
+    "personality": {
+      "ego": 73,
+      "loyalty": 73,
+      "marketability": 65,
+      "mediaSkill": 63,
+      "risk": 38
+    },
+    "state": {
+      "form": 70,
+      "morale": 65,
+      "fitness": 87,
+      "fatigue": 12
+    },
+    "hiddenRanges": {
+      "potential": [79, 90],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "aiden-clarke",
+    "name": "Aiden Clarke",
+    "nationality": "IE",
+    "birthDate": "2005-08-24",
+    "attributes": {
+      "pace": 75,
+      "consistency": 72,
+      "racecraft": 75,
+      "tyreManagement": 75,
+      "wetSkill": 79,
+      "qualifying": 80,
+      "starts": 79,
+      "feedback": 70,
+      "adaptability": 80,
+      "stamina": 82
+    },
+    "personality": {
+      "ego": 74,
+      "loyalty": 75,
+      "marketability": 53,
+      "mediaSkill": 61,
+      "risk": 32
+    },
+    "state": {
+      "form": 64,
+      "morale": 79,
+      "fitness": 88,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [78, 87],
+      "growthRate": [0.9, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "matteo-bianchetti",
+    "name": "Matteo Bianchetti",
+    "nationality": "IT",
+    "birthDate": "2007-01-29",
+    "attributes": {
+      "pace": 78,
+      "consistency": 73,
+      "racecraft": 73,
+      "tyreManagement": 74,
+      "wetSkill": 74,
+      "qualifying": 77,
+      "starts": 78,
+      "feedback": 65,
+      "adaptability": 78,
+      "stamina": 84
+    },
+    "personality": {
+      "ego": 56,
+      "loyalty": 38,
+      "marketability": 67,
+      "mediaSkill": 71,
+      "risk": 48
+    },
+    "state": {
+      "form": 70,
+      "morale": 69,
+      "fitness": 88,
+      "fatigue": 4
+    },
+    "hiddenRanges": {
+      "potential": [79, 94],
+      "growthRate": [1.2, 1.6],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "joshua-tan",
+    "name": "Joshua Tan",
+    "nationality": "SG",
+    "birthDate": "2005-04-18",
+    "attributes": {
+      "pace": 75,
+      "consistency": 71,
+      "racecraft": 71,
+      "tyreManagement": 71,
+      "wetSkill": 73,
+      "qualifying": 80,
+      "starts": 79,
+      "feedback": 74,
+      "adaptability": 75,
+      "stamina": 82
+    },
+    "personality": {
+      "ego": 59,
+      "loyalty": 63,
+      "marketability": 67,
+      "mediaSkill": 71,
+      "risk": 33
+    },
+    "state": {
+      "form": 78,
+      "morale": 70,
+      "fitness": 88,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [76, 85],
+      "growthRate": [0.9, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 7,
+    "contract": null
+  },
+  {
+    "id": "riku-tanaka",
+    "name": "Riku Tanaka",
+    "nationality": "JP",
+    "birthDate": "2006-09-12",
+    "attributes": {
+      "pace": 77,
+      "consistency": 70,
+      "racecraft": 72,
+      "tyreManagement": 72,
+      "wetSkill": 79,
+      "qualifying": 79,
+      "starts": 78,
+      "feedback": 69,
+      "adaptability": 76,
+      "stamina": 88
+    },
+    "personality": {
+      "ego": 66,
+      "loyalty": 72,
+      "marketability": 40,
+      "mediaSkill": 47,
+      "risk": 32
+    },
+    "state": {
+      "form": 65,
+      "morale": 76,
+      "fitness": 89,
+      "fatigue": 6
+    },
+    "hiddenRanges": {
+      "potential": [79, 90],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 2,
+    "contract": null
+  },
+  {
+    "id": "benjamin-kovac",
+    "name": "Benjamin Kovac",
+    "nationality": "CZ",
+    "birthDate": "2006-06-30",
+    "attributes": {
+      "pace": 78,
+      "consistency": 73,
+      "racecraft": 75,
+      "tyreManagement": 71,
+      "wetSkill": 76,
+      "qualifying": 77,
+      "starts": 73,
+      "feedback": 70,
+      "adaptability": 76,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 42,
+      "loyalty": 63,
+      "marketability": 62,
+      "mediaSkill": 43,
+      "risk": 53
+    },
+    "state": {
+      "form": 64,
+      "morale": 64,
+      "fitness": 92,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [78, 89],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "ethan-moore",
+    "name": "Ethan Moore",
+    "nationality": "US",
+    "birthDate": "2007-10-02",
+    "attributes": {
+      "pace": 73,
+      "consistency": 71,
+      "racecraft": 71,
+      "tyreManagement": 71,
+      "wetSkill": 70,
+      "qualifying": 78,
+      "starts": 72,
+      "feedback": 68,
+      "adaptability": 72,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 66,
+      "loyalty": 39,
+      "marketability": 52,
+      "mediaSkill": 71,
+      "risk": 45
+    },
+    "state": {
+      "form": 64,
+      "morale": 66,
+      "fitness": 89,
+      "fatigue": 7
+    },
+    "hiddenRanges": {
+      "potential": [78, 93],
+      "growthRate": [1.2, 1.6],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 4,
+    "contract": null
+  },
+  {
+    "id": "lucas-oliveira",
+    "name": "Lucas Oliveira",
+    "nationality": "PT",
+    "birthDate": "2005-12-19",
+    "attributes": {
+      "pace": 76,
+      "consistency": 73,
+      "racecraft": 78,
+      "tyreManagement": 73,
+      "wetSkill": 75,
+      "qualifying": 77,
+      "starts": 77,
+      "feedback": 68,
+      "adaptability": 74,
+      "stamina": 87
+    },
+    "personality": {
+      "ego": 49,
+      "loyalty": 53,
+      "marketability": 46,
+      "mediaSkill": 75,
+      "risk": 47
+    },
+    "state": {
+      "form": 63,
+      "morale": 79,
+      "fitness": 90,
+      "fatigue": 11
+    },
+    "hiddenRanges": {
+      "potential": [77, 86],
+      "growthRate": [0.9, 1.2],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "oliver-stenberg",
+    "name": "Oliver Stenberg",
+    "nationality": "NO",
+    "birthDate": "2006-03-27",
+    "attributes": {
+      "pace": 77,
+      "consistency": 72,
+      "racecraft": 72,
+      "tyreManagement": 77,
+      "wetSkill": 72,
+      "qualifying": 76,
+      "starts": 76,
+      "feedback": 70,
+      "adaptability": 80,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 39,
+      "loyalty": 71,
+      "marketability": 35,
+      "mediaSkill": 43,
+      "risk": 60
+    },
+    "state": {
+      "form": 65,
+      "morale": 70,
+      "fitness": 93,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [79, 90],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "adam-nowicki",
+    "name": "Adam Nowicki",
+    "nationality": "PL",
+    "birthDate": "2005-07-11",
+    "attributes": {
+      "pace": 76,
+      "consistency": 69,
+      "racecraft": 74,
+      "tyreManagement": 74,
+      "wetSkill": 73,
+      "qualifying": 78,
+      "starts": 79,
+      "feedback": 73,
+      "adaptability": 77,
+      "stamina": 85
+    },
+    "personality": {
+      "ego": 60,
+      "loyalty": 59,
+      "marketability": 48,
+      "mediaSkill": 71,
+      "risk": 59
+    },
+    "state": {
+      "form": 73,
+      "morale": 72,
+      "fitness": 92,
+      "fatigue": 10
+    },
+    "hiddenRanges": {
+      "potential": [77, 87],
+      "growthRate": [0.9, 1.3],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 3,
+    "contract": null
+  },
+  {
+    "id": "samuel-dubois",
+    "name": "Samuel Dubois",
+    "nationality": "BE",
+    "birthDate": "2006-11-05",
+    "attributes": {
+      "pace": 76,
+      "consistency": 71,
+      "racecraft": 75,
+      "tyreManagement": 74,
+      "wetSkill": 77,
+      "qualifying": 79,
+      "starts": 75,
+      "feedback": 74,
+      "adaptability": 73,
+      "stamina": 90
+    },
+    "personality": {
+      "ego": 52,
+      "loyalty": 59,
+      "marketability": 70,
+      "mediaSkill": 54,
+      "risk": 77
+    },
+    "state": {
+      "form": 63,
+      "morale": 66,
+      "fitness": 86,
+      "fatigue": 9
+    },
+    "hiddenRanges": {
+      "potential": [78, 89],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  },
+  {
+    "id": "jack-wilson",
+    "name": "Jack Wilson",
+    "nationality": "AU",
+    "birthDate": "2006-01-23",
+    "attributes": {
+      "pace": 76,
+      "consistency": 69,
+      "racecraft": 78,
+      "tyreManagement": 73,
+      "wetSkill": 76,
+      "qualifying": 75,
+      "starts": 75,
+      "feedback": 67,
+      "adaptability": 79,
+      "stamina": 89
+    },
+    "personality": {
+      "ego": 31,
+      "loyalty": 79,
+      "marketability": 76,
+      "mediaSkill": 51,
+      "risk": 44
+    },
+    "state": {
+      "form": 69,
+      "morale": 66,
+      "fitness": 92,
+      "fatigue": 8
+    },
+    "hiddenRanges": {
+      "potential": [79, 90],
+      "growthRate": [1, 1.4],
+      "injuryProneness": [0.05, 0.15]
+    },
+    "paymentM": 0,
+    "contract": null
+  }
+]

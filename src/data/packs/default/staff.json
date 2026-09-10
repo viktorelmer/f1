@@ -1,0 +1,3837 @@
+[
+  {
+    "id": "thomas-kingsley",
+    "name": "Thomas Kingsley",
+    "nationality": "GB",
+    "birthDate": "1970-03-15",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 93,
+      "consistency": 99
+    },
+    "reputation": 92,
+    "ambition": 73,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 13.07,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "peter-sutcliffe",
+    "name": "Peter Sutcliffe",
+    "nationality": "GB",
+    "birthDate": "1984-01-16",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 90,
+      "consistency": 98
+    },
+    "reputation": 91,
+    "ambition": 75,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 5.96,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "bram-jansen",
+    "name": "Bram Jansen",
+    "nationality": "NL",
+    "birthDate": "1986-09-04",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 88,
+      "consistency": 88
+    },
+    "reputation": 84,
+    "ambition": 43,
+    "assignedDriverId": "liam-whitaker",
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 1.12,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "mark-bramwell",
+    "name": "Mark Bramwell",
+    "nationality": "GB",
+    "birthDate": "1993-04-24",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 85,
+      "consistency": 83
+    },
+    "reputation": 83,
+    "ambition": 84,
+    "assignedDriverId": "callum-reid",
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.93,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "thomas-sutcliffe",
+    "name": "Thomas Sutcliffe",
+    "nationality": "GB",
+    "birthDate": "1991-11-08",
+    "role": "strategist",
+    "attributes": {
+      "skill": 84,
+      "consistency": 79
+    },
+    "reputation": 80,
+    "ambition": 53,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.74,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "matthew-gillespie",
+    "name": "Matthew Gillespie",
+    "nationality": "GB",
+    "birthDate": "1981-12-15",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 89,
+      "consistency": 84
+    },
+    "reputation": 92,
+    "ambition": 41,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 1.47,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "antoine-arnaud",
+    "name": "Antoine Arnaud",
+    "nationality": "FR",
+    "birthDate": "1982-06-22",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 86,
+      "consistency": 82
+    },
+    "reputation": 86,
+    "ambition": 78,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.7,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "rebecca-eastwood",
+    "name": "Rebecca Eastwood",
+    "nationality": "GB",
+    "birthDate": "1974-09-08",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 83,
+      "consistency": 83
+    },
+    "reputation": 82,
+    "ambition": 39,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 1,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "paolo-mancuso",
+    "name": "Paolo Mancuso",
+    "nationality": "IT",
+    "birthDate": "1984-09-06",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 90,
+      "consistency": 96
+    },
+    "reputation": 93,
+    "ambition": 63,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 1.61,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "rachel-whitfield",
+    "name": "Rachel Whitfield",
+    "nationality": "GB",
+    "birthDate": "1989-12-19",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 90,
+      "consistency": 87
+    },
+    "reputation": 90,
+    "ambition": 48,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.91,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "rachel-thornton",
+    "name": "Rachel Thornton",
+    "nationality": "GB",
+    "birthDate": "1987-12-16",
+    "role": "scout",
+    "attributes": {
+      "skill": 83,
+      "consistency": 76
+    },
+    "reputation": 79,
+    "ambition": 49,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.39,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "claire-greaves",
+    "name": "Claire Greaves",
+    "nationality": "GB",
+    "birthDate": "1985-10-08",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 89,
+      "consistency": 91
+    },
+    "reputation": 90,
+    "ambition": 58,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.49,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "daniel-lawton",
+    "name": "Daniel Lawton",
+    "nationality": "GB",
+    "birthDate": "1990-09-08",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 88,
+      "consistency": 82
+    },
+    "reputation": 92,
+    "ambition": 63,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.32,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "jess-mackie",
+    "name": "Jess Mackie",
+    "nationality": "AU",
+    "birthDate": "1986-05-19",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 83,
+      "consistency": 82
+    },
+    "reputation": 81,
+    "ambition": 63,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.63,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "rachel-fenwick",
+    "name": "Rachel Fenwick",
+    "nationality": "GB",
+    "birthDate": "1995-11-12",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 90,
+      "consistency": 91
+    },
+    "reputation": 86,
+    "ambition": 50,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.44,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "javier-lozano",
+    "name": "Javier Lozano",
+    "nationality": "ES",
+    "birthDate": "1981-03-14",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 91,
+      "consistency": 92
+    },
+    "reputation": 90,
+    "ambition": 42,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "marlowe",
+      "salaryM": 0.52,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "laura-fairbairn",
+    "name": "Laura Fairbairn",
+    "nationality": "GB",
+    "birthDate": "1977-04-17",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 88,
+      "consistency": 87
+    },
+    "reputation": 84,
+    "ambition": 75,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 11.05,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "james-ashworth",
+    "name": "James Ashworth",
+    "nationality": "GB",
+    "birthDate": "1976-03-25",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 90,
+      "consistency": 95
+    },
+    "reputation": 90,
+    "ambition": 41,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 6.07,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "giulia-lombardo",
+    "name": "Giulia Lombardo",
+    "nationality": "IT",
+    "birthDate": "1986-07-01",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 86,
+      "consistency": 82
+    },
+    "reputation": 89,
+    "ambition": 69,
+    "assignedDriverId": "henry-ashdown",
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 1.03,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "andrew-eastwood",
+    "name": "Andrew Eastwood",
+    "nationality": "GB",
+    "birthDate": "1990-11-17",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 90,
+      "consistency": 84
+    },
+    "reputation": 94,
+    "ambition": 45,
+    "assignedDriverId": "enzo-marchetti",
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 1.09,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "harry-caldwell",
+    "name": "Harry Caldwell",
+    "nationality": "GB",
+    "birthDate": "1991-05-24",
+    "role": "strategist",
+    "attributes": {
+      "skill": 86,
+      "consistency": 80
+    },
+    "reputation": 82,
+    "ambition": 46,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.79,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "laura-greaves",
+    "name": "Laura Greaves",
+    "nationality": "GB",
+    "birthDate": "1978-01-22",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 88,
+      "consistency": 85
+    },
+    "reputation": 83,
+    "ambition": 64,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 1.39,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "hugo-chevalier",
+    "name": "Hugo Chevalier",
+    "nationality": "FR",
+    "birthDate": "1983-06-23",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 86,
+      "consistency": 90
+    },
+    "reputation": 88,
+    "ambition": 79,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.69,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "matthew-holloway",
+    "name": "Matthew Holloway",
+    "nationality": "GB",
+    "birthDate": "1979-04-28",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 83,
+      "consistency": 85
+    },
+    "reputation": 84,
+    "ambition": 82,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 1.01,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "thomas-gillespie",
+    "name": "Thomas Gillespie",
+    "nationality": "GB",
+    "birthDate": "1975-06-27",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 86,
+      "consistency": 82
+    },
+    "reputation": 83,
+    "ambition": 71,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 1.39,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "simon-wainwright",
+    "name": "Simon Wainwright",
+    "nationality": "GB",
+    "birthDate": "1981-08-06",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 87,
+      "consistency": 94
+    },
+    "reputation": 84,
+    "ambition": 80,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.81,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "sanne-visser",
+    "name": "Sanne Visser",
+    "nationality": "NL",
+    "birthDate": "1983-11-13",
+    "role": "scout",
+    "attributes": {
+      "skill": 84,
+      "consistency": 90
+    },
+    "reputation": 87,
+    "ambition": 37,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.4,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "hannah-thornton",
+    "name": "Hannah Thornton",
+    "nationality": "GB",
+    "birthDate": "1985-02-12",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 91,
+      "consistency": 85
+    },
+    "reputation": 93,
+    "ambition": 59,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.51,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "andrew-radcliffe",
+    "name": "Andrew Radcliffe",
+    "nationality": "GB",
+    "birthDate": "1982-03-21",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 89,
+      "consistency": 94
+    },
+    "reputation": 90,
+    "ambition": 72,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.34,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "andrea-ferraresi",
+    "name": "Andrea Ferraresi",
+    "nationality": "IT",
+    "birthDate": "1988-07-01",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 92,
+      "consistency": 90
+    },
+    "reputation": 91,
+    "ambition": 53,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.85,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "hannah-kingsley",
+    "name": "Hannah Kingsley",
+    "nationality": "GB",
+    "birthDate": "1989-04-24",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 83,
+      "consistency": 85
+    },
+    "reputation": 85,
+    "ambition": 58,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.35,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "elena-beltran",
+    "name": "Elena Beltrán",
+    "nationality": "ES",
+    "birthDate": "1984-09-05",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 82,
+      "consistency": 85
+    },
+    "reputation": 79,
+    "ambition": 37,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "argent",
+      "salaryM": 0.37,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "william-lawton",
+    "name": "William Lawton",
+    "nationality": "GB",
+    "birthDate": "1976-06-05",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 89,
+      "consistency": 87
+    },
+    "reputation": 91,
+    "ambition": 83,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 11.66,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "rebecca-fairbairn",
+    "name": "Rebecca Fairbairn",
+    "nationality": "GB",
+    "birthDate": "1981-09-01",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 87,
+      "consistency": 90
+    },
+    "reputation": 91,
+    "ambition": 60,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 5.4,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "daniel-thornton",
+    "name": "Daniel Thornton",
+    "nationality": "GB",
+    "birthDate": "1987-10-13",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 89,
+      "consistency": 89
+    },
+    "reputation": 91,
+    "ambition": 52,
+    "assignedDriverId": "daan-vermeer",
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 1.17,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "william-dunmore",
+    "name": "William Dunmore",
+    "nationality": "GB",
+    "birthDate": "1986-01-13",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 89,
+      "consistency": 92
+    },
+    "reputation": 89,
+    "ambition": 72,
+    "assignedDriverId": "kenji-arakawa",
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 1.06,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "thomas-colbourne",
+    "name": "Thomas Colbourne",
+    "nationality": "GB",
+    "birthDate": "1992-01-21",
+    "role": "strategist",
+    "attributes": {
+      "skill": 86,
+      "consistency": 91
+    },
+    "reputation": 89,
+    "ambition": 59,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.77,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "matthew-greaves",
+    "name": "Matthew Greaves",
+    "nationality": "GB",
+    "birthDate": "1977-04-20",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 91,
+      "consistency": 87
+    },
+    "reputation": 90,
+    "ambition": 79,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 1.54,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "laura-colbourne",
+    "name": "Laura Colbourne",
+    "nationality": "GB",
+    "birthDate": "1985-10-15",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 91,
+      "consistency": 85
+    },
+    "reputation": 91,
+    "ambition": 55,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.82,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "nicolas-perrin",
+    "name": "Nicolas Perrin",
+    "nationality": "FR",
+    "birthDate": "1974-12-09",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 91,
+      "consistency": 88
+    },
+    "reputation": 88,
+    "ambition": 74,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 1.34,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "kevin-everett",
+    "name": "Kevin Everett",
+    "nationality": "US",
+    "birthDate": "1974-12-15",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 89,
+      "consistency": 94
+    },
+    "reputation": 94,
+    "ambition": 36,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 1.56,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "hannah-dunmore",
+    "name": "Hannah Dunmore",
+    "nationality": "GB",
+    "birthDate": "1981-11-10",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 81,
+      "consistency": 80
+    },
+    "reputation": 82,
+    "ambition": 45,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.65,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "javier-beltran",
+    "name": "Javier Beltrán",
+    "nationality": "ES",
+    "birthDate": "1982-11-10",
+    "role": "scout",
+    "attributes": {
+      "skill": 81,
+      "consistency": 79
+    },
+    "reputation": 79,
+    "ambition": 35,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.37,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "charlotte-holloway",
+    "name": "Charlotte Holloway",
+    "nationality": "GB",
+    "birthDate": "1980-06-01",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 80,
+      "consistency": 79
+    },
+    "reputation": 77,
+    "ambition": 84,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.35,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "elena-mancuso",
+    "name": "Elena Mancuso",
+    "nationality": "IT",
+    "birthDate": "1980-07-24",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 88,
+      "consistency": 96
+    },
+    "reputation": 91,
+    "ambition": 64,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.33,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "ralf-falkenrath",
+    "name": "Ralf Falkenrath",
+    "nationality": "DE",
+    "birthDate": "1986-08-06",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 88,
+      "consistency": 90
+    },
+    "reputation": 86,
+    "ambition": 55,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.75,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "emily-gillespie",
+    "name": "Emily Gillespie",
+    "nationality": "GB",
+    "birthDate": "1994-09-01",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 80,
+      "consistency": 84
+    },
+    "reputation": 77,
+    "ambition": 55,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.31,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "justin-hawthorne",
+    "name": "Justin Hawthorne",
+    "nationality": "US",
+    "birthDate": "1984-07-02",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 85,
+      "consistency": 89
+    },
+    "reputation": 84,
+    "ambition": 44,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "voltage",
+      "salaryM": 0.42,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "luca-mancuso",
+    "name": "Luca Mancuso",
+    "nationality": "IT",
+    "birthDate": "1973-04-22",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 90,
+      "consistency": 85
+    },
+    "reputation": 88,
+    "ambition": 65,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 12.02,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "andrea-castagna",
+    "name": "Andrea Castagna",
+    "nationality": "IT",
+    "birthDate": "1984-02-08",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 83,
+      "consistency": 88
+    },
+    "reputation": 85,
+    "ambition": 77,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 4.77,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "andrea-rinaldi",
+    "name": "Andrea Rinaldi",
+    "nationality": "IT",
+    "birthDate": "1993-07-24",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 81,
+      "consistency": 83
+    },
+    "reputation": 84,
+    "ambition": 37,
+    "assignedDriverId": "marcus-hale",
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.88,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "aiko-morita",
+    "name": "Aiko Morita",
+    "nationality": "JP",
+    "birthDate": "1996-11-15",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 83,
+      "consistency": 80
+    },
+    "reputation": 78,
+    "ambition": 48,
+    "assignedDriverId": "julien-castellane",
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.86,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "chiara-orsini",
+    "name": "Chiara Orsini",
+    "nationality": "IT",
+    "birthDate": "1989-09-01",
+    "role": "strategist",
+    "attributes": {
+      "skill": 87,
+      "consistency": 94
+    },
+    "reputation": 86,
+    "ambition": 39,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.81,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "diego-lozano",
+    "name": "Diego Lozano",
+    "nationality": "ES",
+    "birthDate": "1982-07-06",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 82,
+      "consistency": 87
+    },
+    "reputation": 85,
+    "ambition": 44,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 1.15,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "hiroshi-morita",
+    "name": "Hiroshi Morita",
+    "nationality": "JP",
+    "birthDate": "1984-02-17",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 81,
+      "consistency": 86
+    },
+    "reputation": 82,
+    "ambition": 70,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.58,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "francesca-orsini",
+    "name": "Francesca Orsini",
+    "nationality": "IT",
+    "birthDate": "1977-04-28",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 86,
+      "consistency": 92
+    },
+    "reputation": 83,
+    "ambition": 72,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 1.14,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "giulia-zanetti",
+    "name": "Giulia Zanetti",
+    "nationality": "IT",
+    "birthDate": "1981-10-03",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 89,
+      "consistency": 90
+    },
+    "reputation": 90,
+    "ambition": 49,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 1.57,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "elena-santoro",
+    "name": "Elena Santoro",
+    "nationality": "IT",
+    "birthDate": "1987-08-05",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 86,
+      "consistency": 90
+    },
+    "reputation": 88,
+    "ambition": 77,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.79,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "andrea-pellegrini",
+    "name": "Andrea Pellegrini",
+    "nationality": "IT",
+    "birthDate": "1978-05-02",
+    "role": "scout",
+    "attributes": {
+      "skill": 82,
+      "consistency": 85
+    },
+    "reputation": 80,
+    "ambition": 68,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.38,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "davide-pellegrini",
+    "name": "Davide Pellegrini",
+    "nationality": "IT",
+    "birthDate": "1989-07-25",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 79,
+      "consistency": 83
+    },
+    "reputation": 74,
+    "ambition": 43,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.33,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "davide-bertolini",
+    "name": "Davide Bertolini",
+    "nationality": "IT",
+    "birthDate": "1983-03-24",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 78,
+      "consistency": 76
+    },
+    "reputation": 74,
+    "ambition": 72,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.23,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "francesca-bertolini",
+    "name": "Francesca Bertolini",
+    "nationality": "IT",
+    "birthDate": "1985-10-08",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 81,
+      "consistency": 82
+    },
+    "reputation": 83,
+    "ambition": 44,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.57,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "luca-vitale",
+    "name": "Luca Vitale",
+    "nationality": "IT",
+    "birthDate": "1991-04-01",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 80,
+      "consistency": 84
+    },
+    "reputation": 84,
+    "ambition": 39,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.31,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "francesca-lombardo",
+    "name": "Francesca Lombardo",
+    "nationality": "IT",
+    "birthDate": "1984-09-05",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 80,
+      "consistency": 83
+    },
+    "reputation": 81,
+    "ambition": 79,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "scuderia-rossa",
+      "salaryM": 0.35,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "sophie-bramwell",
+    "name": "Sophie Bramwell",
+    "nationality": "GB",
+    "birthDate": "1976-05-28",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 84,
+      "consistency": 88
+    },
+    "reputation": 86,
+    "ambition": 83,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 9.74,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "stefan-zimmer",
+    "name": "Stefan Zimmer",
+    "nationality": "DE",
+    "birthDate": "1987-01-11",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 82,
+      "consistency": 76
+    },
+    "reputation": 83,
+    "ambition": 53,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 4.6,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "matthew-fairbairn",
+    "name": "Matthew Fairbairn",
+    "nationality": "GB",
+    "birthDate": "1989-09-07",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 81,
+      "consistency": 83
+    },
+    "reputation": 81,
+    "ambition": 42,
+    "assignedDriverId": "alvaro-medina",
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.89,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "thomas-radcliffe",
+    "name": "Thomas Radcliffe",
+    "nationality": "GB",
+    "birthDate": "1986-07-28",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 78,
+      "consistency": 75
+    },
+    "reputation": 75,
+    "ambition": 73,
+    "assignedDriverId": "niran-chaiwat",
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.71,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "andrew-sutcliffe",
+    "name": "Andrew Sutcliffe",
+    "nationality": "GB",
+    "birthDate": "1993-05-26",
+    "role": "strategist",
+    "attributes": {
+      "skill": 76,
+      "consistency": 83
+    },
+    "reputation": 80,
+    "ambition": 49,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.54,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "elena-esteban",
+    "name": "Elena Esteban",
+    "nationality": "ES",
+    "birthDate": "1983-03-20",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 75,
+      "consistency": 83
+    },
+    "reputation": 72,
+    "ambition": 84,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.88,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "william-hargreaves",
+    "name": "William Hargreaves",
+    "nationality": "GB",
+    "birthDate": "1976-07-04",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 77,
+      "consistency": 74
+    },
+    "reputation": 78,
+    "ambition": 69,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.5,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "laura-fenwick",
+    "name": "Laura Fenwick",
+    "nationality": "GB",
+    "birthDate": "1983-11-06",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 78,
+      "consistency": 70
+    },
+    "reputation": 79,
+    "ambition": 58,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.83,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "charlotte-sutcliffe",
+    "name": "Charlotte Sutcliffe",
+    "nationality": "GB",
+    "birthDate": "1983-05-02",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 80,
+      "consistency": 74
+    },
+    "reputation": 82,
+    "ambition": 56,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 1.14,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "peter-prescott",
+    "name": "Peter Prescott",
+    "nationality": "GB",
+    "birthDate": "1987-02-17",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 79,
+      "consistency": 81
+    },
+    "reputation": 78,
+    "ambition": 71,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.61,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "claire-ashworth",
+    "name": "Claire Ashworth",
+    "nationality": "GB",
+    "birthDate": "1986-06-23",
+    "role": "scout",
+    "attributes": {
+      "skill": 81,
+      "consistency": 78
+    },
+    "reputation": 81,
+    "ambition": 68,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.36,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "harry-radcliffe",
+    "name": "Harry Radcliffe",
+    "nationality": "GB",
+    "birthDate": "1988-03-23",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 73,
+      "consistency": 78
+    },
+    "reputation": 76,
+    "ambition": 52,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.27,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "laura-whitfield",
+    "name": "Laura Whitfield",
+    "nationality": "GB",
+    "birthDate": "1987-06-25",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 79,
+      "consistency": 79
+    },
+    "reputation": 82,
+    "ambition": 41,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.24,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "james-dunmore",
+    "name": "James Dunmore",
+    "nationality": "GB",
+    "birthDate": "1990-01-05",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 81,
+      "consistency": 80
+    },
+    "reputation": 85,
+    "ambition": 57,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.59,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "mark-lawton",
+    "name": "Mark Lawton",
+    "nationality": "GB",
+    "birthDate": "1991-08-03",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 77,
+      "consistency": 83
+    },
+    "reputation": 73,
+    "ambition": 48,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.28,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "peter-thornton",
+    "name": "Peter Thornton",
+    "nationality": "GB",
+    "birthDate": "1974-02-20",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 78,
+      "consistency": 76
+    },
+    "reputation": 77,
+    "ambition": 55,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "kestrel",
+      "salaryM": 0.32,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "lachlan-barnett",
+    "name": "Lachlan Barnett",
+    "nationality": "AU",
+    "birthDate": "1976-07-07",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 87,
+      "consistency": 92
+    },
+    "reputation": 86,
+    "ambition": 67,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 10.82,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "andrew-gillespie",
+    "name": "Andrew Gillespie",
+    "nationality": "GB",
+    "birthDate": "1981-08-28",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 87,
+      "consistency": 89
+    },
+    "reputation": 84,
+    "ambition": 55,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 5.45,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "francesca-pellegrini",
+    "name": "Francesca Pellegrini",
+    "nationality": "IT",
+    "birthDate": "1988-04-27",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 83,
+      "consistency": 88
+    },
+    "reputation": 88,
+    "ambition": 45,
+    "assignedDriverId": "rodrigo-valdes",
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.94,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "james-bramwell",
+    "name": "James Bramwell",
+    "nationality": "GB",
+    "birthDate": "1997-06-26",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 83,
+      "consistency": 85
+    },
+    "reputation": 84,
+    "ambition": 61,
+    "assignedDriverId": "dylan-kaine",
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.86,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "laura-bramwell",
+    "name": "Laura Bramwell",
+    "nationality": "GB",
+    "birthDate": "1985-06-04",
+    "role": "strategist",
+    "attributes": {
+      "skill": 83,
+      "consistency": 80
+    },
+    "reputation": 83,
+    "ambition": 40,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.71,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "sophie-hargreaves",
+    "name": "Sophie Hargreaves",
+    "nationality": "GB",
+    "birthDate": "1980-04-21",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 80,
+      "consistency": 77
+    },
+    "reputation": 85,
+    "ambition": 66,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 1.06,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "harry-holloway",
+    "name": "Harry Holloway",
+    "nationality": "GB",
+    "birthDate": "1982-03-26",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 81,
+      "consistency": 86
+    },
+    "reputation": 78,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.59,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "claire-colbourne",
+    "name": "Claire Colbourne",
+    "nationality": "GB",
+    "birthDate": "1978-11-06",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 81,
+      "consistency": 88
+    },
+    "reputation": 79,
+    "ambition": 35,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.96,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "brandon-everett",
+    "name": "Brandon Everett",
+    "nationality": "US",
+    "birthDate": "1976-01-17",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 85,
+      "consistency": 88
+    },
+    "reputation": 83,
+    "ambition": 81,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 1.34,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "camille-vautrin",
+    "name": "Camille Vautrin",
+    "nationality": "FR",
+    "birthDate": "1988-06-25",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 81,
+      "consistency": 76
+    },
+    "reputation": 77,
+    "ambition": 40,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.65,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "george-fairbairn",
+    "name": "George Fairbairn",
+    "nationality": "GB",
+    "birthDate": "1987-01-15",
+    "role": "scout",
+    "attributes": {
+      "skill": 76,
+      "consistency": 76
+    },
+    "reputation": 80,
+    "ambition": 60,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.3,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "daniel-wainwright",
+    "name": "Daniel Wainwright",
+    "nationality": "GB",
+    "birthDate": "1982-10-13",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 76,
+      "consistency": 69
+    },
+    "reputation": 76,
+    "ambition": 85,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.31,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "lotte-mulder",
+    "name": "Lotte Mulder",
+    "nationality": "NL",
+    "birthDate": "1985-03-15",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 76,
+      "consistency": 77
+    },
+    "reputation": 73,
+    "ambition": 80,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.21,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "james-fenwick",
+    "name": "James Fenwick",
+    "nationality": "GB",
+    "birthDate": "1990-12-19",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 82,
+      "consistency": 81
+    },
+    "reputation": 78,
+    "ambition": 57,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.61,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "matthew-eastwood",
+    "name": "Matthew Eastwood",
+    "nationality": "GB",
+    "birthDate": "1990-12-09",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 80,
+      "consistency": 77
+    },
+    "reputation": 76,
+    "ambition": 49,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.32,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "charlotte-whitfield",
+    "name": "Charlotte Whitfield",
+    "nationality": "GB",
+    "birthDate": "1981-04-28",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 80,
+      "consistency": 72
+    },
+    "reputation": 77,
+    "ambition": 61,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "verdant",
+      "salaryM": 0.35,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "lotte-visser",
+    "name": "Lotte Visser",
+    "nationality": "NL",
+    "birthDate": "1975-05-21",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 74,
+      "consistency": 72
+    },
+    "reputation": 75,
+    "ambition": 78,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 6.58,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "mitchell-kerr",
+    "name": "Mitchell Kerr",
+    "nationality": "AU",
+    "birthDate": "1980-03-22",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 76,
+      "consistency": 74
+    },
+    "reputation": 80,
+    "ambition": 67,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 3.67,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "marco-vitale",
+    "name": "Marco Vitale",
+    "nationality": "IT",
+    "birthDate": "1986-04-22",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 71,
+      "consistency": 68
+    },
+    "reputation": 67,
+    "ambition": 63,
+    "assignedDriverId": "yanis-belkacem",
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.59,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "anja-eckhardt",
+    "name": "Anja Eckhardt",
+    "nationality": "DE",
+    "birthDate": "1988-06-02",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 78,
+      "consistency": 84
+    },
+    "reputation": 80,
+    "ambition": 55,
+    "assignedDriverId": "tama-rangi",
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.73,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "elena-ferraresi",
+    "name": "Elena Ferraresi",
+    "nationality": "IT",
+    "birthDate": "1995-08-01",
+    "role": "strategist",
+    "attributes": {
+      "skill": 80,
+      "consistency": 88
+    },
+    "reputation": 82,
+    "ambition": 58,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.64,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "davide-galli",
+    "name": "Davide Galli",
+    "nationality": "IT",
+    "birthDate": "1978-08-04",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 75,
+      "consistency": 68
+    },
+    "reputation": 76,
+    "ambition": 57,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.87,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "yuki-ishikawa",
+    "name": "Yuki Ishikawa",
+    "nationality": "JP",
+    "birthDate": "1978-03-16",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 80,
+      "consistency": 82
+    },
+    "reputation": 78,
+    "ambition": 37,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.57,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "lucia-aranda",
+    "name": "Lucía Aranda",
+    "nationality": "ES",
+    "birthDate": "1982-05-26",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 79,
+      "consistency": 74
+    },
+    "reputation": 81,
+    "ambition": 56,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.87,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "nicole-ridley",
+    "name": "Nicole Ridley",
+    "nationality": "US",
+    "birthDate": "1980-12-11",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 79,
+      "consistency": 83
+    },
+    "reputation": 75,
+    "ambition": 57,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 1.07,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "chiara-santoro",
+    "name": "Chiara Santoro",
+    "nationality": "IT",
+    "birthDate": "1981-09-12",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 72,
+      "consistency": 74
+    },
+    "reputation": 69,
+    "ambition": 35,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.46,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "luca-lombardo",
+    "name": "Luca Lombardo",
+    "nationality": "IT",
+    "birthDate": "1983-09-09",
+    "role": "scout",
+    "attributes": {
+      "skill": 68,
+      "consistency": 69
+    },
+    "reputation": 73,
+    "ambition": 41,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.22,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "simone-pellegrini",
+    "name": "Simone Pellegrini",
+    "nationality": "IT",
+    "birthDate": "1981-07-01",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 72,
+      "consistency": 69
+    },
+    "reputation": 75,
+    "ambition": 50,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.26,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "francesca-santoro",
+    "name": "Francesca Santoro",
+    "nationality": "IT",
+    "birthDate": "1978-06-01",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 71,
+      "consistency": 74
+    },
+    "reputation": 69,
+    "ambition": 82,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.17,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "davide-orsini",
+    "name": "Davide Orsini",
+    "nationality": "IT",
+    "birthDate": "1987-02-13",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 72,
+      "consistency": 64
+    },
+    "reputation": 73,
+    "ambition": 80,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.4,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "elena-rinaldi",
+    "name": "Elena Rinaldi",
+    "nationality": "IT",
+    "birthDate": "1983-08-06",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 70,
+      "consistency": 66
+    },
+    "reputation": 71,
+    "ambition": 46,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.21,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "giulia-vitale",
+    "name": "Giulia Vitale",
+    "nationality": "IT",
+    "birthDate": "1977-12-07",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 73,
+      "consistency": 80
+    },
+    "reputation": 70,
+    "ambition": 85,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "spark",
+      "salaryM": 0.26,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "lauren-hawthorne",
+    "name": "Lauren Hawthorne",
+    "nationality": "US",
+    "birthDate": "1975-07-28",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 71,
+      "consistency": 76
+    },
+    "reputation": 67,
+    "ambition": 50,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 5.93,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "ryan-donnelly",
+    "name": "Ryan Donnelly",
+    "nationality": "US",
+    "birthDate": "1985-04-27",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 74,
+      "consistency": 68
+    },
+    "reputation": 71,
+    "ambition": 80,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 3.34,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "justin-garrison",
+    "name": "Justin Garrison",
+    "nationality": "US",
+    "birthDate": "1994-08-28",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 68,
+      "consistency": 75
+    },
+    "reputation": 68,
+    "ambition": 37,
+    "assignedDriverId": "mathis-leroux",
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.53,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "lauren-garrison",
+    "name": "Lauren Garrison",
+    "nationality": "US",
+    "birthDate": "1992-12-19",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 67,
+      "consistency": 75
+    },
+    "reputation": 64,
+    "ambition": 83,
+    "assignedDriverId": "oscar-pennington",
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.45,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "antoine-delorme",
+    "name": "Antoine Delorme",
+    "nationality": "FR",
+    "birthDate": "1991-06-23",
+    "role": "strategist",
+    "attributes": {
+      "skill": 70,
+      "consistency": 78
+    },
+    "reputation": 73,
+    "ambition": 52,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.43,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "tyler-whitmore",
+    "name": "Tyler Whitmore",
+    "nationality": "US",
+    "birthDate": "1973-05-01",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 75,
+      "consistency": 72
+    },
+    "reputation": 71,
+    "ambition": 83,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.88,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "megan-whitmore",
+    "name": "Megan Whitmore",
+    "nationality": "US",
+    "birthDate": "1988-10-06",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 73,
+      "consistency": 78
+    },
+    "reputation": 68,
+    "ambition": 57,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.42,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "megan-fitzgerald",
+    "name": "Megan Fitzgerald",
+    "nationality": "US",
+    "birthDate": "1973-07-07",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 67,
+      "consistency": 66
+    },
+    "reputation": 66,
+    "ambition": 37,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.54,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "paolo-santoro",
+    "name": "Paolo Santoro",
+    "nationality": "IT",
+    "birthDate": "1977-07-25",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 71,
+      "consistency": 71
+    },
+    "reputation": 72,
+    "ambition": 36,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.79,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "kayla-fitzgerald",
+    "name": "Kayla Fitzgerald",
+    "nationality": "US",
+    "birthDate": "1989-03-21",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 71,
+      "consistency": 63
+    },
+    "reputation": 75,
+    "ambition": 80,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.43,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "brandon-ridley",
+    "name": "Brandon Ridley",
+    "nationality": "US",
+    "birthDate": "1987-02-22",
+    "role": "scout",
+    "attributes": {
+      "skill": 68,
+      "consistency": 72
+    },
+    "reputation": 68,
+    "ambition": 48,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.22,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "tyler-donnelly",
+    "name": "Tyler Donnelly",
+    "nationality": "US",
+    "birthDate": "1989-04-17",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 66,
+      "consistency": 67
+    },
+    "reputation": 62,
+    "ambition": 70,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.2,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "justin-whitmore",
+    "name": "Justin Whitmore",
+    "nationality": "US",
+    "birthDate": "1980-05-02",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 70,
+      "consistency": 64
+    },
+    "reputation": 70,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.17,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "kevin-hawthorne",
+    "name": "Kevin Hawthorne",
+    "nationality": "US",
+    "birthDate": "1988-09-06",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 68,
+      "consistency": 61
+    },
+    "reputation": 65,
+    "ambition": 52,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.35,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "kevin-mcallister",
+    "name": "Kevin McAllister",
+    "nationality": "US",
+    "birthDate": "1989-03-25",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 73,
+      "consistency": 77
+    },
+    "reputation": 74,
+    "ambition": 67,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.24,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "brandon-donnelly",
+    "name": "Brandon Donnelly",
+    "nationality": "US",
+    "birthDate": "1982-11-09",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 70,
+      "consistency": 76
+    },
+    "reputation": 67,
+    "ambition": 67,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "frontier",
+      "salaryM": 0.24,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "hiroshi-nakagawa",
+    "name": "Hiroshi Nakagawa",
+    "nationality": "JP",
+    "birthDate": "1975-01-16",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 76,
+      "consistency": 78
+    },
+    "reputation": 81,
+    "ambition": 42,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 7.28,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "nadja-hug",
+    "name": "Nadja Hug",
+    "nationality": "CH",
+    "birthDate": "1976-11-09",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 78,
+      "consistency": 82
+    },
+    "reputation": 82,
+    "ambition": 51,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 3.97,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "nadja-stucki",
+    "name": "Nadja Stucki",
+    "nationality": "CH",
+    "birthDate": "1990-09-09",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 78,
+      "consistency": 73
+    },
+    "reputation": 76,
+    "ambition": 83,
+    "assignedDriverId": "stefan-bruckner",
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.78,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "corinne-brunner",
+    "name": "Corinne Brunner",
+    "nationality": "CH",
+    "birthDate": "1990-05-20",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 81,
+      "consistency": 75
+    },
+    "reputation": 83,
+    "ambition": 81,
+    "assignedDriverId": "caio-ferraz",
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.81,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "reto-stucki",
+    "name": "Reto Stucki",
+    "nationality": "CH",
+    "birthDate": "1984-11-13",
+    "role": "strategist",
+    "attributes": {
+      "skill": 81,
+      "consistency": 85
+    },
+    "reputation": 82,
+    "ambition": 48,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.65,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "nadja-gerber",
+    "name": "Nadja Gerber",
+    "nationality": "CH",
+    "birthDate": "1975-03-15",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 80,
+      "consistency": 79
+    },
+    "reputation": 77,
+    "ambition": 36,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 1.05,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "urs-hug",
+    "name": "Urs Hug",
+    "nationality": "CH",
+    "birthDate": "1984-09-07",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 81,
+      "consistency": 78
+    },
+    "reputation": 84,
+    "ambition": 77,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.57,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "corinne-stucki",
+    "name": "Corinne Stucki",
+    "nationality": "CH",
+    "birthDate": "1977-07-01",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 78,
+      "consistency": 86
+    },
+    "reputation": 75,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.85,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "nadja-brunner",
+    "name": "Nadja Brunner",
+    "nationality": "CH",
+    "birthDate": "1985-07-07",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 80,
+      "consistency": 83
+    },
+    "reputation": 80,
+    "ambition": 49,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 1.12,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "urs-stucki",
+    "name": "Urs Stucki",
+    "nationality": "CH",
+    "birthDate": "1989-08-27",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 73,
+      "consistency": 80
+    },
+    "reputation": 72,
+    "ambition": 38,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.49,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "katrin-wegener",
+    "name": "Katrin Wegener",
+    "nationality": "DE",
+    "birthDate": "1985-08-26",
+    "role": "scout",
+    "attributes": {
+      "skill": 72,
+      "consistency": 70
+    },
+    "reputation": 69,
+    "ambition": 66,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.25,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "chiara-galli",
+    "name": "Chiara Galli",
+    "nationality": "IT",
+    "birthDate": "1991-05-26",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 79,
+      "consistency": 83
+    },
+    "reputation": 82,
+    "ambition": 78,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.33,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "reto-gerber",
+    "name": "Reto Gerber",
+    "nationality": "CH",
+    "birthDate": "1985-01-26",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 74,
+      "consistency": 78
+    },
+    "reputation": 71,
+    "ambition": 54,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.19,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "reto-brunner",
+    "name": "Reto Brunner",
+    "nationality": "CH",
+    "birthDate": "1988-02-18",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 77,
+      "consistency": 84
+    },
+    "reputation": 77,
+    "ambition": 82,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.51,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "lotte-de-groot",
+    "name": "Lotte de Groot",
+    "nationality": "NL",
+    "birthDate": "1990-10-21",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 73,
+      "consistency": 78
+    },
+    "reputation": 73,
+    "ambition": 71,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.24,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "corinne-hug",
+    "name": "Corinne Hug",
+    "nationality": "CH",
+    "birthDate": "1979-05-28",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 73,
+      "consistency": 65
+    },
+    "reputation": 68,
+    "ambition": 41,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "nordwerk",
+      "salaryM": 0.26,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "james-kingsley",
+    "name": "James Kingsley",
+    "nationality": "GB",
+    "birthDate": "1975-08-03",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 72,
+      "consistency": 71
+    },
+    "reputation": 73,
+    "ambition": 79,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 6.11,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "oliver-marsden",
+    "name": "Oliver Marsden",
+    "nationality": "GB",
+    "birthDate": "1980-03-23",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 73,
+      "consistency": 69
+    },
+    "reputation": 70,
+    "ambition": 48,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 3.23,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "peter-lawton",
+    "name": "Peter Lawton",
+    "nationality": "GB",
+    "birthDate": "1989-08-28",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 79,
+      "consistency": 81
+    },
+    "reputation": 82,
+    "ambition": 81,
+    "assignedDriverId": "theo-marchand",
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.8,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "thomas-whitfield",
+    "name": "Thomas Whitfield",
+    "nationality": "GB",
+    "birthDate": "1986-06-01",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 70,
+      "consistency": 65
+    },
+    "reputation": 70,
+    "ambition": 84,
+    "assignedDriverId": "tomas-ibarra",
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.51,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "mathilde-vautrin",
+    "name": "Mathilde Vautrin",
+    "nationality": "FR",
+    "birthDate": "1990-06-21",
+    "role": "strategist",
+    "attributes": {
+      "skill": 75,
+      "consistency": 67
+    },
+    "reputation": 74,
+    "ambition": 74,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.51,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "laura-norcross",
+    "name": "Laura Norcross",
+    "nationality": "GB",
+    "birthDate": "1980-03-21",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 78,
+      "consistency": 85
+    },
+    "reputation": 73,
+    "ambition": 36,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.96,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "katrin-reinholt",
+    "name": "Katrin Reinholt",
+    "nationality": "DE",
+    "birthDate": "1981-11-09",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 79,
+      "consistency": 77
+    },
+    "reputation": 78,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.54,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "hannah-holloway",
+    "name": "Hannah Holloway",
+    "nationality": "GB",
+    "birthDate": "1977-11-14",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 77,
+      "consistency": 70
+    },
+    "reputation": 78,
+    "ambition": 40,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.8,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "peter-pennock",
+    "name": "Peter Pennock",
+    "nationality": "GB",
+    "birthDate": "1984-05-20",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 76,
+      "consistency": 75
+    },
+    "reputation": 77,
+    "ambition": 39,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.97,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "emily-eastwood",
+    "name": "Emily Eastwood",
+    "nationality": "GB",
+    "birthDate": "1987-10-13",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 70,
+      "consistency": 64
+    },
+    "reputation": 67,
+    "ambition": 37,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.42,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "rebecca-greaves",
+    "name": "Rebecca Greaves",
+    "nationality": "GB",
+    "birthDate": "1982-08-08",
+    "role": "scout",
+    "attributes": {
+      "skill": 67,
+      "consistency": 63
+    },
+    "reputation": 63,
+    "ambition": 70,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.21,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "william-norcross",
+    "name": "William Norcross",
+    "nationality": "GB",
+    "birthDate": "1984-10-07",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 75,
+      "consistency": 77
+    },
+    "reputation": 71,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.29,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "simon-marsden",
+    "name": "Simon Marsden",
+    "nationality": "GB",
+    "birthDate": "1984-05-02",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 74,
+      "consistency": 75
+    },
+    "reputation": 77,
+    "ambition": 65,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.2,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "laura-gillespie",
+    "name": "Laura Gillespie",
+    "nationality": "GB",
+    "birthDate": "1993-07-24",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 75,
+      "consistency": 78
+    },
+    "reputation": 74,
+    "ambition": 84,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.46,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "tobias-reinholt",
+    "name": "Tobias Reinholt",
+    "nationality": "DE",
+    "birthDate": "1994-01-20",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 75,
+      "consistency": 79
+    },
+    "reputation": 78,
+    "ambition": 66,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.26,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "george-sutcliffe",
+    "name": "George Sutcliffe",
+    "nationality": "GB",
+    "birthDate": "1983-03-16",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 75,
+      "consistency": 68
+    },
+    "reputation": 71,
+    "ambition": 70,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "bleu-alpin",
+      "salaryM": 0.29,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "kenta-ishikawa",
+    "name": "Kenta Ishikawa",
+    "nationality": "JP",
+    "birthDate": "1976-03-26",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 77,
+      "consistency": 72
+    },
+    "reputation": 74,
+    "ambition": 61,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 7.52,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "bram-visser",
+    "name": "Bram Visser",
+    "nationality": "NL",
+    "birthDate": "1975-06-21",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 76,
+      "consistency": 68
+    },
+    "reputation": 74,
+    "ambition": 56,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 3.56,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "nicole-mcallister",
+    "name": "Nicole McAllister",
+    "nationality": "US",
+    "birthDate": "1988-06-05",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 74,
+      "consistency": 76
+    },
+    "reputation": 71,
+    "ambition": 48,
+    "assignedDriverId": "emiliano-cruz",
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.68,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "kayla-donnelly",
+    "name": "Kayla Donnelly",
+    "nationality": "US",
+    "birthDate": "1994-04-22",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 78,
+      "consistency": 85
+    },
+    "reputation": 82,
+    "ambition": 38,
+    "assignedDriverId": "mikael-lindqvist",
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.72,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "lukas-falkenrath",
+    "name": "Lukas Falkenrath",
+    "nationality": "DE",
+    "birthDate": "1987-10-13",
+    "role": "strategist",
+    "attributes": {
+      "skill": 77,
+      "consistency": 72
+    },
+    "reputation": 75,
+    "ambition": 81,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.55,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "kayla-everett",
+    "name": "Kayla Everett",
+    "nationality": "US",
+    "birthDate": "1972-12-12",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 73,
+      "consistency": 71
+    },
+    "reputation": 78,
+    "ambition": 53,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.81,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "marta-esteban",
+    "name": "Marta Esteban",
+    "nationality": "ES",
+    "birthDate": "1986-07-07",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 72,
+      "consistency": 79
+    },
+    "reputation": 71,
+    "ambition": 77,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.41,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "brandon-sullivan",
+    "name": "Brandon Sullivan",
+    "nationality": "US",
+    "birthDate": "1979-09-01",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 76,
+      "consistency": 77
+    },
+    "reputation": 74,
+    "ambition": 52,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.78,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "justin-mcallister",
+    "name": "Justin McAllister",
+    "nationality": "US",
+    "birthDate": "1981-09-07",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 80,
+      "consistency": 81
+    },
+    "reputation": 83,
+    "ambition": 80,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 1.11,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "chloe-tully",
+    "name": "Chloe Tully",
+    "nationality": "AU",
+    "birthDate": "1981-08-03",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 69,
+      "consistency": 72
+    },
+    "reputation": 70,
+    "ambition": 73,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.41,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "megan-mcallister",
+    "name": "Megan McAllister",
+    "nationality": "US",
+    "birthDate": "1984-05-23",
+    "role": "scout",
+    "attributes": {
+      "skill": 76,
+      "consistency": 81
+    },
+    "reputation": 77,
+    "ambition": 75,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.3,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "lauren-ridley",
+    "name": "Lauren Ridley",
+    "nationality": "US",
+    "birthDate": "1983-05-26",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 69,
+      "consistency": 75
+    },
+    "reputation": 73,
+    "ambition": 72,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.22,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "ryan-callahan",
+    "name": "Ryan Callahan",
+    "nationality": "US",
+    "birthDate": "1984-12-09",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 76,
+      "consistency": 73
+    },
+    "reputation": 72,
+    "ambition": 47,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.21,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "nicole-whitmore",
+    "name": "Nicole Whitmore",
+    "nationality": "US",
+    "birthDate": "1985-09-07",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 71,
+      "consistency": 76
+    },
+    "reputation": 75,
+    "ambition": 59,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.38,
+      "fromSeason": 2025,
+      "untilSeason": 2029
+    }
+  },
+  {
+    "id": "tyler-hawthorne",
+    "name": "Tyler Hawthorne",
+    "nationality": "US",
+    "birthDate": "1985-02-14",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 68,
+      "consistency": 73
+    },
+    "reputation": 73,
+    "ambition": 73,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.2,
+      "fromSeason": 2025,
+      "untilSeason": 2027
+    }
+  },
+  {
+    "id": "megan-hawthorne",
+    "name": "Megan Hawthorne",
+    "nationality": "US",
+    "birthDate": "1980-05-27",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 72,
+      "consistency": 73
+    },
+    "reputation": 75,
+    "ambition": 84,
+    "assignedDriverId": null,
+    "contract": {
+      "teamId": "monarch",
+      "salaryM": 0.25,
+      "fromSeason": 2025,
+      "untilSeason": 2028
+    }
+  },
+  {
+    "id": "marta-dominguez",
+    "name": "Marta Domínguez",
+    "nationality": "ES",
+    "birthDate": "1969-10-08",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 72,
+      "consistency": 67
+    },
+    "reputation": 75,
+    "ambition": 38,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "rachel-wainwright",
+    "name": "Rachel Wainwright",
+    "nationality": "GB",
+    "birthDate": "1997-12-14",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 56,
+      "consistency": 50
+    },
+    "reputation": 55,
+    "ambition": 53,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "andrew-holloway",
+    "name": "Andrew Holloway",
+    "nationality": "GB",
+    "birthDate": "1997-06-22",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 58,
+      "consistency": 53
+    },
+    "reputation": 61,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "emily-ashworth",
+    "name": "Emily Ashworth",
+    "nationality": "GB",
+    "birthDate": "1993-09-08",
+    "role": "strategist",
+    "attributes": {
+      "skill": 60,
+      "consistency": 60
+    },
+    "reputation": 56,
+    "ambition": 74,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "james-thornton",
+    "name": "James Thornton",
+    "nationality": "GB",
+    "birthDate": "1976-03-15",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 64,
+      "consistency": 69
+    },
+    "reputation": 60,
+    "ambition": 58,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "charlotte-dunmore",
+    "name": "Charlotte Dunmore",
+    "nationality": "GB",
+    "birthDate": "1969-12-16",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 61,
+      "consistency": 68
+    },
+    "reputation": 64,
+    "ambition": 60,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "olivier-faure",
+    "name": "Olivier Faure",
+    "nationality": "FR",
+    "birthDate": "1972-06-28",
+    "role": "technical-director",
+    "attributes": {
+      "skill": 62,
+      "consistency": 59
+    },
+    "reputation": 67,
+    "ambition": 67,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "mitchell-mackie",
+    "name": "Mitchell Mackie",
+    "nationality": "AU",
+    "birthDate": "1982-03-14",
+    "role": "head-of-aerodynamics",
+    "attributes": {
+      "skill": 67,
+      "consistency": 67
+    },
+    "reputation": 63,
+    "ambition": 78,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "hiroshi-kobayashi",
+    "name": "Hiroshi Kobayashi",
+    "nationality": "JP",
+    "birthDate": "1983-08-07",
+    "role": "race-engineer",
+    "attributes": {
+      "skill": 64,
+      "consistency": 62
+    },
+    "reputation": 62,
+    "ambition": 69,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "andrew-ashworth",
+    "name": "Andrew Ashworth",
+    "nationality": "GB",
+    "birthDate": "1987-07-28",
+    "role": "strategist",
+    "attributes": {
+      "skill": 74,
+      "consistency": 82
+    },
+    "reputation": 75,
+    "ambition": 54,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "mark-kingsley",
+    "name": "Mark Kingsley",
+    "nationality": "GB",
+    "birthDate": "1968-12-16",
+    "role": "sporting-director",
+    "attributes": {
+      "skill": 62,
+      "consistency": 64
+    },
+    "reputation": 65,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "peter-radcliffe",
+    "name": "Peter Radcliffe",
+    "nationality": "GB",
+    "birthDate": "1980-05-24",
+    "role": "chief-mechanic",
+    "attributes": {
+      "skill": 69,
+      "consistency": 74
+    },
+    "reputation": 71,
+    "ambition": 71,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "luca-pellegrini",
+    "name": "Luca Pellegrini",
+    "nationality": "IT",
+    "birthDate": "1970-09-08",
+    "role": "operations-director",
+    "attributes": {
+      "skill": 64,
+      "consistency": 60
+    },
+    "reputation": 60,
+    "ambition": 53,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "emily-prescott",
+    "name": "Emily Prescott",
+    "nationality": "GB",
+    "birthDate": "1977-11-07",
+    "role": "commercial-director",
+    "attributes": {
+      "skill": 62,
+      "consistency": 56
+    },
+    "reputation": 57,
+    "ambition": 73,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "harry-fenwick",
+    "name": "Harry Fenwick",
+    "nationality": "GB",
+    "birthDate": "1977-12-19",
+    "role": "head-of-marketing",
+    "attributes": {
+      "skill": 70,
+      "consistency": 64
+    },
+    "reputation": 65,
+    "ambition": 64,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "marta-beltran",
+    "name": "Marta Beltrán",
+    "nationality": "ES",
+    "birthDate": "1975-04-21",
+    "role": "scout",
+    "attributes": {
+      "skill": 58,
+      "consistency": 56
+    },
+    "reputation": 54,
+    "ambition": 44,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "daniel-kingsley",
+    "name": "Daniel Kingsley",
+    "nationality": "GB",
+    "birthDate": "1985-05-24",
+    "role": "driver-coach",
+    "attributes": {
+      "skill": 67,
+      "consistency": 69
+    },
+    "reputation": 68,
+    "ambition": 39,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "rebecca-marsden",
+    "name": "Rebecca Marsden",
+    "nationality": "GB",
+    "birthDate": "1984-07-04",
+    "role": "meteorologist",
+    "attributes": {
+      "skill": 61,
+      "consistency": 58
+    },
+    "reputation": 62,
+    "ambition": 49,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "thomas-dunmore",
+    "name": "Thomas Dunmore",
+    "nationality": "GB",
+    "birthDate": "1988-06-23",
+    "role": "head-of-data-analysis",
+    "attributes": {
+      "skill": 69,
+      "consistency": 67
+    },
+    "reputation": 67,
+    "ambition": 38,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "matteo-vitale",
+    "name": "Matteo Vitale",
+    "nationality": "IT",
+    "birthDate": "1982-09-09",
+    "role": "press-officer",
+    "attributes": {
+      "skill": 59,
+      "consistency": 62
+    },
+    "reputation": 55,
+    "ambition": 50,
+    "assignedDriverId": null,
+    "contract": null
+  },
+  {
+    "id": "francesca-mancuso",
+    "name": "Francesca Mancuso",
+    "nationality": "IT",
+    "birthDate": "1972-04-18",
+    "role": "team-doctor",
+    "attributes": {
+      "skill": 65,
+      "consistency": 64
+    },
+    "reputation": 63,
+    "ambition": 62,
+    "assignedDriverId": null,
+    "contract": null
+  }
+]
