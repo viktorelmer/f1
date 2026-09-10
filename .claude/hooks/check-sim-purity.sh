@@ -16,17 +16,20 @@ esac
 
 [ -f "$file" ] || exit 0
 
-pattern='Math\.random|Date\.now|new Date\(|performance\.now|crypto\.(getRandomValues|randomUUID)'
-pattern="$pattern|from ['\"](react|react-dom)(/[^'\"]*)?['\"]"
-pattern="$pattern|from ['\"][^'\"]*\b(ui|app)/"
+# The game calendar is a day index, not a JS Date — even deterministic Date.UTC stays out of sim.
+pattern='Math\.random|new Date\b|\bDate\.(now|UTC|parse)\b|performance\.now|crypto\.(getRandomValues|randomUUID)'
+# Banned module specifiers: React, and anything under app/ or ui/ (the dependency direction is sim <- app <- ui).
+spec="((react|react-dom)(/[^'\"]*)?|[^'\"]*\b(ui|app)/[^'\"]*)['\"]"
+# Static (`from '…'`), side-effect (`import '…'`), dynamic (`import('…')`) and CommonJS (`require('…')`) imports.
+pattern="$pattern|(from|import|import\(|require\()[[:space:]]*['\"]$spec"
 
 # Skip lines that are only comments, so documenting the rule doesn't trip it.
 hits=$(grep -nE "$pattern" "$file" | grep -vE '^[0-9]+:[[:space:]]*(//|\*|/\*)')
 
 if [ -n "$hits" ]; then
   {
-    echo "src/sim/ must stay pure: no wall-clock time, no Math.random, no React, no imports from app/ or ui/."
-    echo "Use the injected Rng stream and the passed-in game time instead."
+    echo "src/sim/ must stay pure: no Date or wall-clock time, no Math.random, no React, no imports from app/ or ui/."
+    echo "Use the injected Rng stream and the passed-in game time (a day index) instead."
     echo "$file:"
     echo "$hits"
   } >&2

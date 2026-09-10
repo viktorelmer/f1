@@ -16,6 +16,13 @@
       "Bash(git branch *)",
       "Bash(git add *)",
       "Bash(git commit *)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f*)",
+      "Bash(rm -rf *)"
     ]
   },
   "hooks": {
@@ -30,5 +37,9 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "context7@claude-plugins-official": true
   }
 }
