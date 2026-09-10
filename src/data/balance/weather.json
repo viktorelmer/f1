@@ -1,0 +1,104 @@
+{
+  "timelineMinutes": {
+    "value": 180,
+    "why": "Length of the generated weather timeline: a race plus a two-hour limit with margin."
+  },
+  "cloudStart": {
+    "value": [0, 0.6],
+    "why": "Cloud cover at the start of a dry race is drawn from this range; rain needs cloud, so a rain episode first builds cover towards 1."
+  },
+  "cloudDriftPerHourSd": {
+    "value": 0.25,
+    "why": "Random walk of cloud cover per hour: enough for sun to come and go during a race."
+  },
+  "trackTempCloudDropC": {
+    "value": 12,
+    "why": "How much cooler the asphalt runs under full cloud than in full sun (its offset over the air shrinks by this much)."
+  },
+  "trackTempLagMinutes": {
+    "value": 15,
+    "why": "Time constant for asphalt temperature to follow a change in cloud — 'changes within 15 minutes' (plan 5.4)."
+  },
+  "airTempDriftPerHourSd": {
+    "value": 1.2,
+    "why": "Random walk of air temperature per hour, °C."
+  },
+  "humidity": {
+    "value": {
+      "range": [35, 80],
+      "perCloud": 15,
+      "inRain": 95
+    },
+    "why": "Humidity %: drawn from the range, raised by cloud cover, near saturation while it rains."
+  },
+  "windDriftPerHourSd": {
+    "value": {
+      "directionDeg": 35,
+      "speedKph": 5
+    },
+    "why": "Random walk of wind per hour: direction can swing enough to change which sectors gain and lose (plan 5.4)."
+  },
+  "rain": {
+    "value": {
+      "startWindowMin": [0, 110],
+      "durationMin": [12, 70],
+      "intensity": [0.15, 1],
+      "frontLagMinPerSector": [2, 9]
+    },
+    "why": "A rain episode: starts somewhere in the race window, lasts 12–70 minutes, from drizzle (0.15) to a downpour (1), and reaches each following sector 2–9 minutes after the previous one — rain arrives by sectors (plan 5.4)."
+  },
+  "rainShape": {
+    "value": {
+      "rampMinutes": 3,
+      "cloudLeadMinutes": 20,
+      "cloudTrailMinutes": 10,
+      "cloudApproachPerMinute": 0.1,
+      "airCoolingPerMinuteC": 0.03,
+      "startWetnessPerIntensity": 0.8,
+      "dryingBelowIntensity": 0.02
+    },
+    "why": "Shape of a rain episode: it fades in and out over 3 minutes per sector; cloud builds from 20 minutes before and clears 10 minutes after, closing 10% of the gap each minute; rain cools the air 0.03 °C per minute; a race that starts in rain starts at 80% of the intensity as wetness; a sector dries only when rain there is below 0.02."
+  },
+  "wettingPerMinute": {
+    "value": 0.06,
+    "why": "Wetness gained per minute at rain intensity 1: a downpour floods a sector in ~15 minutes, drizzle only dampens it."
+  },
+  "drying": {
+    "value": {
+      "basePerMinute": 0.008,
+      "perDegTrackPerMinute": 0.0004,
+      "perWindKphPerMinute": 0.0002,
+      "racingLinePerMinute": 0.006
+    },
+    "why": "Wetness lost per minute once rain stops: a base rate plus warm asphalt, wind and cars clearing a line; a medium-wet track dries to slick conditions in ~20–30 minutes."
+  },
+  "powerLossPerDegAbove25": {
+    "value": 0.00035,
+    "why": "Share of lap time lost per °C of air above 25 °C, scaled by the track's power sensitivity: hot, thin air costs engines power."
+  },
+  "powerLossPerHumidityPointAbove50": {
+    "value": 0.00003,
+    "why": "Share of lap time lost per humidity point above 50%, scaled by power sensitivity: humid air burns less efficiently."
+  },
+  "windStraightSPerKph": {
+    "value": 0.004,
+    "why": "Seconds per kph of tail (−) or head (+) wind over a whole sector made of straights: a 20 kph headwind down a long straight costs ~0.08 s."
+  },
+  "crosswindCornerSPerKph": {
+    "value": 0.0035,
+    "why": "Seconds per kph of crosswind through a sector made of corners: the car loses stability and confidence (plan 5.4)."
+  },
+  "wetSlowdownFraction": {
+    "value": 0.12,
+    "why": "Share of lap time a fully wet track costs even on the right tyre: less grip, spray, caution."
+  },
+  "evolution": {
+    "value": {
+      "raceStartGrip": 0.85,
+      "gripPerCarLap": 0.00012,
+      "washPerWetnessPerMinute": 0.012,
+      "maxGreenPenaltyFraction": 0.03
+    },
+    "why": "Track grip 0..1: rubbered to 0.85 by Sunday, +0.00012 per car-lap (≈0.13 over a race), washed away by rain. A fully green track costs 3% × the track's evolution factor — 1.5–2.5 s on street circuits (plan 5.4)."
+  }
+}

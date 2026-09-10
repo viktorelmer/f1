@@ -1,0 +1,215 @@
+{
+  "car": {
+    "value": {
+      "referenceScore": 80,
+      "paceSensitivity": 0.0017,
+      "weights": {
+        "aeroBase": 0.25,
+        "aeroPerSensitivity": 0.35,
+        "powerBase": 0.15,
+        "powerPerSensitivity": 0.35,
+        "mechanicalBase": 0.12,
+        "mechanicalPerLowSpeedShare": 0.12,
+        "brakingBase": 0.05,
+        "brakingPerBrakeWear": 0.1
+      },
+      "powerMix": {
+        "power": 0.6,
+        "ers": 0.2,
+        "lowDrag": 0.2
+      }
+    },
+    "why": "Car pace: characteristics blended into one score with weights from the track profile (aero tracks reward downforce, power tracks reward power and low drag). Each point above the reference score is 0.17% of lap time, so a 15-point gap between front and back of the grid gives the plan's 2–3%."
+  },
+  "weightSPerKgPer90s": {
+    "value": 0.03,
+    "why": "Seconds per kg per lap, scaled to a 90 s lap: 10 kg of excess weight or fuel costs ~0.3 s (plan 5.4)."
+  },
+  "driver": {
+    "value": {
+      "referencePace": 88,
+      "paceSensitivity": 0.00045,
+      "formSensitivity": 0.00006,
+      "moraleSensitivity": 0.00003,
+      "wetSkillSensitivity": 0.0012
+    },
+    "why": "Driver pace: each point of pace above 88 is 0.045% of lap time, so the grid's 16-point spread is ~0.7% — smaller than the car spread, as in real F1. Form and morale around 70 nudge it; wet skill matters only on a wet track, up to 1.2% per 10 points at full wetness."
+  },
+  "lapNoiseSd": {
+    "value": {
+      "atConsistency100": 0.14,
+      "atConsistency60": 0.5
+    },
+    "why": "Lap-to-lap scatter (seconds, sd), interpolated by the consistency attribute: grid drivers at 78–94 land in the plan's 0.2–0.4 s band."
+  },
+  "fatigue": {
+    "value": {
+      "perLap": 0.35,
+      "perDegAbove25": 0.03,
+      "perHighSpeedCorner": 0.02,
+      "staminaRef": 88,
+      "staminaPerPoint": 0.025,
+      "freeUpTo": 30,
+      "paceSPer10": 0.05,
+      "mistakeFactorPer10": 0.12
+    },
+    "why": "Fatigue 0..100 builds each lap, faster in heat and on high-g tracks, slower with stamina. Above 30 it costs 0.05 s/lap and +12% mistake chance per 10 points — a tired driver fades and errs late in a hot race (plan 5.16)."
+  },
+  "mistakes": {
+    "value": {
+      "chancePerLapAt85": 0.004,
+      "perConsistencyPoint": 0.00015,
+      "wetMultiplier": 5,
+      "gripDeficitMultiplierPerS": 0.6,
+      "minorLossS": [0.5, 2.5],
+      "spinShare": 0.16,
+      "spinLossS": [5, 14],
+      "crashShareOfSpins": 0.14,
+      "minChancePerLap": 0.0005,
+      "crashShareProfileBase": 0.4,
+      "crashShareProfilePer": 1.2
+    },
+    "why": "Driver errors: ~0.4% per lap for a consistency-85 driver, far likelier in the wet and on the wrong tyre. Most are small moments; one in six is a spin, and one spin in seven ends in the barrier. Even the most consistent driver keeps a 0.05% chance per lap. How often a spin ends in the barrier scales with the track: ×(0.4 + 1.2 × SC profile), so walls close by (street circuits) turn errors into crashes and run-off forgives them."
+  },
+  "start": {
+    "value": {
+      "gridSlotS": 0.2,
+      "standingStartLossS": 2.2,
+      "skillRef": 85,
+      "skillSPerPoint": 0.02,
+      "spreadSd": 0.3,
+      "lap1ContactChance": 0.012
+    },
+    "why": "Standing start: grid slots 0.2 s apart, 2.2 s lost accelerating from rest; the starts attribute gains or loses 0.02 s per point with 0.3 s of random spread; each car has a 1.2% chance of lap-1 contact."
+  },
+  "traffic": {
+    "value": {
+      "minGapS": 0.3,
+      "dirtyAirWindowS": 1.5,
+      "dirtyAirLossS": 0.15,
+      "slipstreamWindowS": 1,
+      "slipstreamGainS": 0.08,
+      "lappedLossS": 0.35,
+      "lapperLossS": 0.1,
+      "toleranceRef": 80,
+      "lossPerTolerancePoint": 0.02,
+      "dirtyAirAeroBase": 0.5
+    },
+    "why": "A car cannot run closer than 0.3 s without passing. Within 1.5 s it loses up to 0.15 s per sector in dirty air, scaled by the track aero sensitivity and by the car: each point of dirty-air tolerance above 80 cuts the loss by 2%. Within 1 s the tow gives back up to 0.08 s per sector on straights. Lapping costs the backmarker 0.35 s and the leader 0.1 s. The aero-sensitivity scaling is (0.5 + sensitivity), so even a power track costs some time in the wake."
+  },
+  "drs": {
+    "value": {
+      "gainS": 0.3,
+      "referenceZoneShare": 0.12,
+      "windowS": 1,
+      "enabledFromLap": 3,
+      "disabledLapsAfterRestart": 2
+    },
+    "why": "DRS: ~0.3 s over a zone 12% of the lap long (scaled by the actual zone), for a car within 1 s at detection; enabled from lap 3 and off for two laps after a restart."
+  },
+  "overtaking": {
+    "value": {
+      "base": -3.6,
+      "perPaceS": 4,
+      "drs": 1.1,
+      "outsideDrsZone": -1.1,
+      "perRacecraft": 0.035,
+      "perWearDifference": 2.5,
+      "perDifficulty": -2.6,
+      "lap1Bonus": 0.8,
+      "ersAttack": 0.5,
+      "successMarginS": 0.15,
+      "defenseLossS": 0.15,
+      "failedAttackerLossS": 0.25,
+      "failedDefenderLossS": 0.1,
+      "contactChance": 0.005,
+      "outsideDrsMinAdvantageS": 0.25,
+      "paceAdvantageCapS": 0.8
+    },
+    "why": "Overtake probability is a logistic function: a sector's pace advantage in seconds, DRS, the racecraft gap, the tyre-wear gap and an ERS push raise it; a hard track to pass (overtakingDifficulty) and passing outside a DRS zone lower it. Failed attempts cost both cars time; about one attempt in eighty ends in contact. The pace advantage counts only up to 0.8 s per sector: a car that has run wide is not automatically passable on a narrow street circuit. A spun car is driven around, not overtaken. Away from a DRS zone a car only attempts when at least 0.25 s faster over the sector."
+  },
+  "ers": {
+    "value": {
+      "referenceDeployment": 84,
+      "harvestPerLap": 0.35,
+      "attackCost": 0.5
+    },
+    "why": "ERS battery 0..1: recharges 0.35 per lap and an attack or a defence costs half a charge, so a car can push roughly every other lap. The system quality itself already counts in car pace (car.powerMix.ers); here it scales how much a push is worth relative to the reference deployment of 84."
+  },
+  "fuel": {
+    "value": {
+      "efficiencyRef": 83,
+      "consumptionPerPoint": 0.004,
+      "marginKg": 1.5
+    },
+    "why": "Fuel use per lap is the track's figure, 0.4% lower per point of fuel efficiency above 83; cars fuel exactly to the flag plus a 1.5 kg margin."
+  },
+  "pit": {
+    "value": {
+      "stationaryBaseS": 2.5,
+      "crewRef": 80,
+      "crewSPerPoint": 0.02,
+      "stationarySd": 0.2,
+      "slowStopChance": 0.03,
+      "slowStopLossS": [2, 8],
+      "safetyCarLossFactor": 0.55,
+      "virtualSafetyCarLossFactor": 0.7,
+      "minStationaryS": 1.8,
+      "crewWithoutChiefMechanic": 40
+    },
+    "why": "Pit stop = the track's pit-lane loss + a stationary time of ~2.5 s, 0.02 s better per point of crew quality above 80, with 0.2 s scatter and a 3% chance of a sticky wheel nut (+2–8 s). Under a safety car the whole stop costs 55% of normal, under a VSC 70%. No stop is quicker than 1.8 s stationary. A team without a chief mechanic counts as a 40-rated crew lead."
+  },
+  "reliability": {
+    "value": {
+      "failureScale": 0.45,
+      "partialShare": 0.35,
+      "partialLossS": 0.9,
+      "powerUnitShare": 0.6
+    },
+    "why": "Mechanical failures per race = 0.45 × (1 − reliability): a 0.85-reliability car fails ~7% of races, close to real modern DNF rates. A third of failures are partial (0.9 s/lap slower to the flag); 60% come from the power unit."
+  },
+  "damage": {
+    "value": {
+      "contactLossS": 0.8,
+      "retireShare": 0.2,
+      "punctureShare": 0.35
+    },
+    "why": "Contact: usually front-wing damage worth 0.8 s/lap until the next stop; a third of contacts puncture a tyre, one in five ends the race."
+  },
+  "raceControl": {
+    "value": {
+      "crashSafetyCarBase": 0.1,
+      "crashSafetyCarPerProfile": 0.9,
+      "stoppedCarVscBase": 0.12,
+      "stoppedCarVscPerProfile": 0.3,
+      "stoppedCarSafetyCarPerProfile": 0.15,
+      "contactSafetyCarPerProfile": 0.2,
+      "backgroundIncidentsPerRace": 0.5,
+      "safetyCarLaps": [3, 5],
+      "virtualSafetyCarLaps": [1, 3],
+      "safetyCarLapFactor": 1.4,
+      "virtualSafetyCarLapFactor": 1.35,
+      "catchUpFactor": 1.18,
+      "bunchGapS": 0.8,
+      "neutralisedWearFactor": 0.4,
+      "neutralisedFuelFactor": 0.6,
+      "catchUpBeyondGaps": 1.5
+    },
+    "why": "Race control: a crash brings the safety car 10% + 90% × the track SC profile of the time, otherwise a VSC; a stranded car is usually handled with a VSC (12% + 30% × profile), sometimes the safety car; debris from contact sometimes a safety car. Background incidents (debris, stray objects) add ~0.5 × profile triggers per race. SC laps run 40% slower and the field closes to 0.8 s gaps; a VSC slows everyone equally. Calibrated so a track SC profile is roughly its share of races with a safety car, and the calendar averages ~40% (docs/calibration/M2.md). Behind the safety car or under VSC tyres wear at 40% and fuel burns at 60% of the racing rate. A car more than 1.5 bunch gaps behind the car ahead drives faster than safety-car pace to close up."
+  },
+  "strategy": {
+    "value": {
+      "planScoreScaleS": 30,
+      "pitCallScoreScaleS": 20,
+      "maxStops": 2,
+      "wetnessReviewStep": 0.08,
+      "safetyCarWindowLaps": 12,
+      "riskStopBias": 0.02,
+      "minStintLaps": 5,
+      "dryBelowWetness": 0.1,
+      "candidateWindowS": 6,
+      "trackPositionCostPerStopS": 15
+    },
+    "why": "Strategist decisions: a plan 30 s slower than the best (a pit call 20 s worse) scores zero, so perception noise from decide.json means ~0.75 s of misjudgement for a top strategist and ~7 s for a poor one. Plans have up to 2 stops (3-stoppers are rarely right in the modern era; pit calls can still add a stop). A risk-loving strategist gets 0.02 per stop saved per unit of risk above 0.5, tipping near-equal plans towards fewer stops. Wetness moving by 0.08 triggers a tyre review; a safety car within 12 laps of a planned stop triggers a pit call. No planned stint is shorter than 5 laps. Below wetness 0.1 only slicks are considered; otherwise any compound within 6 s a lap of the best one for the conditions. Each stop also costs track position the car has to win back on the road: 15 s × the track overtaking difficulty — ~15 s where passing is nearly impossible, ~4 s where it is easy — so strategists stop less where they cannot pass."
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "compounds": {
+    "soft": {
+      "value": {
+        "gripOffsetS": -0.65,
+        "wearPerLap": 0.042,
+        "secondsPerWear": 2.8,
+        "cliffWear": 0.72,
+        "cliffSecondsPerWear": 14,
+        "windowC": [18, 40],
+        "warmupLossS": 1.0,
+        "wet": { "band": [0, 0], "belowLossS": 0, "aboveLossS": 30 }
+      },
+      "why": "Softest dry compound: ~0.65 s faster than the medium when new; wear 0.042/lap × 2.8 s/wear ≈ 0.12 s/lap of degradation at an average track (plan target 0.08–0.15), cliff after ~17 laps. Slicks lose time quadratically with water: 30 s at a fully wet track, ~2.7 s already on a damp one."
+    },
+    "medium": {
+      "value": {
+        "gripOffsetS": 0,
+        "wearPerLap": 0.028,
+        "secondsPerWear": 2.6,
+        "cliffWear": 0.75,
+        "cliffSecondsPerWear": 12,
+        "windowC": [24, 48],
+        "warmupLossS": 1.4,
+        "wet": { "band": [0, 0], "belowLossS": 0, "aboveLossS": 30 }
+      },
+      "why": "Reference compound: ~0.07 s/lap of degradation, cliff after ~27 laps at an average track; warms up slower than the soft."
+    },
+    "hard": {
+      "value": {
+        "gripOffsetS": 0.55,
+        "wearPerLap": 0.019,
+        "secondsPerWear": 2.3,
+        "cliffWear": 0.78,
+        "cliffSecondsPerWear": 10,
+        "windowC": [32, 58],
+        "warmupLossS": 2.0,
+        "wet": { "band": [0, 0], "belowLossS": 0, "aboveLossS": 30 }
+      },
+      "why": "Durable compound: ~0.55 s slower than the medium when new, ~0.045 s/lap of degradation, cliff after ~41 laps; hardest to switch on, worst on a cold track."
+    },
+    "inter": {
+      "value": {
+        "gripOffsetS": 0.5,
+        "wearPerLap": 0.03,
+        "secondsPerWear": 2.4,
+        "cliffWear": 0.8,
+        "cliffSecondsPerWear": 10,
+        "windowC": [10, 35],
+        "warmupLossS": 0.8,
+        "wet": { "band": [0.2, 0.6], "belowLossS": 4, "aboveLossS": 6 }
+      },
+      "why": "Intermediate: best between wetness 0.2 and 0.6. On a dry track it is ~4.5 s slower than slicks and overheats; with the slick curve the slick→inter crossover lands near wetness 0.18."
+    },
+    "wet": {
+      "value": {
+        "gripOffsetS": 1.5,
+        "wearPerLap": 0.025,
+        "secondsPerWear": 2.4,
+        "cliffWear": 0.82,
+        "cliffSecondsPerWear": 10,
+        "windowC": [5, 30],
+        "warmupLossS": 0.6,
+        "wet": { "band": [0.75, 1], "belowLossS": 6, "aboveLossS": 0 }
+      },
+      "why": "Full wet: only worth it on standing water; the inter→wet crossover lands near wetness 0.72. On a drying track it loses time fast and overheats."
+    }
+  },
+  "outOfWindowSPerDeg": {
+    "value": 0.02,
+    "why": "Lap time lost per °C of track temperature outside a compound's working window: a 10 °C miss costs ~0.2 s/lap."
+  },
+  "outOfWindowWearPerDeg": {
+    "value": 0.012,
+    "why": "Extra wear per °C outside the window (as a share of normal wear): a tyre out of its window also degrades faster — graining when cold, blistering when hot."
+  },
+  "offBandWearFactor": {
+    "value": 2.5,
+    "why": "Wet-weather tyres on a track drier than their band wear up to this many times faster at bone dry: inters overheat and destroy themselves on a drying line."
+  },
+  "carTyreManagementRef": {
+    "value": 80,
+    "why": "Car tyre-management rating at which wear is nominal."
+  },
+  "carWearPerPoint": {
+    "value": 0.008,
+    "why": "Wear change per rating point of car tyre management: a car 10 points kinder on its tyres wears them ~8% slower."
+  },
+  "driverTyreManagementRef": {
+    "value": 85,
+    "why": "Driver tyre-management attribute at which wear is nominal."
+  },
+  "driverWearPerPoint": {
+    "value": 0.006,
+    "why": "Wear change per point of the driver's tyre management: a gentle driver makes a stint ~6% longer per 10 points."
+  },
+  "fuelWearPerKg": {
+    "value": 0.0015,
+    "why": "Extra wear per kg of fuel on board: a full car (~100 kg) wears its tyres ~15% faster than an empty one."
+  },
+  "puncture": {
+    "value": { "chancePerLap": 0.00012, "beyondCliffMultiplier": 12, "lossS": 20, "retireShare": 0.1 },
+    "why": "Random punctures: roughly one car in four races per season-lap budget; twelve times likelier on a tyre past its cliff. A puncture costs ~20 s limping to the pits and ends the race one time in ten."
+  }
+}

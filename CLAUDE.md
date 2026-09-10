@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `f1-manager-plan.md` (Russian, ~790 lines) is the full design and development spec for a browser-based Formula 1 team-manager game. The plan is the source of truth: read the relevant section before implementing anything, and treat section 10 ("Зафиксированные решения") as fixed — those decisions change only via a new ADR, not by inference during implementation.
 
-Work proceeds strictly milestone by milestone (M0 → M12, section 7). Do not start the next milestone until the current one passes its Definition of Done. The user's typical task framing is "implement milestone MN from the plan" (the `/milestone` skill). Progress is recorded in `docs/CHANGELOG.md`; **M0 (scaffold) and M1 (domain and content) are done** — see `docs/adr/001-m0-scaffold.md` and `docs/adr/002-m1-domain-and-content.md`. All docs (`docs/`) are written in Russian.
+Work proceeds strictly milestone by milestone (M0 → M12, section 7). Do not start the next milestone until the current one passes its Definition of Done. The user's typical task framing is "implement milestone MN from the plan" (the `/milestone` skill). Progress is recorded in `docs/CHANGELOG.md`; **M0 (scaffold), M1 (domain and content) and M2 (race core) are done** — see `docs/adr/001…003` and `docs/calibration/M2.md`. All docs (`docs/`) are written in Russian.
 
 ## Non-negotiable invariants
 
@@ -42,7 +42,9 @@ UI conventions:
 - **Numbers** (times, gaps, money) use `font-mono`; `Table` columns take `numeric: true`.
 - `/dev/components` is the component showcase; extend it when adding a primitive.
 
-Simulation runs in a Web Worker from M2 onward; the UI only draws.
+**The race core** (`src/sim/race/`, ADR 003) is `simulateRace(input): RaceResult` — a discrete-event simulation over sectors: cars are processed in the order they enter their next sector, and "the car ahead" is whoever last crossed that sector's boundary, so traffic, DRS, overtaking, lapping and pit lanes all fall out of one rule. Positions and gaps are derived after the race from final line times. Weather is an input (`generateWeather` → minute timeline, built by `buildRaceInput`), not rolled inside the race. Strategy calls go through `decide()` (`strategy.ts`: `decideRaceStrategy`, `decidePitCall`). Subsystems are small pure modules (`pace`, `tyres`, `traffic`, `incidents`, `weather`, `track`) each with its own test file; `analysis.ts` measures calibration metrics from the race output. Any change to race behaviour must be re-checked with `npm run sim:batch` against `docs/calibration/M2.md` — the `calibration guard` test catches gross drift only.
+
+The simulation moves into a Web Worker (Comlink) in M3, when the race screen needs it (ADR 003 moved this from M2); the UI only draws.
 
 **Two time scales** (section 3.4): between races, one tick = one day. During a race weekend, sessions run by lap with per-sector segments, played back at ×1/×2/×5/×15 with pause and intervention.
 
@@ -50,7 +52,7 @@ Simulation runs in a Web Worker from M2 onward; the UI only draws.
 
 - Unit tests per simulation formula.
 - **Determinism tests**: seed + input → fixed result hash, so unintended logic changes fail loudly.
-- **Batch runs are the primary balancing tool** — `npm run sim:batch -- --seasons 100` emitting CSV statistics (champion distribution, average gaps, SC frequency, strategy spread). Calibration targets are numeric and specified per milestone (e.g. M2: top-to-backmarker gap ≈2–3%, driver lap scatter ≈0.2–0.4 s, soft-tyre deg ≈0.08–0.15 s/lap, SC in ~40% of races). M2 must produce `docs/calibration/M2.md` before any race UI exists.
+- **Batch runs are the primary balancing tool** — `npm run sim:batch` (per race now; `--seasons` arrives with the season loop in M5) printing a Markdown summary and optional per-race CSV (winners, pace spread, lap scatter, degradation, overtakes, SC frequency, stops). Calibration targets are numeric and specified per milestone (e.g. M2: top-to-backmarker gap ≈2–3%, driver lap scatter ≈0.2–0.4 s, soft-tyre deg ≈0.08–0.15 s/lap, SC in ~40% of races). M2's report is `docs/calibration/M2.md` (1000 races of one track plus the whole calendar).
 - Save snapshots for migration tests.
 - Performance budget: full headless race < 200 ms; race rendering holds 60 FPS at ×15.
 
@@ -65,7 +67,9 @@ npm run format         # Prettier --write (markdown is excluded on purpose)
 npm run format:check
 npm test               # all Vitest projects once
 npm run test:watch
-npm run sim:batch -- --seasons 100   # balancing batch runner; exits 1 until M2 adds the race core
+npm run sim:batch -- --track al-rimal --runs 1000 --seed M2   # one race many times; Markdown summary
+npm run sim:batch -- --all-tracks --runs 100 --seed M2       # whole calendar; add --csv out.csv for per-race rows
+npm run sim:race -- --track porto-rocca --seed demo          # one race: classification and key events (--events all, --json)
 npm run pack:geometry  # rebuild src/data/packs/default/geometry.json from bacinger/f1-circuits (cached in .cache/)
 ```
 

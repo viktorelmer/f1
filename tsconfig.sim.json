@@ -1,11 +1,13 @@
 {
   // src/sim/ is checked a second time without DOM types: the engine runs headless (worker, batch
   // runs) and must not reach for window, document or console. See docs/systems/app-shell.md.
+  // Tests may measure wall-clock time; they are type-checked by tsconfig.app.json instead.
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.sim.tsbuildinfo",
     "lib": ["ES2023"],
     "types": []
   },
-  "include": ["src/sim"]
+  "include": ["src/sim"],
+  "exclude": ["src/sim/**/*.test.ts"]
 }

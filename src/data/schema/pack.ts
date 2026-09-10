@@ -370,6 +370,8 @@ export const regulationSchema = z.strictObject({
   minWeightKg: z.number().positive(),
   tyreSetsPerWeekend: z.strictObject({ standard: z.number().int().min(1), sprint: z.number().int().min(1) }),
   rookieFp1SessionsPerTeam: z.number().int().min(0),
+  /** A retired car is classified — and can score — if it covered this share of the race distance. */
+  classifiedShareOfLaps: z.number().min(0).max(1),
 });
 
 export const calendarSchema = z.strictObject({

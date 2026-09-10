@@ -23,6 +23,7 @@
       "standard": 13,
       "sprint": 12
     },
-    "rookieFp1SessionsPerTeam": 4
+    "rookieFp1SessionsPerTeam": 4,
+    "classifiedShareOfLaps": 0.9
   }
 ]
