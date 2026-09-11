@@ -54,10 +54,16 @@ export function runPracticeSessions(
       plans: plans[session] ?? defaultPlan(race.entries, session),
       dataAnalysis,
       known: Object.fromEntries(Object.entries(knowledge).map(([id, k]) => [id, k.weekend])),
+      rivals: Object.fromEntries(Object.entries(knowledge).map(([id, k]) => [id, k.rivals])),
+      // What a car has found so far this weekend shows in how quick it looks to everyone else.
+      setupLossS: Object.fromEntries(
+        race.entries.map((e) => [e.driverId, knowledge[e.teamId]?.weekend?.setupLossS ?? e.setupLossS]),
+      ),
     });
     for (const [teamId, learned] of Object.entries(result.learned)) {
       const team = knowledge[teamId];
-      if (team) knowledge[teamId] = { ...team, weekend: learned };
+      if (team)
+        knowledge[teamId] = { ...team, weekend: learned, rivals: result.rivals[teamId] ?? team.rivals };
     }
     sessions.push(result);
   }

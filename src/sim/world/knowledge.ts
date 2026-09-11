@@ -46,5 +46,5 @@ export function initialKnowledge(
     );
     return [driver.id, { potential }];
   });
-  return { drivers: Object.fromEntries(entries), weekend: null };
+  return { drivers: Object.fromEntries(entries), rivals: {}, weekend: null };
 }

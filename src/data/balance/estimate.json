@@ -30,6 +30,14 @@
       },
       "why": "Fuel a car burns per lap, in kilograms, on the pack's 0.8..3 scale. An sd of 0.25 kg over a race distance is more than a pit stop's worth of fuel, so confidence is zero there."
     },
+    "team.pace": {
+      "value": {
+        "min": 50,
+        "max": 200,
+        "wideSd": 1.5
+      },
+      "why": "A team's clean-air lap time here, in seconds, on the 50..200 s scale a lap can take. An sd of 1.5 s covers the whole field from front to back, so confidence is zero there."
+    },
     "driver.potential": {
       "value": {
         "min": 1,

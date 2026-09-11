@@ -15,6 +15,7 @@ import type { ProgrammeKind } from '@/data/schema/weekend-balance';
 import type { Rng } from '../rng/rng';
 import { streams } from '../rng/rng';
 import type { GameDate } from '../types/game-date';
+import type { Estimate } from '../knowledge/estimate';
 import type { DriverId, SessionKind, SessionResult, TeamId, WeekendKnowledge } from '../types/world';
 import { carPaceFraction, driverPaceFraction, fuelPerLap, lapNoiseSd, massSeconds } from '../race/pace';
 import { prepareTrack } from '../race/track';
@@ -28,6 +29,7 @@ import {
   wetSlowdownFraction,
 } from '../race/weather';
 import { learnFromRunning, priorKnowledge, type WeekendTruth } from './knowledge';
+import { decideHiding, readRivals, referencePaceS, type RivalReading } from './scouting';
 
 export type { ProgrammeKind };
 
@@ -48,6 +50,10 @@ export type PracticeInput = {
   dataAnalysis: Record<TeamId, number>;
   /** What each team knew before the session; a team without an entry starts from the prior. */
   known: Record<TeamId, WeekendKnowledge | null>;
+  /** What each team made of its rivals before the session. */
+  rivals: Record<TeamId, Record<TeamId, Estimate>>;
+  /** Seconds a lap each car is off its setup, from the sessions already run. */
+  setupLossS: Record<DriverId, number>;
 };
 
 export type PracticeLap = {
@@ -67,6 +73,10 @@ export type PracticeResult = {
   minutes: Record<DriverId, number>;
   /** What each team knows after the session. */
   learned: Record<TeamId, WeekendKnowledge>;
+  /** What each team now makes of everyone else's pace (plan 5.13). */
+  rivals: Record<TeamId, Record<TeamId, Estimate>>;
+  /** Who ran heavy to hide their hand this session. */
+  hiding: TeamId[];
 };
 
 /** The truth a weekend's practice is about: the track's tyres, and each car's fuel use. */
@@ -109,6 +119,19 @@ export function runPractice(input: PracticeInput): PracticeResult {
   /** Laps that bear on each quantity, per team. */
   const learnedLaps: Record<TeamId, { degradationLaps: number; fuelLaps: number; setupLaps: number }> = {};
 
+  // Friday is also reconnaissance: a team may run heavy to keep its hand hidden (plan 5.13).
+  const hiding = new Set<TeamId>();
+  for (const teamId of [...new Set(race.entries.map((e) => e.teamId))]) {
+    const entry = race.entries.find((e) => e.teamId === teamId)!;
+    const decision = decideHiding(
+      { risk: entry.riskAppetite },
+      entry.strategist,
+      { goal: 'hide', risk: entry.riskAppetite, issuedBy: 'team-character' },
+      stream(`race:${race.season}:r${race.round}:${session}:hiding:${teamId}`),
+    );
+    if (decision.choice.hide) hiding.add(teamId);
+  }
+
   for (const entry of race.entries) {
     const plan = input.plans[entry.driverId] ?? [];
     const rng = stream(`race:${race.season}:r${race.round}:${session}:${entry.driverId}`);
@@ -124,11 +147,11 @@ export function runPractice(input: PracticeInput): PracticeResult {
       if (used >= w.session.practiceMinutes) break;
       const spec = w.programmes[run.programme]!;
       const fuelKg =
-        run.programme === 'long-run'
+        (run.programme === 'long-run'
           ? w.fuel.longRunKg
           : run.programme === 'qualifying-sim'
             ? w.fuel.qualifyingKg
-            : w.fuel.defaultKg;
+            : w.fuel.defaultKg) + (hiding.has(entry.teamId) ? w.scouting.hidingFuelKg : 0);
       used += w.session.boxMinutes;
       if (spec.fresh) {
         wear = 0;
@@ -174,8 +197,10 @@ export function runPractice(input: PracticeInput): PracticeResult {
         );
       }
       // A long run is the only programme that shows how the tyre goes off; fuel is read off any run.
-      if (run.programme === 'long-run') learn.degradationLaps += ran;
-      if (run.programme === 'fuel-calibration' || run.programme === 'long-run') learn.fuelLaps += ran;
+      // Running heavy to hide costs the team half of what those laps would have taught it.
+      const worth = hiding.has(entry.teamId) ? w.scouting.hidingLearningShare : 1;
+      if (run.programme === 'long-run') learn.degradationLaps += ran * worth;
+      if (run.programme === 'fuel-calibration' || run.programme === 'long-run') learn.fuelLaps += ran * worth;
       // Setup work dials the car in; a qualifying simulation checks it and counts for half.
       if (run.programme === 'setup') learn.setupLaps += ran;
       if (run.programme === 'qualifying-sim') learn.setupLaps += ran / 2;
@@ -224,7 +249,32 @@ export function runPractice(input: PracticeInput): PracticeResult {
     );
   }
 
-  return { session: { session, classification }, laps, minutes, learned };
+  // What everyone made of everyone else. The truth is each team's reference pace here; a team
+  // hiding is read slower than it is, and every observer has its own error and its own stream.
+  const truth: Record<TeamId, number> = {};
+  const readings: Record<TeamId, RivalReading> = {};
+  for (const teamId of teams) {
+    const entry = race.entries.find((e) => e.teamId === teamId)!;
+    truth[teamId] = referencePaceS(race, entry, input.setupLossS[entry.driverId] ?? 0);
+    readings[teamId] = {
+      laps: laps.filter((l) => race.entries.find((e) => e.driverId === l.driverId)?.teamId === teamId).length,
+      hiding: hiding.has(teamId),
+    };
+  }
+  const rivals: Record<TeamId, Record<TeamId, Estimate>> = {};
+  for (const teamId of teams) {
+    const seen = Object.fromEntries(Object.entries(readings).filter(([id]) => id !== teamId));
+    rivals[teamId] = readRivals(
+      input.rivals[teamId],
+      Object.fromEntries(Object.entries(truth).filter(([id]) => id !== teamId)),
+      seen,
+      input.dataAnalysis[teamId] ?? balance.weekend.scouting.departmentRef,
+      input.at,
+      stream(`race:${race.season}:r${race.round}:${session}:scouting:${teamId}`),
+    );
+  }
+
+  return { session: { session, classification }, laps, minutes, learned, rivals, hiding: [...hiding] };
 }
 
 /** One practice lap on an empty track: the race's own lap-time terms, without traffic or segments. */

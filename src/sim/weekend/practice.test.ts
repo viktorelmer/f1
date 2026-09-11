@@ -10,6 +10,7 @@ import type { SessionKind } from '../types/world';
 import { readingSd } from './knowledge';
 import { defaultPlan, type PracticePlan, runPractice, weekendTruth } from './practice';
 import { PRACTICE_SESSIONS, runPracticeSessions, weekendRaceInput } from './run-practice';
+import { decideHiding, referencePaceS, rivalPrecision } from './scouting';
 
 const pack = loadActivePack();
 const TEAM = 'kestrel';
@@ -22,6 +23,8 @@ const roundOf = (trackId: string) => world.season.calendar.find((r) => r.trackId
 const race = (track: string, seed: string) => buildRaceInput(world, pack, roundOf(track), seed);
 const dataAnalysis = Object.fromEntries(Object.values(world.teams).map((t) => [t.id, 60]));
 const known = Object.fromEntries(Object.keys(world.teams).map((id) => [id, null]));
+const rivals = Object.fromEntries(Object.keys(world.teams).map((id) => [id, {}]));
+const setupLossS: Record<string, number> = {};
 
 const session = (track: string, seed: string, plans?: PracticePlan, kind: SessionKind = 'fp2') => {
   const input = race(track, seed);
@@ -32,6 +35,8 @@ const session = (track: string, seed: string, plans?: PracticePlan, kind: Sessio
     plans: plans ?? defaultPlan(input.entries, kind),
     dataAnalysis,
     known,
+    rivals,
+    setupLossS,
   });
 };
 
@@ -51,6 +56,8 @@ describe('a practice session', () => {
       plans: greedy,
       dataAnalysis,
       known,
+      rivals,
+      setupLossS,
     });
     for (const minutes of Object.values(result.minutes)) {
       expect(minutes).toBeGreaterThan(balance.weekend.session.practiceMinutes * 0.8);
@@ -73,7 +80,16 @@ describe('a practice session', () => {
     const [absent] = world.teams[TEAM]!.drivers.race;
     const plans = { ...defaultPlan(input.entries, 'fp2') };
     delete plans[absent];
-    const result = runPractice({ race: input, session: 'fp2', at: world.date, plans, dataAnalysis, known });
+    const result = runPractice({
+      race: input,
+      session: 'fp2',
+      at: world.date,
+      plans,
+      dataAnalysis,
+      known,
+      rivals,
+      setupLossS,
+    });
     const car = result.session.classification.find((c) => c.driverId === absent)!;
     expect(car.laps).toBe(0);
     expect(car.bestLapS).toBeNull();
@@ -199,4 +215,76 @@ describe('M5 DoD: skipping practice costs the team on Sunday', () => {
     // itself is a few tenths a lap away from where practice would have put it.
     expect(mean(positions.skipped) - mean(positions.ran)).toBeGreaterThan(0.5);
   }, 120_000);
+});
+
+describe('reading the opposition (plan 5.13)', () => {
+  const weekendOf = (seed: string) => {
+    const input = race('al-rimal', seed);
+    const after = runPracticeSessions(world, input);
+    return { input, after };
+  };
+
+  it('gives every team its own read on everyone else, and never on itself', () => {
+    const { after } = weekendOf('rivals-1');
+    for (const [teamId, knowledge] of Object.entries(after.knowledge)) {
+      expect(knowledge.rivals[teamId]).toBeUndefined();
+      expect(Object.keys(knowledge.rivals).length).toBe(Object.keys(world.teams).length - 1);
+    }
+    // Two teams watching the same Friday come away with different numbers.
+    const [a, b] = Object.keys(after.knowledge) as [string, string];
+    const target = Object.keys(after.knowledge).find((id) => id !== a && id !== b)!;
+    expect(after.knowledge[a]!.rivals[target]!.value).not.toBe(after.knowledge[b]!.rivals[target]!.value);
+  });
+
+  it('narrows with the laps of a weekend and never holds the truth', () => {
+    const { input, after } = weekendOf('rivals-2');
+    const observer = 'kestrel';
+    const target = Object.keys(world.teams).find((id) => id !== observer)!;
+    const estimate = after.knowledge[observer]!.rivals[target]!;
+    const entry = input.entries.find((e) => e.teamId === target)!;
+    const truth = referencePaceS(input, entry, after.knowledge[target]!.weekend!.setupLossS);
+    expect(estimate.basis.sd).toBeGreaterThan(0);
+    expect(estimate.basis.mean).not.toBe(truth);
+    // Three sessions of watching are worth more than one.
+    const oneSession = runPractice({
+      race: input,
+      session: 'fp1',
+      at: world.date,
+      plans: defaultPlan(input.entries, 'fp1'),
+      dataAnalysis,
+      known,
+      rivals,
+      setupLossS,
+    }).rivals[observer]![target]!;
+    expect(estimate.basis.sd).toBeLessThan(oneSession.basis.sd);
+  });
+
+  it('reads a team that runs heavy as slower than it is', () => {
+    const clean = rivalPrecision({ laps: 20, hiding: false }, 60);
+    const hidden = rivalPrecision({ laps: 20, hiding: true }, 60);
+    expect(clean.bias).toBe(0);
+    expect(hidden.bias).toBeGreaterThan(0);
+    // A better department reads the same laps tighter, and is less fooled.
+    expect(rivalPrecision({ laps: 20, hiding: true }, 90).sd).toBeLessThan(hidden.sd);
+    expect(rivalPrecision({ laps: 20, hiding: true }, 90).bias).toBeLessThan(hidden.bias);
+  });
+
+  it('hides more often for a team that likes a gamble, and never when told to show', () => {
+    const profile = { skill: 0.7, consistency: 0.8, rapport: 0.5 };
+    const hides = (risk: number, goal: 'hide' | 'show') => {
+      let n = 0;
+      for (let i = 0; i < 40; i++) {
+        const choice = decideHiding(
+          { risk },
+          profile,
+          { goal, risk, issuedBy: 'team-character' },
+          createRng('hide', `${goal}-${risk}-${i}`),
+        );
+        if (choice.choice.hide) n++;
+      }
+      return n;
+    };
+    expect(hides(0.9, 'hide')).toBeGreaterThan(hides(0.1, 'hide'));
+    expect(hides(0.9, 'show')).toBeLessThan(hides(0.9, 'hide'));
+  });
 });

@@ -55,6 +55,18 @@ export const weekendBalanceSchema = z.strictObject({
       maxTrafficShare: unit,
     }),
   ),
+  scouting: tuned(
+    z.strictObject({
+      sdBaseS: positive,
+      departmentRef: positive,
+      sdPerDepartmentPoint: nonNegative,
+      minSdFactor: unit,
+      hidingBiasS: nonNegative,
+      hidingAppetite: unit,
+      hidingFuelKg: nonNegative,
+      hidingLearningShare: unit,
+    }),
+  ),
   learning: tuned(
     z.strictObject({
       degradationSdBase: positive,

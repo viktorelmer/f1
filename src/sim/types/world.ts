@@ -224,6 +224,8 @@ export type WeekendKnowledge = {
 
 export type TeamKnowledge = {
   drivers: Record<DriverId, { potential: Estimate }>;
+  /** What this team makes of everyone else's pace at the weekend it is at (plan 5.13). */
+  rivals: Record<TeamId, Estimate>;
   /** Null before the team has looked at the coming weekend at all. */
   weekend: WeekendKnowledge | null;
 };

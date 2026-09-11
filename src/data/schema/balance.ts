@@ -40,6 +40,7 @@ export const estimateBalanceSchema = z.strictObject({
   confidenceLabels: z.strictObject({ medium: tuned(unit), high: tuned(unit) }),
   quantities: z.strictObject({
     'driver.potential': quantitySchema,
+    'team.pace': quantitySchema,
     'track.tyreDegradation': quantitySchema,
     'car.fuelPerLap': quantitySchema,
   }),
