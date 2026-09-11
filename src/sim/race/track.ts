@@ -30,7 +30,7 @@ export type TrackModel = {
 /** Bends tighter than this radius count as corners. Matches the geometry import. */
 const STRAIGHT_MIN_RADIUS_M = 450;
 
-type Point = [number, number];
+export type Point = [number, number];
 
 export function parsePath(path: string): Point[] {
   const numbers = path.match(/-?\d+(\.\d+)?/g)?.map(Number) ?? [];
@@ -105,6 +105,35 @@ export function prepareTrack(track: PackTrack, geometry: PackGeometry): TrackMod
   });
 
   return { track, sectors, drsZones };
+}
+
+/**
+ * A point-at-fraction function for a closed polyline — how the track map places a car that is
+ * `fraction` of the way round the lap. The pack's paths are polylines, so this is exact, and
+ * unlike SVGPathElement.getPointAtLength it needs no DOM.
+ */
+export function pathSampler(points: readonly Point[]): (fraction: number) => Point {
+  const n = points.length;
+  const cumulative = [0];
+  for (let i = 1; i <= n; i++) {
+    const [a, b] = [points[i - 1]!, points[i % n]!];
+    cumulative.push(cumulative[i - 1]! + Math.hypot(b[0] - a[0], b[1] - a[1]));
+  }
+  const total = cumulative[n]!;
+  return (fraction) => {
+    const at = (((fraction % 1) + 1) % 1) * total;
+    let lo = 0;
+    let hi = n - 1;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (cumulative[mid]! <= at) lo = mid;
+      else hi = mid - 1;
+    }
+    const [a, b] = [points[lo]!, points[(lo + 1) % n]!];
+    const span = cumulative[lo + 1]! - cumulative[lo]!;
+    const s = span > 0 ? (at - cumulative[lo]!) / span : 0;
+    return [a[0] + (b[0] - a[0]) * s, a[1] + (b[1] - a[1]) * s];
+  };
 }
 
 /**

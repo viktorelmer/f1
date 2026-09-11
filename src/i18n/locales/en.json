@@ -74,7 +74,9 @@
     "inDays_other": "in {{count}} days",
     "budget": "Budget",
     "constructors": "Constructors",
-    "continue": "Continue"
+    "continue": "Continue",
+    "test": "Pre-season test · {{track}}",
+    "race": "R{{round}} · {{track}}"
   },
   "placeholder": {
     "body": "This screen is empty for now. It will be filled in by the milestone that implements its system."
@@ -116,5 +118,180 @@
     "accent": "Team accent",
     "typography": "Typography",
     "typeSample": "Pit wall and engineering telemetry"
+  },
+  "race": {
+    "setup": {
+      "title": "Race",
+      "intro": "Pick a round and a seed. The same seed always replays the same race.",
+      "round": "Round",
+      "roundOption": "{{round}}. {{track}}",
+      "sprint": "sprint",
+      "seed": "Seed",
+      "newSeed": "New seed",
+      "start": "Start the race",
+      "loading": "Simulating the race…",
+      "error": "The race could not be simulated: {{message}}",
+      "retry": "Try again"
+    },
+    "header": {
+      "lap": "Lap {{lap}}/{{total}}",
+      "dry": "Dry",
+      "damp": "Damp",
+      "wet": "Wet",
+      "air": "air {{temp}} °C",
+      "track": "track {{temp}} °C",
+      "wind": "wind {{speed}} km/h",
+      "status": {
+        "green": "Green flag",
+        "sc": "Safety car",
+        "vsc": "Virtual safety car"
+      },
+      "finished": "Chequered flag",
+      "seed": "seed {{seed}}"
+    },
+    "controls": {
+      "label": "Playback",
+      "pause": "Pause",
+      "play": "Play",
+      "speed": "×{{speed}}",
+      "speedLabel": "Playback speed ×{{speed}}",
+      "restart": "Restart",
+      "newRace": "New race",
+      "progress": "Race progress"
+    },
+    "board": {
+      "title": "Timing",
+      "position": "Pos",
+      "driver": "Driver",
+      "gap": "Gap",
+      "interval": "Int",
+      "tyre": "Tyre",
+      "stops": "Pit",
+      "leader": "Leader",
+      "lapsDown_one": "+{{count}} lap",
+      "lapsDown_other": "+{{count}} laps",
+      "pit": "PIT",
+      "out": "OUT",
+      "finished": "FIN"
+    },
+    "map": {
+      "title": "Track map",
+      "drs": "DRS zone",
+      "retired": "{{driver}} stopped here",
+      "inPit": "In the pits"
+    },
+    "panel": {
+      "title": "Your drivers",
+      "position": "P{{position}}",
+      "tyre": "Tyres · life",
+      "tyreValue": "{{age}} laps · {{life}}%",
+      "ers": "ERS",
+      "fuel": "Fuel",
+      "fuelValue": "{{kg}} kg",
+      "stops": "Stops",
+      "lastLap": "Last lap",
+      "bestLap": "Best lap",
+      "plan": "Plan",
+      "nextStop": "Next planned stop: lap {{lap}}",
+      "noStop": "No planned stops left",
+      "forecastLater": "Finish forecast and team radio arrive with race control (M4)."
+    },
+    "tabs": {
+      "label": "Race data",
+      "events": "Race feed",
+      "gaps": "Gap chart",
+      "pits": "Pit stops"
+    },
+    "compound": {
+      "soft": "Soft",
+      "medium": "Medium",
+      "hard": "Hard",
+      "inter": "Intermediate",
+      "wet": "Wet",
+      "short": {
+        "soft": "S",
+        "medium": "M",
+        "hard": "H",
+        "inter": "I",
+        "wet": "W"
+      }
+    },
+    "reason": {
+      "crash": "crash",
+      "collision": "collision",
+      "puncture": "puncture",
+      "debris": "debris",
+      "power-unit failure": "power unit failure",
+      "chassis failure": "chassis failure"
+    },
+    "trigger": {
+      "safety-car": "under the safety car",
+      "weather": "weather change",
+      "damage": "damage",
+      "puncture": "puncture"
+    },
+    "events": {
+      "start": "Lights out — {{cars}} cars away",
+      "launch_one": "{{driver}} gains {{count}} place at the start",
+      "launch_other": "{{driver}} gains {{count}} places at the start",
+      "launchBad": "{{driver}} bogs down at the start",
+      "overtake": "{{driver}} passes {{other}}",
+      "overtakeDrs": "{{driver}} passes {{other}} with DRS",
+      "defence": "{{driver}} keeps {{other}} behind",
+      "pit": "{{driver}} pits: {{from}} → {{to}}, {{stationary}} s stationary",
+      "pitSlow": "{{driver}} pits: {{from}} → {{to}}, slow stop — {{stationary}} s",
+      "safety-car": "Safety car deployed ({{cause}})",
+      "safety-car-in": "Safety car in this lap — racing resumes",
+      "vsc": "Virtual safety car ({{cause}})",
+      "vsc-end": "VSC ending — green flag",
+      "drs-enabled": "DRS enabled",
+      "mistake": "{{driver}} makes a mistake, loses {{loss}} s",
+      "spin": "{{driver}} spins, loses {{loss}} s",
+      "crash": "{{driver}} crashes",
+      "contact": "Contact between {{driver}} and {{other}}",
+      "contactStart": "{{driver}} damaged in first-lap contact",
+      "failure": "{{driver}}: {{component}} problem",
+      "failurePartial": "{{driver}}: {{component}} problem, losing pace",
+      "puncture": "{{driver}} has a puncture",
+      "retirement": "{{driver}} retires — {{reason}}",
+      "rain-start": "Rain is falling",
+      "rain-stop": "The rain has stopped",
+      "strategyStay": "{{driver}} stays out ({{trigger}})",
+      "strategyPit": "{{driver}} is called in for {{compound}} ({{trigger}})",
+      "chequered-flag": "Chequered flag — {{driver}} wins",
+      "component": {
+        "power-unit": "power unit",
+        "chassis": "chassis"
+      }
+    },
+    "feed": {
+      "lap": "L{{lap}}",
+      "empty": "Nothing has happened yet."
+    },
+    "gaps": {
+      "title": "Gap to the leader by lap",
+      "xAxis": "Lap",
+      "yAxis": "Gap to leader, s",
+      "legendYou": "Your drivers",
+      "legendOthers": "Rest of the field",
+      "safetyCar": "Safety car",
+      "vsc": "VSC",
+      "tooltip": "Lap {{lap}}",
+      "noData": "The chart fills in as laps are completed."
+    },
+    "pits": {
+      "lap": "Lap",
+      "driver": "Driver",
+      "change": "Tyres",
+      "stationary": "Stationary",
+      "slow": "slow",
+      "empty": "No pit stops yet."
+    },
+    "results": {
+      "title": "Result",
+      "gap": "Gap",
+      "points": "Pts",
+      "dnf": "DNF — {{reason}}"
+    }
   }
 }

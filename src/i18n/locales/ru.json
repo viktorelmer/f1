@@ -76,7 +76,9 @@
     "inDays_other": "через {{count}} дня",
     "budget": "Бюджет",
     "constructors": "Кубок конструкторов",
-    "continue": "Продолжить"
+    "continue": "Продолжить",
+    "test": "Предсезонные тесты · {{track}}",
+    "race": "Этап {{round}} · {{track}}"
   },
   "placeholder": {
     "body": "Экран пока пуст. Его наполнит веха, в которой появится соответствующая система."
@@ -118,5 +120,184 @@
     "accent": "Цвет команды",
     "typography": "Типографика",
     "typeSample": "Пит-уолл и инженерная телеметрия"
+  },
+  "race": {
+    "setup": {
+      "title": "Гонка",
+      "intro": "Выберите этап и сид. Один и тот же сид всегда повторяет ту же гонку.",
+      "round": "Этап",
+      "roundOption": "{{round}}. {{track}}",
+      "sprint": "спринт",
+      "seed": "Сид",
+      "newSeed": "Новый сид",
+      "start": "Старт гонки",
+      "loading": "Считаем гонку…",
+      "error": "Не удалось посчитать гонку: {{message}}",
+      "retry": "Ещё раз"
+    },
+    "header": {
+      "lap": "Круг {{lap}}/{{total}}",
+      "dry": "Сухо",
+      "damp": "Влажно",
+      "wet": "Мокро",
+      "air": "воздух {{temp}} °C",
+      "track": "трасса {{temp}} °C",
+      "wind": "ветер {{speed}} км/ч",
+      "status": {
+        "green": "Зелёный флаг",
+        "sc": "Машина безопасности",
+        "vsc": "Виртуальная машина безопасности"
+      },
+      "finished": "Финиш",
+      "seed": "сид {{seed}}"
+    },
+    "controls": {
+      "label": "Воспроизведение",
+      "pause": "Пауза",
+      "play": "Смотреть",
+      "speed": "×{{speed}}",
+      "speedLabel": "Скорость воспроизведения ×{{speed}}",
+      "restart": "С начала",
+      "newRace": "Новая гонка",
+      "progress": "Ход гонки"
+    },
+    "board": {
+      "title": "Таймингборд",
+      "position": "Поз",
+      "driver": "Пилот",
+      "gap": "Разрыв",
+      "interval": "Интервал",
+      "tyre": "Шины",
+      "stops": "Пит",
+      "leader": "Лидер",
+      "lapsDown_one": "+{{count}} круг",
+      "lapsDown_few": "+{{count}} круга",
+      "lapsDown_many": "+{{count}} кругов",
+      "lapsDown_other": "+{{count}} круга",
+      "pit": "БОКСЫ",
+      "out": "СХОД",
+      "finished": "ФИНИШ"
+    },
+    "map": {
+      "title": "Карта трассы",
+      "drs": "DRS-зона",
+      "retired": "Здесь сошёл {{driver}}",
+      "inPit": "В боксах"
+    },
+    "panel": {
+      "title": "Ваши пилоты",
+      "position": "P{{position}}",
+      "tyre": "Шины · ресурс",
+      "tyreValue": "{{age}} кр. · {{life}}%",
+      "ers": "ERS",
+      "fuel": "Топливо",
+      "fuelValue": "{{kg}} кг",
+      "stops": "Стопы",
+      "lastLap": "Последний круг",
+      "bestLap": "Лучший круг",
+      "plan": "План",
+      "nextStop": "Следующий плановый заезд: круг {{lap}}",
+      "noStop": "Плановых заездов больше нет",
+      "forecastLater": "Прогноз финиша и радио появятся вместе с управлением гонкой (M4)."
+    },
+    "tabs": {
+      "label": "Данные гонки",
+      "events": "Лента событий",
+      "gaps": "График разрывов",
+      "pits": "Пит-стопы"
+    },
+    "compound": {
+      "soft": "Мягкие",
+      "medium": "Средние",
+      "hard": "Жёсткие",
+      "inter": "Промежуточные",
+      "wet": "Дождевые",
+      "short": {
+        "soft": "S",
+        "medium": "M",
+        "hard": "H",
+        "inter": "I",
+        "wet": "W"
+      }
+    },
+    "reason": {
+      "crash": "авария",
+      "collision": "столкновение",
+      "puncture": "прокол",
+      "debris": "обломки на трассе",
+      "power-unit failure": "отказ силовой установки",
+      "chassis failure": "поломка шасси"
+    },
+    "trigger": {
+      "safety-car": "под машиной безопасности",
+      "weather": "смена погоды",
+      "damage": "повреждение",
+      "puncture": "прокол"
+    },
+    "events": {
+      "start": "Старт! На трассе {{cars}} машин",
+      "launch_one": "{{driver}} отыгрывает {{count}} позицию на старте",
+      "launch_few": "{{driver}} отыгрывает {{count}} позиции на старте",
+      "launch_many": "{{driver}} отыгрывает {{count}} позиций на старте",
+      "launch_other": "{{driver}} отыгрывает {{count}} позиции на старте",
+      "launchBad": "{{driver}} проваливает старт",
+      "overtake": "{{driver}} обгоняет {{other}}",
+      "overtakeDrs": "{{driver}} обгоняет {{other}} с DRS",
+      "defence": "{{driver}} отбивается от атаки {{other}}",
+      "pit": "{{driver}} в боксах: {{from}} → {{to}}, стоп {{stationary}} с",
+      "pitSlow": "{{driver}} в боксах: {{from}} → {{to}}, медленный стоп — {{stationary}} с",
+      "safety-car": "Выезжает машина безопасности ({{cause}})",
+      "safety-car-in": "Машина безопасности уходит — рестарт",
+      "vsc": "Виртуальная машина безопасности ({{cause}})",
+      "vsc-end": "VSC заканчивается — зелёный флаг",
+      "drs-enabled": "DRS разрешён",
+      "mistake": "{{driver}} ошибается и теряет {{loss}} с",
+      "spin": "{{driver}} разворачивает, потеря {{loss}} с",
+      "crash": "{{driver}} — авария",
+      "contact": "Контакт: {{driver}} и {{other}}",
+      "contactStart": "{{driver}} получает повреждение в контакте на первом круге",
+      "failure": "{{driver}}: проблема — {{component}}",
+      "failurePartial": "{{driver}}: проблема — {{component}}, теряет темп",
+      "puncture": "{{driver}}: прокол",
+      "retirement": "{{driver}} сходит — {{reason}}",
+      "rain-start": "Начинается дождь",
+      "rain-stop": "Дождь закончился",
+      "strategyStay": "{{driver}}: стратег оставляет на трассе ({{trigger}})",
+      "strategyPit": "{{driver}}: стратег зовёт в боксы на {{compound}} ({{trigger}})",
+      "chequered-flag": "Финиш! Побеждает {{driver}}",
+      "component": {
+        "power-unit": "силовая установка",
+        "chassis": "шасси"
+      }
+    },
+    "feed": {
+      "lap": "К{{lap}}",
+      "empty": "Пока ничего не произошло."
+    },
+    "gaps": {
+      "title": "Отставание от лидера по кругам",
+      "xAxis": "Круг",
+      "yAxis": "Отставание от лидера, с",
+      "legendYou": "Ваши пилоты",
+      "legendOthers": "Остальные",
+      "safetyCar": "Машина безопасности",
+      "vsc": "VSC",
+      "tooltip": "Круг {{lap}}",
+      "noData": "График заполняется по мере прохождения кругов."
+    },
+    "pits": {
+      "lap": "Круг",
+      "driver": "Пилот",
+      "change": "Шины",
+      "stationary": "Стоп",
+      "slow": "медленный",
+      "empty": "Пит-стопов пока не было."
+    },
+    "results": {
+      "title": "Итоги гонки",
+      "gap": "Отставание",
+      "points": "Очки",
+      "dnf": "Сход — {{reason}}"
+    }
   }
 }

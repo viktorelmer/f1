@@ -15,4 +15,8 @@ declare module '@tanstack/react-router' {
   interface Register {
     router: ReturnType<typeof createAppRouter>;
   }
+  interface StaticDataRouteOption {
+    /** The screen manages its own layout and scrolling: no padding, no outer scroll (the race screen). */
+    fullBleed?: boolean;
+  }
 }

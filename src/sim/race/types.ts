@@ -76,6 +76,10 @@ export type RaceInput = {
 export type Stint = { compound: Compound; laps: number };
 /** Planned stints in order; a stop falls at the end of each stint but the last. */
 export type StrategyPlan = { stints: Stint[] };
+/** A stint on the race's own laps: `fromLap`..`toLap`, both inclusive. */
+export type ScheduledStint = { compound: Compound; fromLap: number; toLap: number };
+/** The strategist's plan from `timeS` on: the stint being driven and the ones after it. */
+export type PlanRevision = { timeS: number; stints: ScheduledStint[] };
 
 // ── Result ───────────────────────────────────────────────────────────────────────────────────
 
@@ -84,6 +88,10 @@ export type TrackStatus = 'green' | 'sc' | 'vsc';
 export type RaceEventKind =
   | 'start'
   | 'overtake'
+  /** Off the line: `detail.places` won (or lost, when `detail.bad` = 1: a car that bogged down). */
+  | 'launch'
+  /** An attack that did not come off: `driverId` kept `otherId` behind. */
+  | 'defence'
   | 'pit'
   | 'safety-car'
   | 'safety-car-in'
@@ -115,13 +123,22 @@ export type RaceEvent = {
 export type LapRecord = {
   lap: number;
   lapTimeS: number;
+  /** Race time at the line that ends this lap: exact, where summing lap times drifts by rounding. */
+  lineTimeS: number;
   sectorsS: [number, number, number];
   position: number;
   /** Time behind the leader's crossing of the same lap. */
   gapToLeaderS: number;
+  /** The tyre the lap was driven on (on an in-lap, the set that comes off). */
   compound: Compound;
   tyreAge: number;
+  /** Wear of that tyre at the end of the lap, 0..1 — the team's own telemetry, exact. */
+  tyreWear: number;
+  /** ERS battery at the line, 0..1. */
+  battery: number;
   pitted: boolean;
+  /** Seconds of the lap spent in the pit lane and box (0 without a stop). */
+  pitLaneS: number;
   status: TrackStatus;
   /** Diagnostics for calibration: fuel at the end of the lap; clean air (no car close, no incident); any incident. */
   fuelKg: number;
@@ -163,5 +180,10 @@ export type RaceResult = {
   laps: Record<DriverId, LapRecord[]>;
   events: RaceEvent[];
   conditions: ConditionsRecord[];
+  /** The plans chosen before the start. */
   plans: Record<DriverId, StrategyPlan>;
+  /** Each car's plan as the race went: the starting plan at t = 0, then every revision. */
+  planHistory: Record<DriverId, PlanRevision[]>;
+  /** When each car got across the start line after the signal: its grid slot plus its launch. */
+  launchS: Record<DriverId, number>;
 };

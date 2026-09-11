@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { balance } from '@/data/balance';
-import { loadDefaultPack } from '@/data/packs/default';
+import { loadActivePack } from '@/data/packs/active';
 import type { CarPerformance } from '../types/world';
 import {
   carPaceFraction,
@@ -14,7 +14,7 @@ import {
 } from './pace';
 import type { RaceDriver } from './types';
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 const track = (id: string) => pack.tracks.find((t) => t.id === id)!;
 
 const car = (over: Partial<CarPerformance> = {}): CarPerformance => ({

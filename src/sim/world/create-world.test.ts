@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { balance } from '@/data/balance';
-import { defaultPackFiles, loadDefaultPack } from '@/data/packs/default';
-import { type Pack, parsePack } from '@/data/schema/pack';
+import { isLocalPack, loadActivePack } from '@/data/packs/active';
+import type { Pack } from '@/data/schema/pack';
 import { DELEGATION_AREAS } from '../decide/delegation';
 import { gameDate } from '../types/game-date';
 import type { World } from '../types/world';
@@ -10,7 +10,7 @@ import { checkWorld } from './check-world';
 import { type CareerSetup, CareerSetupError, createWorld, FOUNDER_TEAM_ID } from './create-world';
 import { potentialSd } from './knowledge';
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 
 const TAKEOVER: CareerSetup = { mode: 'takeover', teamId: 'kestrel', principalName: '  Alex Morgan ' };
 const FREE_AGENTS = pack.drivers.filter((d) => !d.contract).map((d) => d.id);
@@ -173,24 +173,24 @@ describe('the seed (plan section 10: a fixed world)', () => {
     });
   }
 
-  it('is deterministic: seed + pack + career → fixed hash', () => {
+  it('is deterministic: seed + pack + career → the same world', () => {
     const a = createWorld('M1', pack, TAKEOVER);
     expect(fingerprint(createWorld('M1', pack, TAKEOVER))).toBe(fingerprint(a));
-    expect(fingerprint(a)).toBe('0ce5524658a1cb');
+  });
+
+  // Pinned for the default pack only: a local pack has other content and so other hashes.
+  it.skipIf(isLocalPack)('pins the default pack’s worlds to fixed hashes', () => {
+    expect(fingerprint(createWorld('M1', pack, TAKEOVER))).toBe('0ce5524658a1cb');
     expect(fingerprint(createWorld('M1', pack, FOUNDER))).toBe('195c151bc563b4');
   });
 
   it('draws each driver from their own stream: adding a driver to the pack moves nobody else', () => {
-    const files = JSON.parse(JSON.stringify(defaultPackFiles)) as typeof defaultPackFiles;
     const newcomer = {
-      ...files.drivers[files.drivers.length - 1]!,
+      ...pack.drivers[pack.drivers.length - 1]!,
       id: 'late-addition',
       name: 'Late Addition',
     };
-    files.drivers.unshift(newcomer);
-    const result = parsePack(files);
-    if (!result.success) throw new Error(result.issues.join('\n'));
-    const bigger: Pack = result.pack;
+    const bigger: Pack = { ...pack, drivers: [newcomer, ...pack.drivers] };
 
     const [before, after] = [createWorld('s', pack, TAKEOVER), createWorld('s', bigger, TAKEOVER)];
     for (const id of Object.keys(before.hidden.drivers))

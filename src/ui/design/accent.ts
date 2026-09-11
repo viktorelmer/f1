@@ -2,6 +2,10 @@
 export const NEUTRAL_ACCENT = '#5b7fb8';
 
 const LIGHT_TEXT = '#e8edf5';
+/** --color-ground: the darkest surface a team colour has to stand out against. */
+const GROUND = '#0c0f14';
+/** WCAG minimum for graphics and large text: below it a team colour disappears on the dark UI. */
+const MIN_GRAPHIC_CONTRAST = 3;
 const DARK_TEXT = '#0c0f14';
 
 function parseHex(hex: string): [number, number, number] {
@@ -20,7 +24,7 @@ function luminance(hex: string): number {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-function contrast(a: string, b: string): number {
+export function contrast(a: string, b: string): number {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
   return (hi + 0.05) / (lo + 0.05);
 }
@@ -28,6 +32,19 @@ function contrast(a: string, b: string): number {
 /** Text colour for content on the accent: whichever of light and dark text reads better. */
 export function accentForeground(accent: string): string {
   return contrast(accent, LIGHT_TEXT) >= contrast(accent, DARK_TEXT) ? LIGHT_TEXT : DARK_TEXT;
+}
+
+/**
+ * The team colour to draw with: whichever of the livery's two colours stands out better on the
+ * dark interface (a navy primary gives way to its light-blue secondary). If neither reaches 3:1,
+ * the neutral accent — a team colour that cannot be seen is worse than none.
+ */
+export function visibleTeamColour(colours: { primary: string; secondary: string }): string {
+  const best =
+    contrast(colours.primary, GROUND) >= contrast(colours.secondary, GROUND)
+      ? colours.primary
+      : colours.secondary;
+  return contrast(best, GROUND) >= MIN_GRAPHIC_CONTRAST ? best : NEUTRAL_ACCENT;
 }
 
 /** Sets the player's team colour for the whole interface. */

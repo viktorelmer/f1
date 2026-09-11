@@ -34,6 +34,8 @@
   /* Meaning. */
   --color-positive: #34d399;
   --color-negative: #f04e4e;
+  /* Yellow flag: safety car and VSC. Its own token, so a flag never borrows a tyre colour. */
+  --color-caution: #f5c542;
 
   /* Tyre compounds. */
   --color-tyre-soft: #e5342e;

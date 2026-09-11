@@ -10,7 +10,7 @@
  */
 import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
-import { loadDefaultPack } from '@/data/packs/default';
+import { loadActivePack } from './pack';
 import { raceMetrics, type RaceMetrics } from '@/sim/race/analysis';
 import { buildRaceInput } from '@/sim/race/build-input';
 import { simulateRace } from '@/sim/race/simulate';
@@ -40,7 +40,7 @@ if (!Number.isInteger(runs) || runs < 1) {
   process.exit(2);
 }
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 // The world only supplies teams, cars and people: the takeover team makes no difference to a race.
 const world = createWorld(`${values.seed}-world`, pack, {
   mode: 'takeover',
@@ -48,6 +48,8 @@ const world = createWorld(`${values.seed}-world`, pack, {
   principalName: 'Batch',
 });
 const calendar = world.season.calendar;
+const driverName = (id: string) => pack.drivers.find((d) => d.id === id)?.name ?? id;
+const teamName = (id: string) => pack.teams.find((t) => t.id === id)?.shortName ?? id;
 const rounds = values['all-tracks']
   ? calendar.map((r) => r.round)
   : calendar.filter((r) => r.trackId === (values.track ?? 'al-rimal')).map((r) => r.round);
@@ -87,7 +89,7 @@ const dry = rows.filter((r) => !r.metrics.wet);
 
 const out: string[] = [];
 out.push(
-  `# Batch: ${rounds.length} track(s) × ${runs} runs = ${rows.length} races (seed prefix "${values.seed}")`,
+  `# Batch: ${rounds.length} track(s) × ${runs} runs = ${rows.length} races (seed prefix "${values.seed}", pack "${pack.manifest.name}")`,
   '',
 );
 out.push('| Metric | Mean | p10 | p90 | Target |', '|---|---|---|---|---|');
@@ -210,7 +212,7 @@ if (rounds.length > 1) {
   );
   for (const [id, d] of [...drivers].sort((a, b) => mean(a[1].positions) - mean(b[1].positions))) {
     out.push(
-      `| ${id} | ${d.team} | ${f((d.wins / rows.length) * 100, 1)} | ${f((d.podiums / rows.length) * 100, 1)} | ${f(mean(d.positions), 1)} | ${pct(d.positions, 0.5)} | ${f((d.dnf / rows.length) * 100, 1)} |`,
+      `| ${driverName(id)} | ${teamName(d.team)} | ${f((d.wins / rows.length) * 100, 1)} | ${f((d.podiums / rows.length) * 100, 1)} | ${f(mean(d.positions), 1)} | ${pct(d.positions, 0.5)} | ${f((d.dnf / rows.length) * 100, 1)} |`,
     );
   }
   out.push('');
@@ -220,7 +222,7 @@ if (rounds.length > 1) {
   const fastest = Math.min(...[...teams.values()].map(mean));
   out.push('| Team | Clean-lap pace (fuel-corrected), s | Behind fastest, % |', '|---|---|---|');
   for (const [t, xs] of [...teams].sort((a, b) => mean(a[1]) - mean(b[1]))) {
-    out.push(`| ${t} | ${f(mean(xs), 3)} | ${f(((mean(xs) - fastest) / fastest) * 100, 2)} |`);
+    out.push(`| ${teamName(t)} | ${f(mean(xs), 3)} | ${f(((mean(xs) - fastest) / fastest) * 100, 2)} |`);
   }
   const strategies = new Map<string, number>();
   for (const r of rows)

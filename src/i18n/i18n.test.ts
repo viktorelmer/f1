@@ -66,3 +66,16 @@ describe('formatting', () => {
     expect(formatMoneyMillions(142.6, 'ru')).toMatch(/^142,6\s?млн\s?\$$/);
   });
 });
+
+describe('race times', () => {
+  it('formats lap and race times without rounding into 60 seconds', async () => {
+    const { formatLapTime, formatRaceTime, formatGap } = await import('./format');
+    expect(formatLapTime(92.418)).toBe('1:32.418');
+    expect(formatLapTime(59.9996)).toBe('1:00.000');
+    expect(formatLapTime(65.05)).toBe('1:05.050');
+    expect(formatRaceTime(5648.865)).toBe('1:34:08.865');
+    expect(formatRaceTime(3599.9999)).toBe('1:00:00.000');
+    expect(formatGap(1.2345, 'en')).toBe('+1.235');
+    expect(formatGap(1.2345, 'ru')).toBe('+1,235');
+  });
+});

@@ -7,7 +7,7 @@
  */
 import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
-import { loadDefaultPack } from '@/data/packs/default';
+import { loadActivePack } from './pack';
 import { buildRaceInput } from '@/sim/race/build-input';
 import { simulateRace } from '@/sim/race/simulate';
 import { createWorld } from '@/sim/world/create-world';
@@ -22,13 +22,16 @@ const { values } = parseArgs({
   },
 });
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 const world = createWorld(`${values.seed}-world`, pack, {
   mode: 'takeover',
   teamId: 'kestrel',
   principalName: 'CLI',
 });
 const calendar = world.season.calendar;
+const driverName = (id: string | null) =>
+  id === null ? '' : (pack.drivers.find((d) => d.id === id)?.name ?? id);
+const teamName = (id: string) => pack.teams.find((t) => t.id === id)?.shortName ?? id;
 const weekend =
   values.round !== undefined
     ? calendar.find((r) => r.round === Number(values.round))
@@ -46,7 +49,7 @@ const ms = performance.now() - t0;
 const track = input.track;
 const start = input.weather.samples[0]!;
 console.log(
-  `${track.name} — round ${weekend.round}, ${track.laps} laps, seed "${values.seed}" (${ms.toFixed(1)} ms)`,
+  `${track.name} — round ${weekend.round}, ${track.laps} laps, seed "${values.seed}" (${ms.toFixed(1)} ms), pack "${pack.manifest.name}"`,
 );
 console.log(
   `Start: air ${start.airTempC.toFixed(1)} °C, track ${start.trackTempC.toFixed(1)} °C, wind ${start.windKph.toFixed(0)} kph from ${start.windFromDeg.toFixed(0)}°\n`,
@@ -67,11 +70,12 @@ for (const c of result.classification) {
           ? `+${c.gapS.toFixed(3)}`
           : `+${c.lapsDown} lap${c.lapsDown > 1 ? 's' : ''}`;
   console.log(
-    `${String(c.position).padStart(2)}  ${c.driverId.padEnd(20)} ${c.teamId.padEnd(16)} ${gap.padEnd(28)} ${c.stops} stop${c.stops === 1 ? ' ' : 's'}  ${c.compounds.join('→').padEnd(24)} ${c.points ? `${c.points} pts` : ''}`,
+    `${String(c.position).padStart(2)}  ${driverName(c.driverId).padEnd(24)} ${teamName(c.teamId).padEnd(14)} ${gap.padEnd(28)} ${c.stops} stop${c.stops === 1 ? ' ' : 's'}  ${c.compounds.join('→').padEnd(24)} ${c.points ? `${c.points} pts` : ''}`,
   );
 }
 
 const key = new Set([
+  'launch',
   'safety-car',
   'safety-car-in',
   'vsc',
@@ -90,7 +94,7 @@ console.log(
   `\nEvents (${values.events === 'all' ? 'all' : 'key'}): ${result.events.filter((e) => e.kind === 'overtake').length} overtakes, ${result.events.filter((e) => e.kind === 'pit').length} pit stops`,
 );
 for (const e of shown) {
-  const who = [e.driverId, e.otherId].filter(Boolean).join(' vs ');
+  const who = [e.driverId, e.otherId].filter(Boolean).map(driverName).join(' vs ');
   const detail = Object.entries(e.detail)
     .map(([k, v]) => `${k}=${v}`)
     .join(' ');

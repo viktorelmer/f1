@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadDefaultPack } from '@/data/packs/default';
+import { loadActivePack } from '@/data/packs/active';
 import type { DecisionMakerProfile } from '../decide/decide';
 import { createRng } from '../rng/rng';
 import { fingerprint } from '../util/hash';
@@ -13,7 +13,7 @@ import {
 } from './strategy';
 import { isDry } from './tyres';
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 const track = (id: string) => pack.tracks.find((t) => t.id === id)!;
 const model = (id: string, over: Partial<StintModel> = {}): StintModel => ({
   track: track(id),

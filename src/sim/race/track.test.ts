@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { loadDefaultPack } from '@/data/packs/default';
+import { loadActivePack } from '@/data/packs/active';
 import type { PackGeometry } from '@/data/schema/pack';
 import { parsePath, prepareTrack, windInSector } from './track';
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 const track = (id: string) => pack.tracks.find((t) => t.id === id)!;
 const geometry = (id: string) => pack.geometry.find((g) => g.trackId === id)!;
 

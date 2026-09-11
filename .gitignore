@@ -13,3 +13,6 @@ coverage/
 
 # Downloaded source data (see scripts/import-track-geometry.ts)
 .cache/
+
+# The owner's real-world pack (plan section 10): stays local, never enters the repository.
+src/data/packs/local/

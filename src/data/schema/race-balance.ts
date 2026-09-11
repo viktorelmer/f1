@@ -165,6 +165,8 @@ export const raceBalanceSchema = z.strictObject({
       skillRef: positive,
       skillSPerPoint: nonNegative,
       spreadSd: nonNegative,
+      badLaunchChance: unit,
+      badLaunchLossS: nonNegative,
       lap1ContactChance: unit,
     }),
   ),
@@ -209,6 +211,8 @@ export const raceBalanceSchema = z.strictObject({
       outsideDrsMinAdvantageS: nonNegative,
       paceAdvantageCapS: positive,
       contactChance: unit,
+      minAttackChance: unit,
+      defenceReportLaps: positive,
     }),
   ),
   ers: tuned(
@@ -262,6 +266,16 @@ export const raceBalanceSchema = z.strictObject({
       catchUpBeyondGaps: positive,
       neutralisedWearFactor: unit,
       neutralisedFuelFactor: unit,
+    }),
+  ),
+  motion: tuned(
+    z.strictObject({
+      sampleM: positive,
+      curvatureWindowM: positive,
+      lateralAccelMs2: positive,
+      accelMs2: positive,
+      brakeMs2: positive,
+      maxSpeedKph: positive,
     }),
   ),
   strategy: tuned(

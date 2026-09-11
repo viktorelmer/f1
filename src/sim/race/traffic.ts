@@ -38,7 +38,7 @@ export function hasDrsZone(model: TrackModel, sector: SectorIndex): boolean {
 }
 
 export type OvertakeFactors = {
-  /** How much faster the attacker is over the sector in clean conditions, seconds (negative = slower). */
+  /** How much faster the attacker is over a lap in its own pace, seconds (negative = slower). */
   paceAdvantageS: number;
   drsOpen: boolean;
   drsZone: boolean;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadDefaultPack } from '@/data/packs/default';
+import { isLocalPack, loadActivePack } from '@/data/packs/active';
 import type { PackTrack } from '@/data/schema/pack';
 import { createRng } from '../rng/rng';
 import { fingerprint } from '../util/hash';
@@ -14,7 +14,7 @@ import {
   windSeconds,
 } from './weather';
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 const base = pack.tracks.find((t) => t.id === 'northfield')!;
 const withRain = (rainChance: number): PackTrack => ({ ...base, weather: { ...base.weather, rainChance } });
 
@@ -22,7 +22,7 @@ describe('generateWeather', () => {
   it('is deterministic: seed + track → fixed timeline', () => {
     const run = () => generateWeather(base, createRng('M2', 'race:2027:r10:weather'));
     expect(fingerprint(run())).toBe(fingerprint(run()));
-    expect(fingerprint(run())).toBe('125f62f8781201');
+    if (!isLocalPack) expect(fingerprint(run())).toBe('125f62f8781201'); // pinned for the default pack
   });
 
   it('never rains at a track with no rain chance', () => {

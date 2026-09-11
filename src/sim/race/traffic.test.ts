@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { balance } from '@/data/balance';
-import { loadDefaultPack } from '@/data/packs/default';
+import { loadActivePack } from '@/data/packs/active';
 import { prepareTrack } from './track';
 import {
   dirtyAirLossS,
@@ -10,7 +10,7 @@ import {
   slipstreamGainS,
 } from './traffic';
 
-const pack = loadDefaultPack();
+const pack = loadActivePack();
 const model = prepareTrack(
   pack.tracks.find((t) => t.id === 'al-rimal')!,
   pack.geometry.find((g) => g.trackId === 'al-rimal')!,
@@ -84,6 +84,14 @@ describe('overtaking odds', () => {
   it('stop growing past the pace-advantage cap', () => {
     const cap = balance.race.overtaking.paceAdvantageCapS;
     expect(p({ paceAdvantageS: cap + 3 })).toBe(p({ paceAdvantageS: cap }));
+  });
+
+  it('let a car clearly faster over the lap through at a hard track, but not a marginally faster one', () => {
+    // Regression: the odds once used the advantage in the passing sector only — a Mercedes a second
+    // a lap faster sat behind a Williams for nine laps at Barcelona (seed d9e73675).
+    const hard = { overtakingDifficulty: 0.7, drsOpen: true };
+    expect(p({ ...hard, paceAdvantageS: 1 })).toBeGreaterThan(0.2);
+    expect(p({ ...hard, paceAdvantageS: 0.3 })).toBeLessThan(0.1);
   });
 
   it('keep a street circuit nearly impassable without a big advantage', () => {
