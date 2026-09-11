@@ -114,6 +114,9 @@
     "dialogDescription": "Call the driver in this lap and fit mediums?",
     "dialogConfirm": "Box",
     "dialogCancel": "Cancel",
+    "estimate": "Estimate",
+    "estimateKnown": "Pace of a driver you have worked with",
+    "estimateVague": "Pace of a junior seen twice",
     "palette": "Palette",
     "accent": "Team accent",
     "typography": "Typography",
@@ -193,8 +196,7 @@
       "bestLap": "Best lap",
       "plan": "Plan",
       "nextStop": "Next planned stop: lap {{lap}}",
-      "noStop": "No planned stops left",
-      "forecastLater": "Finish forecast and team radio arrive with race control (M4)."
+      "noStop": "No planned stops left"
     },
     "tabs": {
       "label": "Race data",
@@ -228,7 +230,8 @@
       "safety-car": "under the safety car",
       "weather": "weather change",
       "damage": "damage",
-      "puncture": "puncture"
+      "puncture": "puncture",
+      "player": "your call"
     },
     "events": {
       "start": "Lights out — {{cars}} cars away",
@@ -262,6 +265,18 @@
       "component": {
         "power-unit": "power unit",
         "chassis": "chassis"
+      },
+      "strategyPlayerPit": "{{driver}}: box this lap for {{compound}} (your call)",
+      "strategyPlayerPlan_one": "{{driver}}: new plan, {{count}} stop to go (your call)",
+      "strategyPlayerPlan_other": "{{driver}}: new plan, {{count}} stops to go (your call)",
+      "radio": "{{driver}} radio: {{pace}}, ERS {{ers}}, {{aggression}} — {{by}}",
+      "team-order": "Team order to {{driver}} and {{other}}: {{order}}",
+      "order-refused": "{{driver}} ignores the order: “{{retort}}”",
+      "let-by": "{{other}} lets {{driver}} through on team orders",
+      "retort": {
+        "swap": "I’m not moving over.",
+        "hold": "I’m faster, let me race.",
+        "free": "—"
       }
     },
     "feed": {
@@ -292,6 +307,123 @@
       "gap": "Gap",
       "points": "Pts",
       "dnf": "DNF — {{reason}}"
+    },
+    "radio": {
+      "title": "Radio",
+      "pace": {
+        "label": "Pace",
+        "push": "push",
+        "neutral": "neutral",
+        "save-tyres": "save tyres",
+        "save-fuel": "save fuel"
+      },
+      "ers": {
+        "label": "ERS",
+        "attack": "attack",
+        "balanced": "balanced",
+        "harvest": "harvest"
+      },
+      "aggression": {
+        "label": "Racing",
+        "calm": "calm",
+        "normal": "normal",
+        "aggressive": "aggressive"
+      },
+      "by": {
+        "player": "your call",
+        "engineer": "race engineer",
+        "fuel": "short of fuel"
+      }
+    },
+    "orders": {
+      "title": "Team orders",
+      "hold": "hold positions",
+      "swap": "swap places",
+      "free": "free to race"
+    },
+    "control": {
+      "strategy": "Strategy",
+      "radio": "Radio",
+      "mode": {
+        "manual": "Manual",
+        "directed": "Directed",
+        "delegated": "Delegated"
+      },
+      "risk": {
+        "label": "Risk",
+        "careful": "Careful",
+        "balanced": "Balanced",
+        "bold": "Bold"
+      },
+      "goal": {
+        "label": "Priority",
+        "fastest": "Fastest race",
+        "gain-places": "Gain places",
+        "hold-position": "Hold position"
+      },
+      "saving": {
+        "label": "Saving",
+        "none": "None",
+        "tyres": "Tyres",
+        "fuel": "Fuel"
+      },
+      "suggest": "Suggest with pause",
+      "timer": "10 s timer",
+      "delegatedBy": "Run by {{name}}"
+    },
+    "pit": {
+      "box": "Box this lap",
+      "compound": "Tyre",
+      "window": "Pit window: laps {{from}}–{{to}}",
+      "forecast": "Finish forecast",
+      "forecastValue": "P{{value}}",
+      "newPlan": "New plan",
+      "stops_one": "{{count}} stop",
+      "stops_other": "{{count}} stops",
+      "apply": "Apply"
+    },
+    "decision": {
+      "title": "Strategist’s call — {{driver}}",
+      "context": "{{trigger}}, lap {{lap}}",
+      "stay": "Stay out",
+      "pitOn": "Box for {{compound}}",
+      "best": "best",
+      "slower": "+{{s}} s",
+      "pick": "Strategist’s pick",
+      "accept": "Accept",
+      "apply": "Choose this",
+      "reject": "Stay out",
+      "countdown": "Accepting in {{s}} s",
+      "manual": "Manual strategy: nothing happens until you decide."
+    },
+    "planStep": {
+      "title": "Race plan",
+      "intro": "The strategist’s options for this race. In manual strategy the plan you pick is the one the car runs; otherwise the strategist decides.",
+      "option": "{{stints}}",
+      "delta": "+{{s}} s",
+      "pick": "strategist’s pick",
+      "yours": "your plan",
+      "loading": "Working out the options…"
+    }
+  },
+  "estimate": {
+    "confidence": {
+      "low": "low confidence",
+      "medium": "medium confidence",
+      "high": "high confidence"
+    },
+    "range": "{{low}}–{{high}}",
+    "narrows": "What would narrow it",
+    "source": {
+      "scouting": "Scouting",
+      "working-relationship": "Working with them longer",
+      "practice": "More practice running",
+      "simulator": "A better simulator",
+      "data-analysis": "A stronger strategist and analysts",
+      "wind-tunnel": "Wind tunnel time",
+      "cfd": "CFD time",
+      "track-test": "Track testing",
+      "weather-service": "A better weather service"
     }
   }
 }

@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { NEUTRAL_ACCENT, applyAccent } from '@/ui/design/accent';
 import { Button, type ButtonVariant } from '@/ui/design/Button';
 import { cn } from '@/ui/design/cn';
+import { estimateFromModel } from '@/sim/knowledge/estimate';
+import { gameDate } from '@/sim/types/game-date';
 import { Dialog, DialogClose } from '@/ui/design/Dialog';
+import { Estimate } from '@/ui/design/Estimate';
 import { Panel } from '@/ui/design/Panel';
 import { type Column, Table } from '@/ui/design/Table';
 import { Tooltip } from '@/ui/design/Tooltip';
@@ -186,6 +189,42 @@ function PalettePanel() {
   );
 }
 
+const DEMO_DATE = gameDate(2026, 3, 1);
+
+// Two sample estimates, as the observer's model sees them: one well known, one barely.
+const ESTIMATES = [
+  {
+    key: 'estimateKnown',
+    estimate: estimateFromModel(
+      { mean: 81, sd: 1.5 },
+      { quantity: { min: 0, max: 100, wideSd: 15 }, at: DEMO_DATE, sources: ['working-relationship'] },
+    ),
+  },
+  {
+    key: 'estimateVague',
+    estimate: estimateFromModel(
+      { mean: 64, sd: 9 },
+      { quantity: { min: 0, max: 100, wideSd: 15 }, at: DEMO_DATE, sources: ['scouting', 'practice'] },
+    ),
+  },
+] as const;
+
+function EstimatePanel() {
+  const { t } = useTranslation();
+  return (
+    <Panel title={t('demo.estimate')}>
+      <div className="flex flex-col gap-4">
+        {ESTIMATES.map(({ key, estimate }) => (
+          <div key={key} className="flex flex-col gap-1">
+            <span className="text-xs text-lo">{t(`demo.${key}`)}</span>
+            <Estimate estimate={estimate} label={t(`demo.${key}`)} min={0} max={100} />
+          </div>
+        ))}
+      </div>
+    </Panel>
+  );
+}
+
 function TypographyPanel() {
   const { t } = useTranslation();
   return (
@@ -215,6 +254,7 @@ export function ComponentsDemoScreen() {
         <div className="flex flex-col gap-4">
           <ButtonsPanel />
           <OverlaysPanel />
+          <EstimatePanel />
           <PalettePanel />
           <TypographyPanel />
         </div>

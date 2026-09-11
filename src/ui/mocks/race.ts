@@ -8,7 +8,7 @@
 import { raceApi } from '@/app/worker/race-api';
 import { loadActivePack } from '@/data/packs/active';
 import { buildReplay, type Replay } from '@/sim/race/replay';
-import type { RaceEventKind } from '@/sim/race/types';
+import type { RaceControl, RaceEventKind } from '@/sim/race/types';
 import type { World } from '@/sim/types/world';
 import { createWorld } from '@/sim/world/create-world';
 
@@ -28,6 +28,16 @@ const MAX_TRIES = 1000;
 
 let cached: { world: World; replay: Replay; seed: string } | undefined;
 
+/** The player's team run by its staff, so the mock has a strategist's forecast and an engineer's radio. */
+export function mockControl(world: World): RaceControl {
+  return {
+    teamId: world.career.playerTeamId,
+    strategy: { mode: 'delegated', risk: 0.5, goal: 'fastest' },
+    radio: { mode: 'delegated', aggression: 'normal', saving: 'none' },
+    plans: {},
+  };
+}
+
 export function mockRace(): { world: World; replay: Replay; seed: string } {
   if (cached) return cached;
   const world = createWorld(MOCK_RACE.careerSeed, loadActivePack(), {
@@ -37,7 +47,13 @@ export function mockRace(): { world: World; replay: Replay; seed: string } {
   });
   for (let i = 0; i < MAX_TRIES; i++) {
     const seed = `mock-${i}`;
-    const { input, result } = raceApi.run(world, MOCK_RACE.round, seed);
+    const { input, result } = raceApi.run({
+      world,
+      round: MOCK_RACE.round,
+      seed,
+      control: mockControl(world),
+      commands: [],
+    });
     const kinds = new Set(result.events.map((e) => e.kind));
     const retired = result.classification.filter((c) => c.status === 'retired').length;
     const revised = Object.values(result.planHistory).some((h) => h.length > 2);

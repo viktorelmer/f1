@@ -116,6 +116,9 @@
     "dialogDescription": "Позвать пилота в боксы на этом круге и поставить средние шины?",
     "dialogConfirm": "В боксы",
     "dialogCancel": "Отмена",
+    "estimate": "Оценка",
+    "estimateKnown": "Темп пилота, с которым давно работаете",
+    "estimateVague": "Темп юниора, которого видели дважды",
     "palette": "Палитра",
     "accent": "Цвет команды",
     "typography": "Типографика",
@@ -197,8 +200,7 @@
       "bestLap": "Лучший круг",
       "plan": "План",
       "nextStop": "Следующий плановый заезд: круг {{lap}}",
-      "noStop": "Плановых заездов больше нет",
-      "forecastLater": "Прогноз финиша и радио появятся вместе с управлением гонкой (M4)."
+      "noStop": "Плановых заездов больше нет"
     },
     "tabs": {
       "label": "Данные гонки",
@@ -232,7 +234,8 @@
       "safety-car": "под машиной безопасности",
       "weather": "смена погоды",
       "damage": "повреждение",
-      "puncture": "прокол"
+      "puncture": "прокол",
+      "player": "ваше решение"
     },
     "events": {
       "start": "Старт! На трассе {{cars}} машин",
@@ -268,6 +271,20 @@
       "component": {
         "power-unit": "силовая установка",
         "chassis": "шасси"
+      },
+      "strategyPlayerPit": "{{driver}}: в боксы на этом круге, {{compound}} (ваше решение)",
+      "strategyPlayerPlan_one": "{{driver}}: новый план, остался {{count}} стоп (ваше решение)",
+      "strategyPlayerPlan_few": "{{driver}}: новый план, осталось {{count}} стопа (ваше решение)",
+      "strategyPlayerPlan_many": "{{driver}}: новый план, осталось {{count}} стопов (ваше решение)",
+      "strategyPlayerPlan_other": "{{driver}}: новый план, осталось {{count}} стопа (ваше решение)",
+      "radio": "Радио {{driver}}: {{pace}}, ERS {{ers}}, {{aggression}} — {{by}}",
+      "team-order": "Командный приказ для {{driver}} и {{other}}: {{order}}",
+      "order-refused": "{{driver}} не выполняет приказ: «{{retort}}»",
+      "let-by": "{{other}} пропускает {{driver}} по командному приказу",
+      "retort": {
+        "swap": "Я не уступлю.",
+        "hold": "Я быстрее, дайте мне гоняться.",
+        "free": "—"
       }
     },
     "feed": {
@@ -298,6 +315,125 @@
       "gap": "Отставание",
       "points": "Очки",
       "dnf": "Сход — {{reason}}"
+    },
+    "radio": {
+      "title": "Радио",
+      "pace": {
+        "label": "Темп",
+        "push": "в атаку",
+        "neutral": "нейтрально",
+        "save-tyres": "беречь шины",
+        "save-fuel": "беречь топливо"
+      },
+      "ers": {
+        "label": "ERS",
+        "attack": "атака",
+        "balanced": "баланс",
+        "harvest": "зарядка"
+      },
+      "aggression": {
+        "label": "Борьба",
+        "calm": "спокойно",
+        "normal": "обычно",
+        "aggressive": "агрессивно"
+      },
+      "by": {
+        "player": "ваш приказ",
+        "engineer": "гоночный инженер",
+        "fuel": "не хватает топлива"
+      }
+    },
+    "orders": {
+      "title": "Командные приказы",
+      "hold": "держать позиции",
+      "swap": "поменяться",
+      "free": "свободная борьба"
+    },
+    "control": {
+      "strategy": "Стратегия",
+      "radio": "Радио",
+      "mode": {
+        "manual": "Вручную",
+        "directed": "По указанию",
+        "delegated": "На усмотрение"
+      },
+      "risk": {
+        "label": "Риск",
+        "careful": "Осторожно",
+        "balanced": "По ситуации",
+        "bold": "Смело"
+      },
+      "goal": {
+        "label": "Приоритет",
+        "fastest": "Быстрейшая гонка",
+        "gain-places": "Отыгрывать позиции",
+        "hold-position": "Держать позицию"
+      },
+      "saving": {
+        "label": "Экономия",
+        "none": "Нет",
+        "tyres": "Шины",
+        "fuel": "Топливо"
+      },
+      "suggest": "Предлагать с паузой",
+      "timer": "Таймер 10 с",
+      "delegatedBy": "Ведёт {{name}}"
+    },
+    "pit": {
+      "box": "В боксы на этом круге",
+      "compound": "Шины",
+      "window": "Окно пит-стопа: круги {{from}}–{{to}}",
+      "forecast": "Прогноз финиша",
+      "forecastValue": "P{{value}}",
+      "newPlan": "Новый план",
+      "stops_one": "{{count}} стоп",
+      "stops_few": "{{count}} стопа",
+      "stops_many": "{{count}} стопов",
+      "stops_other": "{{count}} стопа",
+      "apply": "Применить"
+    },
+    "decision": {
+      "title": "Решение стратега — {{driver}}",
+      "context": "{{trigger}}, круг {{lap}}",
+      "stay": "Остаться на трассе",
+      "pitOn": "В боксы на {{compound}}",
+      "best": "лучший",
+      "slower": "+{{s}} с",
+      "pick": "Выбор стратега",
+      "accept": "Принять",
+      "apply": "Выбрать",
+      "reject": "Остаться",
+      "countdown": "Приму через {{s}} с",
+      "manual": "Стратегия вручную: пока вы не решите, ничего не происходит."
+    },
+    "planStep": {
+      "title": "План на гонку",
+      "intro": "Варианты стратега на эту гонку. В ручном режиме машина едет по выбранному вами плану, иначе решает стратег.",
+      "option": "{{stints}}",
+      "delta": "+{{s}} с",
+      "pick": "выбор стратега",
+      "yours": "ваш план",
+      "loading": "Считаю варианты…"
+    }
+  },
+  "estimate": {
+    "confidence": {
+      "low": "низкая уверенность",
+      "medium": "средняя уверенность",
+      "high": "высокая уверенность"
+    },
+    "range": "{{low}}–{{high}}",
+    "narrows": "Что сузит интервал",
+    "source": {
+      "scouting": "Скаутинг",
+      "working-relationship": "Дольше работать вместе",
+      "practice": "Больше заездов в практике",
+      "simulator": "Симулятор лучше",
+      "data-analysis": "Сильнее стратег и аналитики",
+      "wind-tunnel": "Время в аэротрубе",
+      "cfd": "Время CFD",
+      "track-test": "Тесты на трассе",
+      "weather-service": "Метеослужба лучше"
     }
   }
 }

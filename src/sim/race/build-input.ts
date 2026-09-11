@@ -11,7 +11,7 @@ import { type Rng, streams } from '../rng/rng';
 import type { World } from '../types/world';
 import { carPaceFraction, driverPaceFraction, lapNoiseSd } from './pace';
 import { tyreLossS } from './tyres';
-import type { RaceEntry, RaceInput } from './types';
+import type { RaceCommand, RaceControl, RaceEntry, RaceInput } from './types';
 import { generateWeather } from './weather';
 
 /**
@@ -36,11 +36,15 @@ export function provisionalGrid(
   return laps.sort((a, b) => a.lap - b.lap).map((l) => l.id);
 }
 
+/** The player's side of a race: how the team is run and what was said on the radio. */
+export type RaceControlInput = { control?: RaceControl | null; commands?: readonly RaceCommand[] };
+
 export function buildRaceInput(
   world: World,
   pack: Pack,
   round: number,
   seed: string = world.seed,
+  { control = null, commands = [] }: RaceControlInput = {},
 ): RaceInput {
   const season = world.season;
   const weekend = season.calendar.find((r) => r.round === round);
@@ -63,6 +67,7 @@ export function buildRaceInput(
     const car = carPerformance(team.chassis, team.engine.spec);
     return team.drivers.race.map((driverId): RaceEntry => {
       const d = world.drivers[driverId]!;
+      const engineer = staff.find((s) => s.role === 'race-engineer' && s.assignedDriverId === driverId);
       return {
         driverId,
         teamId: team.id,
@@ -78,11 +83,16 @@ export function buildRaceInput(
           form: d.state.form,
           morale: d.state.morale,
           fatigue: d.state.fatigue,
+          ego: d.personality.ego,
+          loyalty: d.personality.loyalty,
         },
         car,
         pitCrew,
         strategist: strategist
           ? profileFromAttributes(strategist.attributes)
+          : { skill: 0, consistency: 0, rapport: 0 },
+        raceEngineer: engineer
+          ? profileFromAttributes(engineer.attributes)
           : { skill: 0, consistency: 0, rapport: 0 },
         riskAppetite: team.character.riskAppetite,
       };
@@ -100,5 +110,8 @@ export function buildRaceInput(
     weather,
     grid: provisionalGrid(entries, { track, weather }, stream('grid')),
     entries,
+    raceDate: weekend.raceDate,
+    control,
+    commands: [...commands].sort((a, b) => a.timeS - b.timeS),
   };
 }

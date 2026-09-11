@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import type { Compound, RaceEvent } from '@/sim/race/types';
+import type { Aggression, Compound, ErsMode, PaceMode, RaceEvent, TeamOrder } from '@/sim/race/types';
 import type { Roster } from './roster';
 
 const REASONS = [
@@ -12,6 +12,11 @@ const REASONS = [
 ] as const;
 const TRIGGERS = ['safety-car', 'weather', 'damage', 'puncture'] as const;
 const COMPOUNDS: readonly Compound[] = ['soft', 'medium', 'hard', 'inter', 'wet'];
+const PACES: readonly PaceMode[] = ['push', 'neutral', 'save-tyres', 'save-fuel'];
+const ERS: readonly ErsMode[] = ['attack', 'balanced', 'harvest'];
+const AGGRESSION: readonly Aggression[] = ['calm', 'normal', 'aggressive'];
+const ORDERS: readonly TeamOrder[] = ['hold', 'swap', 'free'];
+const BY = ['player', 'engineer', 'fuel'] as const;
 
 type Detail = string | number | undefined;
 
@@ -90,11 +95,39 @@ export function describeEvent(event: RaceEvent, roster: Roster, t: TFunction): s
     case 'rain-stop':
       return t('race.events.rain-stop');
     case 'strategy-call': {
+      if (d.trigger === 'player') {
+        return d.call === 'plan'
+          ? t('race.events.strategyPlayerPlan', { driver, count: Number(d.stops) })
+          : t('race.events.strategyPlayerPit', { driver, compound: compound(d.compound) });
+      }
       const trigger = isOneOf(TRIGGERS, d.trigger) ? t(`race.trigger.${d.trigger}`) : String(d.trigger);
       return d.call === 'pit'
         ? t('race.events.strategyPit', { driver, compound: compound(d.compound), trigger })
         : t('race.events.strategyStay', { driver, trigger });
     }
+    case 'radio':
+      return t('race.events.radio', {
+        driver,
+        pace: isOneOf(PACES, d.pace) ? t(`race.radio.pace.${d.pace}`) : String(d.pace),
+        ers: isOneOf(ERS, d.ers) ? t(`race.radio.ers.${d.ers}`) : String(d.ers),
+        aggression: isOneOf(AGGRESSION, d.aggression)
+          ? t(`race.radio.aggression.${d.aggression}`)
+          : String(d.aggression),
+        by: isOneOf(BY, d.by) ? t(`race.radio.by.${d.by}`) : String(d.by),
+      });
+    case 'team-order':
+      return t('race.events.team-order', {
+        driver,
+        other,
+        order: isOneOf(ORDERS, d.order) ? t(`race.orders.${d.order}`) : String(d.order),
+      });
+    case 'order-refused':
+      return t('race.events.order-refused', {
+        driver,
+        retort: isOneOf(ORDERS, d.order) ? t(`race.events.retort.${d.order}`) : '',
+      });
+    case 'let-by':
+      return t('race.events.let-by', { driver, other });
     case 'chequered-flag':
       return t('race.events.chequered-flag', { driver });
   }

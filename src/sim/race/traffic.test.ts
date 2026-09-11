@@ -27,6 +27,7 @@ const factors = (over: Partial<OvertakeFactors> = {}): OvertakeFactors => ({
   lap1: false,
   attackerPushes: false,
   defenderPushes: false,
+  aggression: 0,
   ...over,
 });
 
@@ -90,7 +91,7 @@ describe('overtaking odds', () => {
     // Regression: the odds once used the advantage in the passing sector only — a Mercedes a second
     // a lap faster sat behind a Williams for nine laps at Barcelona (seed d9e73675).
     const hard = { overtakingDifficulty: 0.7, drsOpen: true };
-    expect(p({ ...hard, paceAdvantageS: 1 })).toBeGreaterThan(0.2);
+    expect(p({ ...hard, paceAdvantageS: 1 })).toBeGreaterThan(0.15);
     expect(p({ ...hard, paceAdvantageS: 0.3 })).toBeLessThan(0.1);
   });
 

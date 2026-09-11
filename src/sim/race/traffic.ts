@@ -50,6 +50,8 @@ export type OvertakeFactors = {
   lap1: boolean;
   attackerPushes: boolean;
   defenderPushes: boolean;
+  /** Radio aggression: the attacker's push in the fight less the defender's (a logit shift). */
+  aggression: number;
 };
 
 export function overtakeProbability(f: OvertakeFactors): number {
@@ -64,6 +66,7 @@ export function overtakeProbability(f: OvertakeFactors): number {
     o.perDifficulty * f.overtakingDifficulty +
     (f.lap1 ? o.lap1Bonus : 0) +
     (f.attackerPushes ? o.ersAttack : 0) -
-    (f.defenderPushes ? o.ersAttack : 0);
+    (f.defenderPushes ? o.ersAttack : 0) +
+    f.aggression;
   return 1 / (1 + Math.exp(-logit));
 }

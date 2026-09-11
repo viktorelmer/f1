@@ -2,9 +2,11 @@ import { Tabs } from 'radix-ui';
 import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCareer } from '@/app/store/career';
-import { useRace } from '@/app/store/race';
+import { type PlayerCommand, useRace } from '@/app/store/race';
 import { frameAt, type Replay } from '@/sim/race/replay';
 import { cn } from '@/ui/design/cn';
+import { ControlBar } from './ControlBar';
+import { DecisionDialog } from './DecisionDialog';
 import { DriverPanel } from './DriverPanel';
 import { EventFeed } from './EventFeed';
 import { GapChart } from './GapChart';
@@ -35,7 +37,7 @@ export function RaceScreen() {
 function RaceView({ replay }: { replay: Replay }) {
   const { t, i18n } = useTranslation();
   const world = useCareer((s) => s.world);
-  const { timeS, speed, paused, seed, togglePause, setSpeed, restart, backToSetup } = useRace();
+  const { timeS, speed, paused, seed, togglePause, setSpeed, restart, backToSetup, command } = useRace();
   const roster = useMemo(() => buildRoster(world), [world]);
   const frame = useMemo(() => frameAt(replay, timeS), [replay, timeS]);
   usePlaybackClock(!paused && !frame.finished);
@@ -50,10 +52,11 @@ function RaceView({ replay }: { replay: Replay }) {
     freshMine
       .map(
         (c) =>
-          `${c.position}:${c.status}:${c.lap}:${c.stops}:${c.compound}:${c.tyreAge}:${c.plan.map((s) => s.toLap).join()}`,
+          `${c.position}:${c.status}:${c.lap}:${c.stops}:${c.compound}:${c.tyreAge}:${c.plan.map((s) => s.toLap).join()}:${c.radio ? Object.values(c.radio).join() : ''}:${c.forecast?.lap ?? ''}`,
       )
       .join('|'),
   );
+  const onCommand = useCallback((c: PlayerCommand) => void command(c), [command]);
   const lapsDone = frame.cars[0] ? Math.min(frame.totalLaps, Math.floor(frame.cars[0].progress)) : 0;
 
   // A tab picked during the race gives way to the result at the flag (and back after a restart).
@@ -74,7 +77,7 @@ function RaceView({ replay }: { replay: Replay }) {
         onRestart={restart}
         onNewRace={backToSetup}
       />
-      <div className="grid min-h-0 flex-1 grid-cols-[24rem_minmax(0,1fr)_16rem]">
+      <div className="grid min-h-0 flex-1 grid-cols-[24rem_minmax(0,1fr)_19rem]">
         <div className="min-h-0 overflow-y-auto border-r border-line bg-panel">
           <TimingBoard rows={rows} roster={roster} />
         </div>
@@ -130,9 +133,16 @@ function RaceView({ replay }: { replay: Replay }) {
         </div>
 
         <div className="min-h-0 overflow-y-auto border-l border-line bg-panel">
-          <DriverPanel cars={myCars} roster={roster} />
+          <ControlBar inRace={!frame.finished} />
+          <DriverPanel
+            cars={myCars}
+            roster={roster}
+            field={replay.input.entries.length}
+            onCommand={onCommand}
+          />
         </div>
       </div>
+      <DecisionDialog roster={roster} />
     </div>
   );
 }

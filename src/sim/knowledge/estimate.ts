@@ -109,6 +109,19 @@ export function refine<T extends number = number>(prior: Estimate<T>, observatio
   return fromBasis<T>({ ...prior.basis, mean, sd }, prior.sources, observation.at);
 }
 
+/**
+ * An estimate of something nobody knows yet — a forecast. It is built from the observer's own
+ * model (its mean and spread), not from a measurement of a truth: there is no truth to take, so by
+ * its signature this cannot leak one.
+ */
+export function estimateFromModel<T extends number = number>(
+  model: { readonly mean: number; readonly sd: number },
+  context: ObserveContext,
+): Estimate<T> {
+  if (!(model.sd >= 0)) throw new RangeError(`Model sd must be >= 0, got ${model.sd}`);
+  return fromBasis<T>({ mean: model.mean, sd: model.sd, ...context.quantity }, context.sources, context.at);
+}
+
 export function confidenceLabel(confidence: number): ConfidenceLabel {
   const { medium, high } = balance.estimate.confidenceLabels;
   if (confidence >= high) return 'high';

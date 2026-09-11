@@ -1,15 +1,17 @@
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCareer } from '@/app/store/career';
-import { setRaceEngine, useRace } from '@/app/store/race';
+import { type PlayerCommand, setRaceEngine, useRace } from '@/app/store/race';
 import { raceApi } from '@/app/worker/race-api';
 import { createInlineEngine } from '@/app/worker/engine';
 import { i18n } from '@/i18n';
 import { frameAt } from '@/sim/race/replay';
 import type { RaceEvent, RaceEventKind } from '@/sim/race/types';
 import { contrast, NEUTRAL_ACCENT, visibleTeamColour } from '@/ui/design/accent';
-import { MOCK_RACE, MOCK_RACE_NEEDS, mockRace } from '@/ui/mocks/race';
+import { TooltipProvider } from '@/ui/design/Tooltip';
+import { MOCK_RACE, MOCK_RACE_NEEDS, mockControl, mockRace } from '@/ui/mocks/race';
+import { DecisionDialog } from './DecisionDialog';
 import { describeEvent } from './describe-event';
 import { DriverPanel } from './DriverPanel';
 import { EventFeed } from './EventFeed';
@@ -51,6 +53,10 @@ const EVENT_KINDS: Record<RaceEventKind, true> = {
   'rain-start': true,
   'rain-stop': true,
   'strategy-call': true,
+  radio: true,
+  'team-order': true,
+  'order-refused': true,
+  'let-by': true,
   'chequered-flag': true,
 };
 
@@ -88,10 +94,24 @@ describe('TimingBoard', () => {
 });
 
 describe('describeEvent', () => {
-  // Thirty races of the same round reach every kind of event, rain included.
+  // Thirty races of the same round reach every kind of event, rain included; the player's calls,
+  // team orders and their outcomes come from a few commands given in each.
+  const [first, second] = world.teams[world.career.playerTeamId]!.drivers.race;
   const events: RaceEvent[] = Array.from(
     { length: 30 },
-    (_, i) => raceApi.run(world, MOCK_RACE.round, `mock-${i}`).result.events,
+    (_, i) =>
+      raceApi.run({
+        world,
+        round: MOCK_RACE.round,
+        seed: `mock-${i}`,
+        control: mockControl(world),
+        commands: [
+          { timeS: 600, kind: 'team-order', teamId: world.career.playerTeamId, order: 'swap' },
+          { timeS: 700, kind: 'radio', driverId: first, radio: { pace: 'push' } },
+          { timeS: 1500, kind: 'pit', driverId: first, compound: 'hard' },
+          { timeS: 2500, kind: 'plan', driverId: second, stops: 1 },
+        ],
+      }).result.events,
   ).flat();
 
   it('the sample covers every event kind', () => {
@@ -164,7 +184,7 @@ describe('DriverPanel', () => {
   it('shows both player drivers and the next planned stop', () => {
     const frame = frameAt(replay, 0);
     const mine = frame.cars.filter((c) => roster.get(c.driverId)?.isPlayer);
-    render(<DriverPanel cars={mine} roster={roster} />);
+    render(<DriverPanel cars={mine} roster={roster} field={22} onCommand={() => {}} />);
     for (const car of mine) {
       const card = screen.getByRole('article', { name: roster.get(car.driverId)!.short });
       const firstStop = nextPlannedStop(car.plan, 0);
@@ -187,6 +207,58 @@ describe('DriverPanel', () => {
   });
 });
 
+describe('DriverPanel controls (M4)', () => {
+  const midRace = frameAt(replay, replay.durationS / 3);
+  const mine = midRace.cars.filter((c) => roster.get(c.driverId)?.isPlayer && c.status === 'running');
+  const car = mine[0]!;
+  const renderPanel = () => {
+    const onCommand = vi.fn<(command: PlayerCommand) => void>();
+    render(<DriverPanel cars={[car]} roster={roster} field={22} onCommand={onCommand} />, {
+      wrapper: TooltipProvider,
+    });
+    return {
+      onCommand,
+      card: within(screen.getByRole('article', { name: roster.get(car.driverId)!.short })),
+    };
+  };
+
+  it("shows the strategist's forecast through the Estimate component, never as a bare number", () => {
+    const { card } = renderPanel();
+    const forecast = card.getByRole('group', { name: new RegExp(`^${t('race.pit.forecast')}: P\\d+`) });
+    expect(forecast).toHaveAccessibleName(/P\d+–P\d+, (low|medium|high) confidence$/);
+    // The radio the engineer is running is shown as the pressed option.
+    const pace = card.getByRole('group', { name: t('race.radio.pace.label') });
+    expect(within(pace).getByRole('button', { pressed: true })).toHaveTextContent(
+      t(`race.radio.pace.${car.radio!.pace}`),
+    );
+  });
+
+  it('turns radio, box and new-plan clicks into commands for that car', async () => {
+    const user = userEvent.setup();
+    const { onCommand, card } = renderPanel();
+    const pace = within(card.getByRole('group', { name: t('race.radio.pace.label') }));
+    await user.click(pace.getByRole('button', { name: t('race.radio.pace.save-tyres') }));
+    const ers = within(card.getByRole('group', { name: t('race.radio.ers.label') }));
+    await user.click(ers.getByRole('button', { name: t('race.radio.ers.harvest') }));
+    await user.selectOptions(card.getByLabelText(t('race.pit.compound')), 'medium');
+    await user.click(card.getByRole('button', { name: t('race.pit.box') }));
+    const plan = within(card.getByRole('group', { name: t('race.pit.newPlan') }));
+    await user.click(plan.getByRole('button', { name: t('race.pit.stops', { count: 2 }) }));
+    expect(onCommand.mock.calls.map(([c]) => c)).toEqual([
+      { kind: 'radio', driverId: car.driverId, radio: { pace: 'save-tyres' } },
+      { kind: 'radio', driverId: car.driverId, radio: { ers: 'harvest' } },
+      { kind: 'pit', driverId: car.driverId, compound: 'medium' },
+      { kind: 'plan', driverId: car.driverId, stops: 2 },
+    ]);
+  });
+
+  it('has no controls for a car that is out', () => {
+    const out = { ...car, status: 'retired' as const };
+    render(<DriverPanel cars={[out]} roster={roster} field={22} onCommand={() => {}} />);
+    expect(screen.queryByRole('button', { name: t('race.pit.box') })).not.toBeInTheDocument();
+  });
+});
+
 describe('team accent', () => {
   it('takes the livery colour that shows on the dark interface', () => {
     expect(visibleTeamColour({ primary: '#041E42', secondary: '#00A3E0' })).toBe('#00A3E0');
@@ -200,7 +272,15 @@ describe('race screen (M3 DoD: the race can be watched to the flag, and everythi
   beforeEach(() => {
     setRaceEngine(createInlineEngine());
     useCareer.setState({ world });
-    useRace.setState({ phase: 'setup', replay: null, timeS: 0, paused: false, speed: 1 });
+    useRace.setState({
+      phase: 'setup',
+      replay: null,
+      timeS: 0,
+      paused: false,
+      speed: 1,
+      control: mockControl(world),
+      commands: [],
+    });
   });
   afterEach(() => useRace.setState({ phase: 'setup', replay: null, timeS: 0 }));
 
@@ -239,10 +319,93 @@ describe('race screen (M3 DoD: the race can be watched to the flag, and everythi
   });
 
   it('shows the engine error and keeps the setup', async () => {
-    setRaceEngine({ run: () => Promise.reject(new Error('boom')) });
+    setRaceEngine({ run: () => Promise.reject(new Error('boom')), plans: () => Promise.resolve(null) });
     const user = userEvent.setup();
     render(<RaceScreen />);
     await user.click(screen.getByRole('button', { name: t('race.setup.start') }));
     expect(await screen.findByRole('alert')).toHaveTextContent('boom');
+  });
+});
+
+describe('race control on the screen (M4)', () => {
+  beforeEach(() => {
+    setRaceEngine(createInlineEngine());
+    useCareer.setState({ world });
+    useRace.setState({
+      phase: 'setup',
+      replay: null,
+      timeS: 0,
+      paused: false,
+      speed: 1,
+      round: MOCK_RACE.round,
+      seed: mockSeed,
+      plans: null,
+      pending: null,
+      handled: [],
+      commands: [],
+      suggestWithPause: false,
+      control: { ...mockControl(world), strategy: { mode: 'manual', risk: 0.5, goal: 'fastest' } },
+    });
+  });
+  afterEach(() => useRace.setState({ phase: 'setup', replay: null, timeS: 0, pending: null }));
+
+  it("lists the strategist's plans before the start and runs the one picked in manual strategy", async () => {
+    const user = userEvent.setup();
+    render(<RaceScreen />);
+    const plans = await screen.findByRole('radiogroup', { name: t('race.planStep.title') });
+    const options = within(plans).getAllByRole('radio');
+    expect(options.length).toBeGreaterThan(1);
+    const { recommended } = useRace.getState().plans!;
+    expect(options[recommended]).toHaveAttribute('aria-checked', 'true');
+    expect(options[recommended]).toHaveTextContent(t('race.planStep.pick'));
+
+    const other = recommended === 0 ? 1 : 0;
+    await user.click(options[other]!);
+    expect(options[other]).toHaveAttribute('aria-checked', 'true');
+    const picked = useRace.getState().plans!.options[other]!.plan;
+    await user.click(screen.getByRole('button', { name: t('race.setup.start') }));
+    await screen.findAllByRole('row');
+    const { replay: run, control } = useRace.getState();
+    for (const id of world.teams[control.teamId]!.drivers.race) {
+      expect(run!.result.plans[id]).toEqual(picked);
+    }
+  });
+
+  it('stops at a call nobody made, and the answer is given back to the race', async () => {
+    const user = userEvent.setup();
+    await act(() => useRace.getState().start());
+    render(<DecisionDialog roster={roster} />);
+    const call = useRace.getState().replay!.result.pitWall!.decisions.find((d) => d.by === 'unanswered')!;
+    expect(call).toBeDefined();
+    act(() => {
+      while (!useRace.getState().pending) useRace.getState().tick(10_000);
+    });
+    expect(useRace.getState()).toMatchObject({ paused: true, timeS: call.timeS });
+
+    const dialog = await screen.findByRole('dialog', {
+      name: t('race.decision.title', { driver: roster.get(call.driverId)!.short }),
+    });
+    expect(dialog).toHaveTextContent(t('race.decision.manual'));
+    const options = within(dialog).getAllByRole('radio');
+    expect(options).toHaveLength(call.options.length);
+    expect(options[call.recommended]).toHaveTextContent(t('race.decision.pick'));
+    await user.click(within(dialog).getByRole('button', { name: t('race.decision.accept') }));
+
+    await vi.waitFor(() => expect(useRace.getState().busy).toBe(false));
+    const { commands, replay: rerun, paused } = useRace.getState();
+    expect(paused).toBe(false);
+    expect(commands).toEqual([
+      {
+        timeS: call.timeS,
+        kind: 'call',
+        driverId: call.driverId,
+        answer: call.options[call.recommended]!.answer,
+      },
+    ]);
+    const answered = rerun!.result.pitWall!.decisions.find(
+      (d) => d.driverId === call.driverId && Math.abs(d.timeS - call.timeS) < 1e-3,
+    )!;
+    expect(answered).toMatchObject({ by: 'player', applied: call.recommended });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

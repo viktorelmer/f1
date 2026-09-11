@@ -46,6 +46,8 @@ const driver = (over: Partial<RaceDriver> = {}): RaceDriver => ({
   form: 70,
   morale: 70,
   fatigue: 10,
+  ego: 50,
+  loyalty: 50,
   ...over,
 });
 

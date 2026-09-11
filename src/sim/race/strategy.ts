@@ -9,7 +9,7 @@ import type { PackTrack } from '@/data/schema/pack';
 import { type Compound, DRY_COMPOUNDS } from '@/data/schema/race-balance';
 import { chooseByScore, type Decide, type Decision, type Evaluation } from '../decide/decide';
 import { COMPARISON_WEAR, isDry, tyreLossS, warmupLossS, wearPerLap } from './tyres';
-import type { StrategyPlan, Stint, TrackStatus } from './types';
+import type { StrategyGoal, StrategyPlan, Stint, TrackStatus } from './types';
 
 export type StintModel = {
   track: PackTrack;
@@ -25,7 +25,7 @@ const ALL_COMPOUNDS: readonly Compound[] = ['soft', 'medium', 'hard', 'inter', '
 
 /**
  * Cumulative tyre seconds over 0..maxLaps laps of a stint on `compound` starting at `startWear`.
- * A fresh set also pays its warm-up lap.
+ * A fresh set also pays its warm-up lap. `wearFactor` scales the wear rate (a radio pace mode).
  */
 export function cumulativeTyreLoss(
   compound: Compound,
@@ -33,16 +33,19 @@ export function cumulativeTyreLoss(
   maxLaps: number,
   model: StintModel,
   fresh: boolean,
+  wearFactor = 1,
 ): Float64Array {
   const cum = new Float64Array(maxLaps + 1);
-  const perLap = wearPerLap(compound, {
-    trackDegFactor: model.track.profile.tyreDegFactor,
-    carTyreManagement: model.carTyreManagement,
-    driverTyreManagement: model.driverTyreManagement,
-    fuelKg: model.averageFuelKg,
-    trackTempC: model.trackTempC,
-    wetness: model.wetness,
-  });
+  const perLap =
+    wearFactor *
+    wearPerLap(compound, {
+      trackDegFactor: model.track.profile.tyreDegFactor,
+      carTyreManagement: model.carTyreManagement,
+      driverTyreManagement: model.driverTyreManagement,
+      fuelKg: model.averageFuelKg,
+      trackTempC: model.trackTempC,
+      wetness: model.wetness,
+    });
   let wear = startWear;
   for (let lap = 1; lap <= maxLaps; lap++) {
     const loss = tyreLossS(compound, wear + perLap / 2, model.trackTempC, model.wetness);
@@ -171,12 +174,16 @@ export function planOptions(laps: number, model: StintModel): PlanOption[] {
   return options;
 }
 
-export type StrategyGoal = 'fastest';
+export type { StrategyGoal };
+
+/** −1 for fewer stops (keep track position), +1 for more (fresh tyres to attack), 0 for the fastest race. */
+const goalLean = (goal: StrategyGoal) => (goal === 'gain-places' ? 1 : goal === 'hold-position' ? -1 : 0);
 
 /**
  * The strategist picks a race plan. Scores are the share of a fixed time scale a plan is behind
  * the best one, so a weak strategist's noise means seconds of misjudgement, not percent of a race.
- * A risk-loving team character tips near-equal plans towards fewer stops.
+ * A risk-loving team character tips near-equal plans towards fewer stops; the goal tips them
+ * towards fewer stops to keep a place, or more to go after places.
  */
 export const decideRaceStrategy: Decide<readonly PlanOption[], StrategyGoal, PlanOption> = (
   options,
@@ -190,7 +197,8 @@ export const decideRaceStrategy: Decide<readonly PlanOption[], StrategyGoal, Pla
   const evaluate = (o: PlanOption): Evaluation => ({
     score:
       Math.max(0, 1 - (o.timeS - best) / s.planScoreScaleS) +
-      s.riskStopBias * (intent.risk - 0.5) * (mostStops - o.stops),
+      s.riskStopBias * (intent.risk - 0.5) * (mostStops - o.stops) +
+      s.goalStopBias * goalLean(intent.goal) * o.stops,
     reasons: [
       `strategy.plan.stops.${o.stops}`,
       ...o.plan.stints.map((st) => `strategy.compound.${st.compound}`),
@@ -273,17 +281,54 @@ export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
   return options;
 }
 
+/**
+ * A new plan for the rest of the race with exactly `stops` more stops, starting on the tyres the car
+ * is on: the strategist's fastest way to do it, or null when it cannot be done (too few laps left,
+ * or no way to satisfy the compound rule).
+ */
+export function replan(ctx: Omit<PitCallContext, 'trigger' | 'status'>, stops: number): Stint[] | null {
+  const { remainingLaps: laps, model } = ctx;
+  if (laps <= 0) return null;
+  const candidates = candidateCompounds(model);
+  const cache = new Map<Compound, Float64Array>();
+  const fresh = (c: Compound) => {
+    let cum = cache.get(c);
+    if (!cum) cache.set(c, (cum = cumulativeTyreLoss(c, 0, laps, model, true)));
+    return cum;
+  };
+  const usedWet = ctx.compoundsUsed.some((c) => !isDry(c));
+  const drySet = new Set(ctx.compoundsUsed.filter(isDry));
+  const needAnother = !usedWet && drySet.size === 1 ? [...drySet][0]! : null;
+  const current = {
+    compound: ctx.current.compound,
+    cum: cumulativeTyreLoss(ctx.current.compound, ctx.current.wear, laps, model, false),
+  };
+  return (
+    bestCompletion(
+      laps,
+      current,
+      fresh,
+      plannedPitLossS(model.track),
+      { min: stops, max: stops },
+      needAnother,
+      candidates,
+    )?.stints ?? null
+  );
+}
+
 /** The strategist's call on the pit wall when something changes: stay out, or box for a compound. */
 export const decidePitCall: Decide<readonly PitCallOption[], StrategyGoal, PitCallOption> = (
   options,
   competence,
-  _intent,
+  intent,
   rng,
 ) => {
-  const scale = balance.race.strategy.pitCallScoreScaleS;
+  const s = balance.race.strategy;
   const best = Math.min(...options.map((o) => o.timeS));
   const evaluate = (o: PitCallOption): Evaluation => ({
-    score: Math.max(0, 1 - (o.timeS - best) / scale),
+    score:
+      Math.max(0, 1 - (o.timeS - best) / s.pitCallScoreScaleS) +
+      s.goalStopBias * goalLean(intent.goal) * (o.call === 'pit' ? 1 : 0),
     reasons: [o.call === 'stay' ? 'strategy.call.stay' : `strategy.call.pit.${o.compound}`],
   });
   return chooseByScore(options, evaluate, competence, rng);

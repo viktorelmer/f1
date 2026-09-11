@@ -3,7 +3,10 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { accentForeground, applyAccent } from './accent';
 import { Button } from './Button';
+import { estimateFromModel } from '@/sim/knowledge/estimate';
+import { gameDate } from '@/sim/types/game-date';
 import { Dialog, DialogClose } from './Dialog';
+import { Estimate } from './Estimate';
 import { Panel } from './Panel';
 import { type Column, Table } from './Table';
 import { Tooltip, TooltipProvider } from './Tooltip';
@@ -137,6 +140,60 @@ describe('Dialog', () => {
     await user.click(screen.getByRole('button', { name: 'Pit' }));
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+});
+
+describe('Estimate', () => {
+  const at = gameDate(2026, 3, 1);
+  const forecast = (sd: number) =>
+    estimateFromModel(
+      { mean: 6.4, sd },
+      { quantity: { min: 1, max: 22, wideSd: 6 }, at, sources: ['data-analysis'] },
+    );
+
+  it('marks the most likely value, writes out the interval and says the confidence in words', () => {
+    const estimate = forecast(1);
+    render(
+      <TooltipProvider>
+        <Estimate estimate={estimate} label="Finish" format={(v) => `P${Math.round(v)}`} min={1} max={22} />
+      </TooltipProvider>,
+    );
+    const group = screen.getByRole('group', {
+      name: /^Finish: P6, P\d+–P\d+, (low|medium|high) confidence$/,
+    });
+    expect(group).toHaveTextContent('≈ P6');
+    expect(group).toHaveTextContent(`P${Math.round(estimate.low)}–P${Math.round(estimate.high)}`);
+    const interval = within(group).getByTestId('estimate-interval');
+    expect(interval.style.left).toBe(`${(100 * (estimate.low - 1)) / 21}%`);
+  });
+
+  it('draws a vaguer estimate as a wider interval with a lower confidence', () => {
+    const [sharp, vague] = [forecast(0.5), forecast(3)];
+    expect(vague.high - vague.low).toBeGreaterThan(sharp.high - sharp.low);
+    render(
+      <TooltipProvider>
+        <Estimate estimate={sharp} label="Sharp" min={1} max={22} />
+        <Estimate estimate={vague} label="Vague" min={1} max={22} />
+      </TooltipProvider>,
+    );
+    const width = (name: string) =>
+      parseFloat(
+        within(screen.getByRole('group', { name: new RegExp(`^${name}`) })).getByTestId('estimate-interval')
+          .style.width,
+      );
+    expect(width('Vague')).toBeGreaterThan(width('Sharp'));
+    expect(vague.confidence).toBeLessThan(sharp.confidence);
+  });
+
+  it('says in its tooltip what would narrow it', async () => {
+    const user = userEvent.setup();
+    render(
+      <TooltipProvider>
+        <Estimate estimate={forecast(1)} label="Finish" />
+      </TooltipProvider>,
+    );
+    await user.tab();
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('A stronger strategist and analysts');
   });
 });
 

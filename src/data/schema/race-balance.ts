@@ -268,6 +268,64 @@ export const raceBalanceSchema = z.strictObject({
       neutralisedFuelFactor: unit,
     }),
   ),
+  radio: tuned(
+    z.strictObject({
+      pace: z.strictObject(
+        Object.fromEntries(
+          ['push', 'neutral', 'save-tyres', 'save-fuel'].map((m) => [
+            m,
+            z.strictObject({ lapS: num, wear: positive, fuel: positive, mistakes: positive }),
+          ]),
+        ) as Record<
+          'push' | 'neutral' | 'save-tyres' | 'save-fuel',
+          z.ZodObject<{ lapS: z.ZodNumber; wear: z.ZodNumber; fuel: z.ZodNumber; mistakes: z.ZodNumber }>
+        >,
+      ),
+      ers: z.strictObject(
+        Object.fromEntries(
+          ['attack', 'balanced', 'harvest'].map((m) => [
+            m,
+            z.strictObject({ lapS: num, batteryPerLap: num }),
+          ]),
+        ) as Record<
+          'attack' | 'balanced' | 'harvest',
+          z.ZodObject<{ lapS: z.ZodNumber; batteryPerLap: z.ZodNumber }>
+        >,
+      ),
+      aggression: z.strictObject(
+        Object.fromEntries(
+          ['calm', 'normal', 'aggressive'].map((m) => [
+            m,
+            z.strictObject({ attack: num, defence: num, contact: positive }),
+          ]),
+        ) as Record<
+          'calm' | 'normal' | 'aggressive',
+          z.ZodObject<{ attack: z.ZodNumber; defence: z.ZodNumber; contact: z.ZodNumber }>
+        >,
+      ),
+      battleGapS: positive,
+      lowBattery: unit,
+      riskToAggression: range(unit),
+      fuelShortfallKg: nonNegative,
+      engineerScoreScaleS: positive,
+      battlePushBias: nonNegative,
+      savingGoalBias: nonNegative,
+    }),
+  ),
+  teamOrders: tuned(
+    z.strictObject({
+      swapWindowS: positive,
+      yieldLossS: nonNegative,
+      compliance: z.strictObject({
+        base: num,
+        perLoyalty: num,
+        perEgo: num,
+        perMorale: num,
+        whenFaster: num,
+        whenPointsAtStake: num,
+      }),
+    }),
+  ),
   motion: tuned(
     z.strictObject({
       sampleM: positive,
@@ -282,7 +340,8 @@ export const raceBalanceSchema = z.strictObject({
     z.strictObject({
       planScoreScaleS: positive,
       pitCallScoreScaleS: positive,
-      maxStops: z.number().int().min(1).max(4),
+      // The plan search (strategy.ts, bestCompletion) looks at up to two stops.
+      maxStops: z.number().int().min(1).max(2),
       wetnessReviewStep: unit,
       safetyCarWindowLaps: z.number().int().min(0),
       riskStopBias: nonNegative,
@@ -290,6 +349,17 @@ export const raceBalanceSchema = z.strictObject({
       dryBelowWetness: unit,
       candidateWindowS: positive,
       trackPositionCostPerStopS: nonNegative,
+      goalStopBias: nonNegative,
+      pitWindowS: positive,
+      forecast: z.strictObject({
+        sdBase: positive,
+        sdPerRemainingShare: nonNegative,
+        sdFactorAtSkill0: positive,
+        sdFactorAtSkill1: positive,
+        recentLaps: z.number().int().min(1),
+        pairScaleS: positive,
+        pairScalePerLapS: nonNegative,
+      }),
     }),
   ),
 });

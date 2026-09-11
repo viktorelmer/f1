@@ -36,7 +36,13 @@ describe('race store', () => {
     expect(phase).toBe('ready');
     expect(replay!.result.classification).toHaveLength(22);
     // The engine runs the same deterministic simulation the worker would.
-    const direct = raceApi.run(useCareer.getState().world, 1, 'store-race');
+    const direct = raceApi.run({
+      world: useCareer.getState().world,
+      round: 1,
+      seed: 'store-race',
+      control: useRace.getState().startControl,
+      commands: [],
+    });
     expect(fingerprint(replay!.result)).toBe(fingerprint(direct.result));
   });
 
@@ -60,8 +66,39 @@ describe('race store', () => {
     expect(race().timeS).toBe(0);
   });
 
+  it('re-runs the race on a command: the same up to its moment, different after it', async () => {
+    await useRace.getState().start();
+    const race = useRace.getState;
+    const before = race().replay!.result;
+    const driverId = useCareer.getState().world.teams.kestrel!.drivers.race[0];
+    race().seek(1200);
+    await race().command({ kind: 'radio', driverId, radio: { pace: 'push', aggression: 'aggressive' } });
+    expect(race().commands).toEqual([
+      { timeS: 1200, kind: 'radio', driverId, radio: { pace: 'push', aggression: 'aggressive' } },
+    ]);
+    const after = race().replay!.result;
+    expect(race().timeS).toBe(1200);
+    const upTo = (r: typeof before) => r.events.filter((e) => e.timeS < 1200);
+    expect(upTo(after)).toEqual(upTo(before));
+    expect(after.laps[driverId]).not.toEqual(before.laps[driverId]);
+  });
+
+  it('drops a picked plan when the race changes', async () => {
+    const race = useRace.getState;
+    await race().setStrategy({ mode: 'manual', risk: 0.5, goal: 'fastest' });
+    await race().loadPlans();
+    race().choosePlan(race().plans!.options[0]!.plan);
+    expect(Object.keys(race().control.plans)).toHaveLength(2);
+    race().setRound(2);
+    expect(race().control.plans).toEqual({});
+    expect(race().plans).toBeNull();
+  });
+
   it('reports an engine failure instead of hanging', async () => {
-    setRaceEngine({ run: () => Promise.reject(new Error('worker crashed')) });
+    setRaceEngine({
+      run: () => Promise.reject(new Error('worker crashed')),
+      plans: () => Promise.resolve(null),
+    });
     await useRace.getState().start();
     expect(useRace.getState()).toMatchObject({ phase: 'error', error: 'worker crashed' });
     setRaceEngine(createInlineEngine());

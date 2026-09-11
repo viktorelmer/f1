@@ -3,19 +3,22 @@
  * has no workers) the same API runs in-process. Both return the same data.
  */
 import * as Comlink from 'comlink';
-import type { World } from '@/sim/types/world';
-import { type RaceApi, raceApi, type RaceRun } from './race-api';
+import { type PlanChoice, type RaceApi, raceApi, type RaceRequest, type RaceRun } from './race-api';
 
 export type RaceEngine = {
-  run(world: World, round: number, seed: string): Promise<RaceRun>;
+  run(request: RaceRequest): Promise<RaceRun>;
+  plans(request: RaceRequest): Promise<PlanChoice | null>;
 };
 
 export function createWorkerEngine(): RaceEngine {
   const worker = new Worker(new URL('./sim.worker.ts', import.meta.url), { type: 'module' });
   const remote = Comlink.wrap<RaceApi>(worker);
-  return { run: (world, round, seed) => remote.run(world, round, seed) };
+  return { run: (request) => remote.run(request), plans: (request) => remote.plans(request) };
 }
 
 export function createInlineEngine(): RaceEngine {
-  return { run: (world, round, seed) => Promise.resolve(raceApi.run(world, round, seed)) };
+  return {
+    run: (request) => Promise.resolve(raceApi.run(request)),
+    plans: (request) => Promise.resolve(raceApi.plans(request)),
+  };
 }

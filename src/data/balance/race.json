@@ -111,7 +111,7 @@
   },
   "overtaking": {
     "value": {
-      "base": -5.7,
+      "base": -5.9,
       "perPaceS": 4.5,
       "drs": 1.4,
       "outsideDrsZone": -1.1,
@@ -124,13 +124,13 @@
       "defenseLossS": 0.15,
       "failedAttackerLossS": 0.25,
       "failedDefenderLossS": 0.1,
-      "contactChance": 0.012,
+      "contactChance": 0.0098,
       "outsideDrsMinAdvantageS": 0.25,
       "paceAdvantageCapS": 1.15,
       "minAttackChance": 0.05,
       "defenceReportLaps": 10
     },
-    "why": "Overtake probability is a logistic function: the attacker's pace advantage over a lap in seconds (this sector as driven now, the other two as last driven — a car faster all round gets a better run at the passing place), DRS, the racecraft gap, the tyre-wear gap and an ERS push raise it; a hard track to pass (overtakingDifficulty) and passing outside a DRS zone lower it. Failed attempts cost both cars time; about one attack in eighty ends in contact — attacks are real lunges now that hopeless ones are not made, so each carries the risk the many half-attempts of M2 used to share (it keeps collision safety cars, and so SC in ~40% of races). The pace advantage counts only up to 1.15 s a lap: a car that has run wide is not automatically passable on a narrow street circuit. A spun car is driven around, not overtaken. Away from a DRS zone a car only attempts when at least 0.25 s faster over the sector. A driver only lunges when the chance is at least 5%: below that he follows and keeps the ERS charge, instead of wasting it and 0.25 s on a move that is not on. The chance rises steeply with the pace advantage and the track's difficulty weighs less than in M2: the chance rises steeply with it: at a hard track (difficulty 0.7) with DRS an attack from 0.3 s a lap faster comes off about once in eighty, from 1 s faster about once in four (with two DRS zones, a pass within a lap or two); at Monaco even 1 s a lap buys only one in seven; the calendar averages ~40 overtakes and Monaco ~10. A repelled attack is reported once per duel, again only after 10 laps: duels are common (~45 a race) and the feed must stay readable."
+    "why": "Overtake probability is a logistic function: the attacker's pace advantage over a lap in seconds (this sector as driven now, the other two as last driven — a car faster all round gets a better run at the passing place), DRS, the racecraft gap, the tyre-wear gap and an ERS push raise it; a hard track to pass (overtakingDifficulty) and passing outside a DRS zone lower it. Failed attempts cost both cars time; about one attack in a hundred ends in contact for a normal driver (twice that for an aggressive one, half for a calm one — see radio) — attacks are real lunges now that hopeless ones are not made, so each carries the risk the many half-attempts of M2 used to share (it keeps collision safety cars, and so SC in ~40% of races). The pace advantage counts only up to 1.15 s a lap: a car that has run wide is not automatically passable on a narrow street circuit. A spun car is driven around, not overtaken. Away from a DRS zone a car only attempts when at least 0.25 s faster over the sector. A driver only lunges when the chance is at least 5%: below that he follows and keeps the ERS charge, instead of wasting it and 0.25 s on a move that is not on. The chance rises steeply with the pace advantage and the track's difficulty weighs less than in M2: the chance rises steeply with it: at a hard track (difficulty 0.7) with DRS an attack from 0.3 s a lap faster comes off about once in eighty, from 1 s faster about once in four (with two DRS zones, a pass within a lap or two); at Monaco even 1 s a lap buys only one in seven; the calendar averages ~40 overtakes and Monaco ~10. A repelled attack is reported once per duel, again only after 10 laps: duels are common (~45 a race) and the feed must stay readable."
   },
   "ers": {
     "value": {
@@ -212,9 +212,104 @@
       "minStintLaps": 5,
       "dryBelowWetness": 0.1,
       "candidateWindowS": 6,
-      "trackPositionCostPerStopS": 15
+      "trackPositionCostPerStopS": 15,
+      "goalStopBias": 0.02,
+      "pitWindowS": 2,
+      "forecast": {
+        "sdBase": 0.5,
+        "sdPerRemainingShare": 2.5,
+        "sdFactorAtSkill0": 1.8,
+        "sdFactorAtSkill1": 0.8,
+        "recentLaps": 3,
+        "pairScaleS": 1.5,
+        "pairScalePerLapS": 0.1
+      }
     },
-    "why": "Strategist decisions: a plan 30 s slower than the best (a pit call 20 s worse) scores zero, so perception noise from decide.json means ~0.75 s of misjudgement for a top strategist and ~7 s for a poor one. Plans have up to 2 stops (3-stoppers are rarely right in the modern era; pit calls can still add a stop). A risk-loving strategist gets 0.02 per stop saved per unit of risk above 0.5, tipping near-equal plans towards fewer stops. Wetness moving by 0.08 triggers a tyre review; a safety car within 12 laps of a planned stop triggers a pit call. No planned stint is shorter than 5 laps. Below wetness 0.1 only slicks are considered; otherwise any compound within 6 s a lap of the best one for the conditions. Each stop also costs track position the car has to win back on the road: 15 s × the track overtaking difficulty — ~15 s where passing is nearly impossible, ~4 s where it is easy — so strategists stop less where they cannot pass."
+    "why": "Strategist decisions: a plan 30 s slower than the best (a pit call 20 s worse) scores zero, so perception noise from decide.json means ~0.75 s of misjudgement for a top strategist and ~7 s for a poor one. Plans have up to 2 stops (3-stoppers are rarely right in the modern era; pit calls can still add a stop). A risk-loving strategist gets 0.02 per stop saved per unit of risk above 0.5, tipping near-equal plans towards fewer stops. Wetness moving by 0.08 triggers a tyre review; a safety car within 12 laps of a planned stop triggers a pit call. No planned stint is shorter than 5 laps. Below wetness 0.1 only slicks are considered; otherwise any compound within 6 s a lap of the best one for the conditions. Each stop also costs track position the car has to win back on the road: 15 s × the track overtaking difficulty — ~15 s where passing is nearly impossible, ~4 s where it is easy — so strategists stop less where they cannot pass. The goal the player sets tips plans and pit calls by 0.02 per stop: towards fewer stops to keep a place, more to go after places. The pit window is every lap where stopping costs at most 2 s more than the best lap to stop. The finish forecast is ±0.5 place at the flag and ±3 at the start (0.5 + 2.5 × the share of the race still to run), wider for a weak strategist (×1.8) and narrower for a strong one (×0.8); rival pace is read from their last 3 laps. Each rival counts as ahead with a logistic chance of the projected time gap over 1.5 s + 0.1 s per lap still to run, so the forecast position moves smoothly as gaps open and close."
+  },
+  "radio": {
+    "value": {
+      "pace": {
+        "push": {
+          "lapS": -0.2,
+          "wear": 1.3,
+          "fuel": 1.06,
+          "mistakes": 1.3
+        },
+        "neutral": {
+          "lapS": 0,
+          "wear": 1,
+          "fuel": 1,
+          "mistakes": 1
+        },
+        "save-tyres": {
+          "lapS": 0.35,
+          "wear": 0.7,
+          "fuel": 0.97,
+          "mistakes": 0.9
+        },
+        "save-fuel": {
+          "lapS": 0.5,
+          "wear": 0.9,
+          "fuel": 0.88,
+          "mistakes": 0.9
+        }
+      },
+      "ers": {
+        "attack": {
+          "lapS": -0.12,
+          "batteryPerLap": -0.25
+        },
+        "balanced": {
+          "lapS": 0,
+          "batteryPerLap": 0
+        },
+        "harvest": {
+          "lapS": 0.15,
+          "batteryPerLap": 0.2
+        }
+      },
+      "aggression": {
+        "calm": {
+          "attack": -0.5,
+          "defence": -0.3,
+          "contact": 0.5
+        },
+        "normal": {
+          "attack": 0,
+          "defence": 0,
+          "contact": 1
+        },
+        "aggressive": {
+          "attack": 0.5,
+          "defence": 0.4,
+          "contact": 2
+        }
+      },
+      "battleGapS": 1,
+      "lowBattery": 0.3,
+      "riskToAggression": [0.35, 0.65],
+      "fuelShortfallKg": 0.5,
+      "engineerScoreScaleS": 5,
+      "battlePushBias": 0.05,
+      "savingGoalBias": 0.05
+    },
+    "why": "Race radio (plan 5.4). Pace: push is 0.2 s a lap quicker but wears tyres 30% faster, burns 6% more fuel and makes 30% more mistakes; saving tyres costs 0.35 s and wears 30% less; lift-and-coast costs 0.5 s and saves 12% fuel. ERS attack deploys for 0.12 s a lap and drains a quarter of the battery a lap; harvesting costs 0.15 s and charges a fifth. Aggression shifts the pass odds (logit ±0.5 for the attacker, ±0.3–0.4 against the defender) and makes contact twice as likely when aggressive, half when calm. An engineer calls a battle inside 1 s and harvests below a 30% battery; a team character's risk below 0.35 means a calm driver, above 0.65 an aggressive one. A car fuelled to the flag drops to lift-and-coast when it is 0.5 kg short of what the laps left need. Engineer choices are scored on a 5 s scale of stint time, with a 0.05 nudge towards pushing in a fight and towards the mode the player asked the engineer to save."
+  },
+  "teamOrders": {
+    "value": {
+      "swapWindowS": 1.5,
+      "yieldLossS": 0.4,
+      "compliance": {
+        "base": 2,
+        "perLoyalty": 0.03,
+        "perEgo": -0.04,
+        "perMorale": 0.02,
+        "whenFaster": -1.2,
+        "whenPointsAtStake": -0.8
+      }
+    },
+    "why": "Team orders: a swap happens when the teammate is within 1.5 s, costing both 0.4 s. Whether a driver obeys is a logistic chance: 2 (≈88%) at loyalty, ego and morale of 50, +0.03 per point of loyalty and +0.02 per point of morale above 50, −0.04 per point of ego; −1.2 when asked to yield while faster over the lap, −0.8 when yielding costs a podium or points."
   },
   "motion": {
     "value": {

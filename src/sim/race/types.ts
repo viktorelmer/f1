@@ -5,6 +5,9 @@
 import type { Compound, DryCompound } from '@/data/schema/race-balance';
 import type { PackGeometry, PackRegulation, PackTrack } from '@/data/schema/pack';
 import type { DecisionMakerProfile } from '../decide/decide';
+import type { DelegationMode } from '../decide/delegation';
+import type { Estimate } from '../knowledge/estimate';
+import type { GameDate } from '../types/game-date';
 import type { CarPerformance, DriverId, TeamId } from '../types/world';
 
 export type { Compound, DryCompound };
@@ -43,6 +46,9 @@ export type RaceDriver = {
   form: number;
   morale: number;
   fatigue: number;
+  /** Personality, for how a driver takes team orders. */
+  ego: number;
+  loyalty: number;
 };
 
 export type RaceEntry = {
@@ -54,6 +60,8 @@ export type RaceEntry = {
   pitCrew: number;
   /** The team's strategist, who makes this car's strategy calls through decide(). */
   strategist: DecisionMakerProfile;
+  /** The car's race engineer, who runs its radio (pace, ERS, aggression) through decide(). */
+  raceEngineer: DecisionMakerProfile;
   /** Appetite for strategic risk from the team character, 0..1. */
   riskAppetite: number;
 };
@@ -69,7 +77,47 @@ export type RaceInput = {
   /** Starting order, pole first. */
   grid: DriverId[];
   entries: RaceEntry[];
+  /** The day of the race, for the estimates the race produces. */
+  raceDate: GameDate;
+  /** The player's team and how it is run; null in a race without a player (batch runs). */
+  control: RaceControl | null;
+  /** What the player said and when, in race time (docs/systems/race-control.md). */
+  commands: RaceCommand[];
 };
+
+// ── Control: radio, team orders, delegation, commands (docs/systems/race-control.md) ─────────
+
+export type PaceMode = 'push' | 'neutral' | 'save-tyres' | 'save-fuel';
+export type ErsMode = 'attack' | 'balanced' | 'harvest';
+export type Aggression = 'calm' | 'normal' | 'aggressive';
+export type RadioSettings = { pace: PaceMode; ers: ErsMode; aggression: Aggression };
+export type TeamOrder = 'free' | 'hold' | 'swap';
+
+/** What the strategist should aim for: the fastest race, or winning places, or keeping one. */
+export type StrategyGoal = 'fastest' | 'gain-places' | 'hold-position';
+
+export type RaceControl = {
+  teamId: TeamId;
+  /** Race strategy: the player, or the strategist under the player's instruction or on their own. */
+  strategy: { mode: DelegationMode; risk: number; goal: StrategyGoal };
+  /** Race radio: the player, or the race engineers. Aggression and saving are the instruction. */
+  radio: { mode: DelegationMode; aggression: Aggression; saving: 'none' | 'tyres' | 'fuel' };
+  /** Plans the player chose before the start (manual strategy), by driver. */
+  plans: Record<DriverId, StrategyPlan>;
+};
+
+export type PitAnswer = { call: 'stay' } | { call: 'pit'; compound: Compound };
+
+/** A player command, effective from the car's first sector entry at or after `timeS`. */
+export type RaceCommand =
+  | { timeS: number; kind: 'radio'; driverId: DriverId; radio: Partial<RadioSettings> }
+  | { timeS: number; kind: 'pit'; driverId: DriverId; compound: Compound }
+  /** A new plan with this many more stops, the strategist laying out the stints from here. */
+  | { timeS: number; kind: 'plan'; driverId: DriverId; stops: number }
+  /** The answer to the strategist's decision taken at `timeS` (a pause-and-suggest or manual call). */
+  | { timeS: number; kind: 'call'; driverId: DriverId; answer: PitAnswer }
+  | { timeS: number; kind: 'team-order'; teamId: TeamId; order: TeamOrder }
+  | { timeS: number; kind: 'control'; strategy?: RaceControl['strategy']; radio?: RaceControl['radio'] };
 
 // ── Strategy (docs/systems/race-strategy.md) ────────────────────────────────────────────────
 
@@ -108,6 +156,14 @@ export type RaceEventKind =
   | 'rain-start'
   | 'rain-stop'
   | 'strategy-call'
+  /** A radio call to one of the player's cars: `detail` holds what changed and `by` player/engineer. */
+  | 'radio'
+  /** A team order given to the player's team. */
+  | 'team-order'
+  /** A driver ignoring a team order. */
+  | 'order-refused'
+  /** A teammate let through on orders: `driverId` passes, `otherId` yields. */
+  | 'let-by'
   | 'chequered-flag';
 
 export type RaceEvent = {
@@ -186,4 +242,36 @@ export type RaceResult = {
   planHistory: Record<DriverId, PlanRevision[]>;
   /** When each car got across the start line after the signal: its grid slot plus its launch. */
   launchS: Record<DriverId, number>;
+  /** The player's team, as the pit wall saw it: forecasts, decisions and radio (null without a player). */
+  pitWall: PitWall | null;
+};
+
+/** One of the strategist's decisions for the player's team, with everything considered. */
+export type StrategyDecision = {
+  timeS: number;
+  lap: number;
+  driverId: DriverId;
+  trigger: 'safety-car' | 'weather' | 'damage' | 'puncture';
+  options: {
+    answer: PitAnswer;
+    /** Expected seconds to the flag in the strategist's model. */
+    expectedS: number;
+  }[];
+  /** Index of the strategist's pick, and of what was done. */
+  recommended: number;
+  applied: number;
+  /** Who settled it: the strategist, the player, or nobody yet (manual mode: stay out until answered). */
+  by: 'strategist' | 'player' | 'unanswered';
+};
+
+export type PitWall = {
+  teamId: TeamId;
+  /** The strategist's finish forecast and pit window at each of the car's line crossings. */
+  forecasts: Record<
+    DriverId,
+    { lap: number; timeS: number; position: Estimate; window: [number, number] | null }[]
+  >;
+  decisions: StrategyDecision[];
+  /** Radio settings over the race: what the car ran from each time on. */
+  radio: Record<DriverId, { timeS: number; settings: RadioSettings }[]>;
 };

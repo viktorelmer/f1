@@ -12,7 +12,16 @@ import { balance } from '@/data/balance';
 import type { Compound } from '@/data/schema/race-balance';
 import { fractionAtTimeShare, type LapMotion, lapMotion, timeShareAt } from './motion';
 import { sampleAt } from './weather';
-import type { RaceEvent, RaceInput, RaceResult, ScheduledStint, TrackStatus, WeatherSample } from './types';
+import type { Estimate } from '../knowledge/estimate';
+import type {
+  RaceEvent,
+  RaceInput,
+  RadioSettings,
+  RaceResult,
+  ScheduledStint,
+  TrackStatus,
+  WeatherSample,
+} from './types';
 
 type CarTimeline = {
   driverId: string;
@@ -75,6 +84,9 @@ export type CarFrame = {
   bestLapS: number | null;
   /** The strategist's plan as it stands: the stint being driven and the ones after it. */
   plan: readonly ScheduledStint[];
+  /** The player's cars only: the radio as it runs now, and the strategist's latest forecast. */
+  radio: RadioSettings | null;
+  forecast: { position: Estimate; window: [number, number] | null; lap: number } | null;
 };
 
 export type RaceFrame = {
@@ -205,6 +217,17 @@ function locate(car: CarTimeline, bounds: Replay['sectorBounds'], motion: LapMot
 const crossingTime = (car: CarTimeline, segmentsDone: number) =>
   segmentsDone === 0 ? 0 : car.ends[segmentsDone - 1]!;
 
+/** The last entry of a time-ordered log made by time `t`. */
+function latest<T extends { timeS: number }>(log: readonly T[] | undefined, t: number): T | undefined {
+  if (!log) return undefined;
+  let found: T | undefined;
+  for (const entry of log) {
+    if (entry.timeS > t) break;
+    found = entry;
+  }
+  return found;
+}
+
 /** The last plan revision made by time `t`. */
 function planAt(history: RaceResult['planHistory'][string], t: number): readonly ScheduledStint[] {
   let i = history.length - 1;
@@ -256,6 +279,8 @@ export function frameAt(replay: Replay, timeS: number): RaceFrame {
         lastLapS: previous?.lapTimeS ?? null,
         bestLapS: clean.length ? Math.min(...clean.map((l) => l.lapTimeS)) : null,
         plan: planAt(result.planHistory[car.driverId] ?? [], t),
+        radio: latest(result.pitWall?.radio[car.driverId], t)?.settings ?? null,
+        forecast: latest(result.pitWall?.forecasts[car.driverId], t) ?? null,
       },
     };
   });

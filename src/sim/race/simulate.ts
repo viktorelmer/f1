@@ -10,6 +10,7 @@
  */
 import { balance } from '@/data/balance';
 import type { Compound } from '@/data/schema/race-balance';
+import type { Decision } from '../decide/decide';
 import { type Rng, streams } from '../rng/rng';
 import {
   backgroundIncidentChancePerLap,
@@ -31,12 +32,27 @@ import {
   lapNoiseSd,
   massSeconds,
 } from './pace';
+import { finishForecast, type ForecastCar, pitWindow } from './forecast';
+import { obeyChance } from './orders';
+import {
+  aggressionEffects,
+  aggressionFromRisk,
+  decideRadio,
+  ersEffects,
+  NEUTRAL_RADIO,
+  paceEffects,
+  type RadioGoal,
+} from './radio';
 import {
   decidePitCall,
   decideRaceStrategy,
+  type PitCallOption,
   type PitCallTrigger,
+  type PlanOption,
   pitCallOptions,
+  plannedPitLossS,
   planOptions,
+  replan,
   type StintModel,
 } from './strategy';
 import { prepareTrack, type TrackModel } from './track';
@@ -46,7 +62,11 @@ import type {
   ClassifiedCar,
   ConditionsRecord,
   LapRecord,
+  PitAnswer,
+  PitWall,
   PlanRevision,
+  RaceCommand,
+  RaceControl,
   RaceEntry,
   RaceEvent,
   RaceEventKind,
@@ -54,8 +74,11 @@ import type {
   RaceResult,
   ScheduledStint,
   SectorIndex,
+  RadioSettings,
   Stint,
+  StrategyGoal,
   StrategyPlan,
+  TeamOrder,
   TrackStatus,
 } from './types';
 import {
@@ -100,6 +123,11 @@ type CarState = {
   reviewedNeutralisation: number;
   /** The damage the strategist last decided on: the same damage is not re-decided every lap. */
   reviewedDamageS: number;
+  /** Radio: what the car runs now, and what the player has taken over from a delegated engineer. */
+  radio: RadioSettings;
+  radioOverride: Partial<RadioSettings>;
+  /** Whether the driver follows the team's current order; null when no order concerns them. */
+  obeys: boolean | null;
   /** Per lap: sector times, line time, and what the lap looked like. */
   sectors: [number, number, number][];
   lineTimes: number[];
@@ -178,6 +206,43 @@ class SegmentQueue {
   }
 }
 
+/**
+ * A team's pre-race plan options and its strategist's pick, exactly as the race will make it (same
+ * model, same stream) — for the pre-race screen, where the player may choose a different one.
+ */
+export function raceStrategy(
+  input: RaceInput,
+  teamId: string,
+): { options: PlanOption[]; decision: Decision<PlanOption> } {
+  const track = input.track;
+  const cars = input.entries.filter((e) => e.teamId === teamId);
+  const lead = cars[0];
+  if (!lead) throw new RangeError(`No team "${teamId}" in this race`);
+  const start = sampleAt(input.weather, 0);
+  const surface = initialSurface(input.weather);
+  const stintModel: StintModel = {
+    track,
+    carTyreManagement: lead.car.tyreManagement,
+    driverTyreManagement: cars.reduce((sum, c) => sum + c.driver.tyreManagement, 0) / cars.length,
+    trackTempC: start.trackTempC,
+    wetness: Math.max(...surface.wetness),
+    averageFuelKg: (fuelPerLap(track, lead.car.fuelEfficiency) * track.laps) / 2,
+  };
+  const options = planOptions(track.laps, stintModel);
+  const control = input.control;
+  const intent =
+    control && control.teamId === teamId && control.strategy.mode === 'directed'
+      ? { goal: control.strategy.goal, risk: control.strategy.risk, issuedBy: 'player' as const }
+      : { goal: 'fastest' as StrategyGoal, risk: lead.riskAppetite, issuedBy: 'team-character' as const };
+  const decision = decideRaceStrategy(
+    options,
+    lead.strategist,
+    intent,
+    streams(input.seed)(`race:${input.season}:r${input.round}:decisions:${teamId}:plan`),
+  );
+  return { options, decision };
+}
+
 export function simulateRace(input: RaceInput): RaceResult {
   const b = balance.race;
   const model: TrackModel = prepareTrack(input.track, input.geometry);
@@ -201,32 +266,40 @@ export function simulateRace(input: RaceInput): RaceResult {
   ) => events.push({ timeS: round3(timeS), lap, sector, kind, driverId, otherId, detail });
 
   const entriesById = new Map(input.entries.map((e) => [e.driverId, e]));
+  // The player's team and how it is run — changed by 'control' commands during the race.
+  const ctl: RaceControl | null = input.control
+    ? { ...input.control, strategy: { ...input.control.strategy }, radio: { ...input.control.radio } }
+    : null;
+  const isPlayerTeam = (teamId: string) => ctl !== null && teamId === ctl.teamId;
+  /** Whose instruction a team's strategist follows: the player's when directed, the team character's otherwise. */
+  const strategyIntent = (entry: RaceEntry) =>
+    isPlayerTeam(entry.teamId) && ctl!.strategy.mode === 'directed'
+      ? { goal: ctl!.strategy.goal, risk: ctl!.strategy.risk, issuedBy: 'player' as const }
+      : { goal: 'fastest' as StrategyGoal, risk: entry.riskAppetite, issuedBy: 'team-character' as const };
   const gridOrder = input.grid.filter((id) => entriesById.has(id));
   let surface: SurfaceState = initialSurface(input.weather);
-  const start = sampleAt(input.weather, 0);
+
+  /** How hard a car races: the player's instruction or radio call for the player's team, the team character otherwise. */
+  const aggressionFor = (entry: RaceEntry) =>
+    isPlayerTeam(entry.teamId) && ctl!.radio.mode !== 'delegated'
+      ? ctl!.radio.aggression
+      : aggressionFromRisk(entry.riskAppetite);
 
   // ── Pre-race: each team's strategist picks a plan through decide() ─────────────────────────
   const plans = new Map<string, StrategyPlan>();
+  /** Stops in each team's best plan for this race: what its strategist expects of a typical rival. */
+  const expectedStops = new Map<string, number>();
   const teams = [...new Set(input.entries.map((e) => e.teamId))];
   for (const teamId of teams) {
     const cars = input.entries.filter((e) => e.teamId === teamId);
-    const lead = cars[0]!;
-    const fuelKg = fuelPerLap(track, lead.car.fuelEfficiency) * totalLaps;
-    const stintModel: StintModel = {
-      track,
-      carTyreManagement: lead.car.tyreManagement,
-      driverTyreManagement: cars.reduce((s, c) => s + c.driver.tyreManagement, 0) / cars.length,
-      trackTempC: start.trackTempC,
-      wetness: Math.max(...surface.wetness),
-      averageFuelKg: fuelKg / 2,
-    };
-    const decision = decideRaceStrategy(
-      planOptions(totalLaps, stintModel),
-      lead.strategist,
-      { goal: 'fastest', risk: lead.riskAppetite, issuedBy: 'team-character' },
-      stream(`decisions:${teamId}:plan`),
-    );
-    for (const car of cars) plans.set(car.driverId, decision.choice.plan);
+    const { options, decision } = raceStrategy(input, teamId);
+    expectedStops.set(teamId, options.reduce((best, o) => (o.timeS < best.timeS ? o : best)).stops);
+    // In manual strategy the player's own plans run; the strategist still decided, for the record.
+    for (const car of cars) {
+      const own =
+        isPlayerTeam(teamId) && ctl!.strategy.mode === 'manual' ? ctl!.plans[car.driverId] : undefined;
+      plans.set(car.driverId, own ?? decision.choice.plan);
+    }
   }
 
   // ── Grid and launch ──────────────────────────────────────────────────────────────────────
@@ -275,6 +348,9 @@ export function simulateRace(input: RaceInput): RaceResult {
       reviewedWetness: Math.max(...surface.wetness),
       reviewedNeutralisation: 0,
       reviewedDamageS: 0,
+      radio: { ...NEUTRAL_RADIO, aggression: aggressionFor(entry) },
+      radioOverride: {},
+      obeys: null,
       sectors: [],
       // The race clock starts at the signal for everyone: lap 1 includes the run from the grid slot.
       lineTimes: [0],
@@ -289,6 +365,25 @@ export function simulateRace(input: RaceInput): RaceResult {
     };
   });
   const orderOf = new Map(cars.map((c, i) => [c, i]));
+  const radioRngs = new Map(teams.map((t) => [t, stream(`decisions:${t}:radio`)]));
+  const orderRngs = new Map(cars.map((c) => [c.entry.driverId, stream(`radio:${c.entry.driverId}`)]));
+  const teamOrders = new Map<string, TeamOrder>();
+  const commands: readonly RaceCommand[] = input.commands;
+  const appliedCommands = new Set<number>();
+  const pitWall: PitWall | null = ctl
+    ? {
+        teamId: ctl.teamId,
+        forecasts: Object.fromEntries(
+          cars.filter((c) => isPlayerTeam(c.entry.teamId)).map((c) => [c.entry.driverId, []]),
+        ),
+        decisions: [],
+        radio: Object.fromEntries(
+          cars
+            .filter((c) => isPlayerTeam(c.entry.teamId))
+            .map((c) => [c.entry.driverId, [{ timeS: 0, settings: { ...c.radio } }]]),
+        ),
+      }
+    : null;
   const pitRngs = new Map(teams.map((t) => [t, stream(`pit:${t}`)]));
   const callRngs = new Map(teams.map((t) => [t, stream(`decisions:${t}:calls`)]));
 
@@ -400,25 +495,69 @@ export function simulateRace(input: RaceInput): RaceResult {
     };
   };
 
-  /** The strategist's pit call through decide(); a puncture forces a stop, only the tyre is chosen. */
-  function requestPit(car: CarState, trigger: PitCallTrigger, timeS: number, lap: number) {
-    const remaining = totalLaps - lap;
-    if (remaining <= 0 && trigger !== 'puncture') return;
-    const options = pitCallOptions({
+  const optionsFor = (car: CarState, trigger: PitCallTrigger, timeS: number, lap: number) =>
+    pitCallOptions({
       trigger,
-      remainingLaps: Math.max(0, remaining),
+      remainingLaps: Math.max(0, totalLaps - lap),
       current: { compound: car.compound, wear: car.wear },
       compoundsUsed: car.compoundsUsed,
       status: flagAt(timeS).status,
       model: stintModelFor(car, timeS),
     });
+
+  /** The player's answer to the decision taken at `timeS` for a driver, if there is one. */
+  const answerFor = (driverId: string, timeS: number): PitAnswer | undefined =>
+    commands.find(
+      (c): c is Extract<RaceCommand, { kind: 'call' }> =>
+        c.kind === 'call' && c.driverId === driverId && Math.abs(c.timeS - round3(timeS)) < 1e-3,
+    )?.answer;
+
+  const matches = (o: PitCallOption, a: PitAnswer) =>
+    o.call === a.call && (a.call === 'stay' || o.compound === a.compound);
+
+  /**
+   * The strategist's pit call through decide(); a puncture forces a stop, only the tyre is chosen.
+   * The strategist always decides — for the record, and so the stream never depends on the player.
+   * For the player's team the answer, or in manual mode the lack of one, can replace the choice.
+   */
+  function requestPit(car: CarState, trigger: PitCallTrigger, timeS: number, lap: number) {
+    const remaining = totalLaps - lap;
+    if (remaining <= 0 && trigger !== 'puncture') return;
+    const options = optionsFor(car, trigger, timeS, lap);
     const decision = decidePitCall(
       options,
       car.entry.strategist,
-      { goal: 'fastest', risk: car.entry.riskAppetite, issuedBy: 'team-character' },
+      strategyIntent(car.entry),
       callRngs.get(car.entry.teamId)!,
     );
-    const choice = decision.choice;
+    const recommended = options.indexOf(decision.choice);
+    let applied = recommended;
+    if (isPlayerTeam(car.entry.teamId)) {
+      const answer = answerFor(car.entry.driverId, timeS);
+      const answered = answer ? options.findIndex((o) => matches(o, answer)) : -1;
+      const stay = options.findIndex((o) => o.call === 'stay');
+      let by: 'strategist' | 'player' | 'unanswered' = 'strategist';
+      if (answered >= 0) [applied, by] = [answered, 'player'];
+      else if (ctl!.strategy.mode === 'manual') {
+        // Nobody has decided yet: stay out (a puncture boxes on the strategist's tyre) until told.
+        by = 'unanswered';
+        if (stay >= 0) applied = stay;
+      }
+      pitWall!.decisions.push({
+        timeS: round3(timeS),
+        lap,
+        driverId: car.entry.driverId,
+        trigger,
+        options: options.map((o) => ({
+          answer: o.call === 'stay' ? { call: 'stay' } : { call: 'pit', compound: o.compound },
+          expectedS: round3(o.timeS),
+        })),
+        recommended,
+        applied,
+        by,
+      });
+    }
+    const choice = options[applied]!;
     emit(timeS, lap, car.sector, 'strategy-call', car.entry.driverId, null, {
       trigger,
       call: choice.call,
@@ -431,6 +570,219 @@ export function simulateRace(input: RaceInput): RaceResult {
       );
       car.planHistory.push({ timeS: round3(timeS), stints: schedule(car.plan, lap - car.stintLaps) });
     }
+  }
+
+  /** "Box this lap" from the player: the strategist fills in the rest of the race on that tyre. */
+  function playerPit(car: CarState, compound: Compound, timeS: number, lap: number) {
+    if (totalLaps - lap <= 0) return;
+    const option = optionsFor(car, 'damage', timeS, lap).find(
+      (o) => o.call === 'pit' && o.compound === compound,
+    );
+    if (!option) return;
+    car.pitRequest = { compound, plan: option.stints };
+    emit(timeS, lap, car.sector, 'strategy-call', car.entry.driverId, null, {
+      trigger: 'player',
+      call: 'pit',
+      compound,
+    });
+  }
+
+  /** A new plan for the rest of the race from the player: this many more stops, from the tyres on the car. */
+  function playerPlan(car: CarState, stops: number, timeS: number, lap: number) {
+    const stints = replan(
+      {
+        remainingLaps: totalLaps - lap + 1,
+        current: { compound: car.compound, wear: car.wear },
+        compoundsUsed: car.compoundsUsed,
+        model: stintModelFor(car, timeS),
+      },
+      stops,
+    );
+    if (!stints || stints.length === 0) return;
+    car.pitRequest = null;
+    car.plan = stints.map((st, i) => (i === 0 ? { ...st, laps: st.laps + car.stintLaps } : { ...st }));
+    car.planHistory.push({ timeS: round3(timeS), stints: schedule(car.plan, lap - car.stintLaps) });
+    emit(timeS, lap, car.sector, 'strategy-call', car.entry.driverId, null, {
+      trigger: 'player',
+      call: 'plan',
+      stops: stints.length - 1,
+    });
+  }
+
+  /** Radio history for the pit wall; the feed hears the player's calls and changes of pace or aggression. */
+  function recordRadio(
+    car: CarState,
+    timeS: number,
+    lap: number,
+    by: 'player' | 'engineer' | 'fuel',
+    before: RadioSettings,
+  ) {
+    pitWall?.radio[car.entry.driverId]?.push({ timeS: round3(timeS), settings: { ...car.radio } });
+    if (by === 'player' || car.radio.pace !== before.pace || car.radio.aggression !== before.aggression) {
+      emit(timeS, lap, car.sector, 'radio', car.entry.driverId, null, { ...car.radio, by });
+    }
+  }
+
+  /** How far round the race a car is, for team orders: laps and sectors done, earlier entry first. */
+  const progressOf = (c: CarState) => c.lapsDone * 3 + c.sector - c.nextTime * 1e-6;
+
+  /** A team order: who it asks to give way or stay put, and whether they will. */
+  function applyTeamOrder(teamId: string, order: TeamOrder, timeS: number, lap: number) {
+    teamOrders.set(teamId, order);
+    const mates = cars.filter((c) => c.entry.teamId === teamId && c.status === 'running');
+    for (const m of mates) m.obeys = null;
+    emit(timeS, lap, null, 'team-order', mates[0]?.entry.driverId ?? null, mates[1]?.entry.driverId ?? null, {
+      order,
+    });
+    if (order === 'free' || mates.length < 2) return;
+    const [front, back] = [...mates].sort((a, c) => progressOf(c) - progressOf(a)) as [CarState, CarState];
+    // A swap asks the car ahead to give way; holding asks the car behind to stay behind.
+    const [asked, other] = order === 'swap' ? [front, back] : [back, front];
+    const pace = (c: CarState) => c.recentPaceS.reduce<number>((sum, x) => sum + (x ?? 0), 0);
+    const position =
+      1 + cars.filter((c) => c.status === 'running' && progressOf(c) > progressOf(asked)).length;
+    const d = asked.entry.driver;
+    const obeys =
+      orderRngs.get(asked.entry.driverId)!.next() <
+      obeyChance(
+        { loyalty: d.loyalty, ego: d.ego, morale: d.morale },
+        {
+          faster: pace(asked) < pace(other),
+          pointsAtStake: order === 'swap' && position <= input.regulation.points.race.length,
+        },
+      );
+    asked.obeys = obeys;
+    other.obeys = true;
+    if (!obeys)
+      emit(timeS, lap, null, 'order-refused', asked.entry.driverId, other.entry.driverId, { order });
+  }
+
+  /** Commands that are due for this car (or for everyone) when it enters a sector at `t`. */
+  function applyCommands(car: CarState, t: number, lap: number) {
+    commands.forEach((c, i) => {
+      if (appliedCommands.has(i) || c.timeS > t || c.kind === 'call') return;
+      if (c.kind === 'team-order') {
+        appliedCommands.add(i);
+        if (isPlayerTeam(c.teamId)) applyTeamOrder(c.teamId, c.order, t, lap);
+        return;
+      }
+      if (c.kind === 'control') {
+        appliedCommands.add(i);
+        if (!ctl) return;
+        if (c.strategy) ctl.strategy = { ...c.strategy };
+        if (c.radio) {
+          ctl.radio = { ...c.radio };
+          for (const p of cars) {
+            if (!isPlayerTeam(p.entry.teamId)) continue;
+            p.radioOverride = {};
+            p.radio = { ...p.radio, aggression: aggressionFor(p.entry) };
+          }
+        }
+        return;
+      }
+      if (c.driverId !== car.entry.driverId || !isPlayerTeam(car.entry.teamId)) return;
+      appliedCommands.add(i);
+      if (c.kind === 'radio') {
+        const before = car.radio;
+        car.radio = { ...car.radio, ...c.radio };
+        if (ctl!.radio.mode !== 'manual') Object.assign(car.radioOverride, c.radio);
+        recordRadio(car, t, lap, 'player', before);
+      } else if (c.kind === 'pit') playerPit(car, c.compound, t, lap);
+      else playerPlan(car, c.stops, t, lap);
+    });
+  }
+
+  /**
+   * The engineer's radio call at the line, through decide() for every car; in manual radio the
+   * player's settings stay. Short of fuel, any car drops to lift-and-coast.
+   */
+  function updateRadio(car: CarState, timeS: number, lap: number) {
+    const lapsLeft = totalLaps - lap;
+    if (lapsLeft <= 0) return;
+    const player = isPlayerTeam(car.entry.teamId);
+    const mode = player ? ctl!.radio.mode : 'delegated';
+    const ahead = aheadAt(crossings[0], car, timeS);
+    const previous = car.lineTimes[lap - 1] ?? 0;
+    const behind = crossings[0]
+      .filter((c) => c.car !== car && c.lap === lap - 1 && !c.off && c.time > previous)
+      .reduce<number>((min, c) => Math.min(min, c.time - previous), Infinity);
+    const goal: RadioGoal = player && mode === 'directed' ? ctl!.radio.saving : 'none';
+    const decision = decideRadio(
+      {
+        stintLapsLeft: car.plan.length > 1 ? Math.max(1, car.plan[0]!.laps - car.stintLaps) : lapsLeft,
+        compound: car.compound,
+        wear: car.wear,
+        model: stintModelFor(car, timeS),
+        gapAheadS: ahead && ahead.lap === lap ? timeS - ahead.time : Infinity,
+        gapBehindS: behind,
+        battery: car.battery,
+        aggression: aggressionFor(car.entry),
+        neutralised: flagAt(timeS).status !== 'green',
+      },
+      car.entry.raceEngineer,
+      {
+        goal,
+        risk: car.entry.riskAppetite,
+        issuedBy: player && mode === 'directed' ? 'player' : 'team-character',
+      },
+      radioRngs.get(car.entry.teamId)!,
+    );
+    const next: RadioSettings =
+      mode === 'manual' ? { ...car.radio } : { ...decision.choice, ...car.radioOverride };
+    if (goal === 'fuel' && !car.radioOverride.pace) next.pace = 'save-fuel';
+    const shortS = car.fuelPerLapKg * lapsLeft - car.fuelKg;
+    const shortOfFuel = shortS > b.radio.fuelShortfallKg;
+    if (shortOfFuel) next.pace = 'save-fuel';
+    if (
+      next.pace !== car.radio.pace ||
+      next.ers !== car.radio.ers ||
+      next.aggression !== car.radio.aggression
+    ) {
+      const before = car.radio;
+      car.radio = next;
+      if (player) recordRadio(car, timeS, lap, shortOfFuel ? 'fuel' : 'engineer', before);
+    }
+  }
+
+  /** The strategist's forecast and pit window for one of the player's cars, at its line crossing. */
+  function recordForecast(car: CarState, timeS: number, lap: number) {
+    if (!pitWall || lap >= totalLaps) return;
+    const recentLaps = b.strategy.forecast.recentLaps;
+    const view = (c: CarState): ForecastCar => {
+      const recent: number[] = [];
+      // Only clean green laps say anything about pace: a lap behind the queue is the queue's time.
+      for (let l = c.lapsDone; l > 1 && recent.length < recentLaps; l--) {
+        if (!c.lapInfo[l - 1]?.pitted && !c.lapInfo[l - 2]?.pitted && c.lapInfo[l - 1]?.status === 'green')
+          recent.push(c.lineTimes[l]! - c.lineTimes[l - 1]!);
+      }
+      return {
+        driverId: c.entry.driverId,
+        lapsDone: c.lapsDone,
+        lineTimeS: c.lineTimes[c.lapsDone] ?? 0,
+        recentLapS: recent.length > 0 ? recent.reduce((sum, x) => sum + x, 0) / recent.length : base,
+        compound: c.compound,
+        tyreAge: c.tyreAge,
+        compoundsUsed: c.compoundsUsed,
+        stops: c.stops,
+      };
+    };
+    const model = stintModelFor(car, timeS);
+    const position = finishForecast(
+      { ...view(car), stopsLeft: car.pitRequest ? car.pitRequest.plan.length : car.plan.length - 1 },
+      cars.filter((c) => c !== car && c.status === 'running' && c.lapsDone > 0).map(view),
+      {
+        totalLaps,
+        pitLossS: plannedPitLossS(track),
+        expectedStops: expectedStops.get(car.entry.teamId)!,
+        skill: car.entry.strategist.skill,
+        field: cars.length,
+        at: input.raceDate,
+      },
+    );
+    const window = car.pitRequest
+      ? null
+      : pitWindow(car.plan, car.stintLaps, car.wear, lap, totalLaps, model);
+    pitWall.forecasts[car.entry.driverId]!.push({ lap, timeS: round3(timeS), position, window });
   }
 
   // ── The main loop ────────────────────────────────────────────────────────────────────────
@@ -453,6 +805,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     // The flag this car sees on entering the sector.
     const shown = flagAt(t);
     const flag = shown.status;
+    applyCommands(car, t, lap);
 
     // Strategy triggers are reviewed before the last sector: a stop happens at the end of the lap.
     if (k === 2 && lap < totalLaps && !car.pitRequest && flagTime === null) {
@@ -497,6 +850,10 @@ export function simulateRace(input: RaceInput): RaceResult {
       windSeconds(shape, sample) +
       car.pace.normal(0, lapNoiseSd(d.consistency) / Math.sqrt(3));
     if (lap === 1 && k === 0) segment += s.standingStartLossS;
+    // Radio: the pace mode and ERS deployment (an empty battery has nothing to deploy).
+    const paceMode = paceEffects(car.radio.pace);
+    const ersMode = ersEffects(car.radio.ers === 'attack' && car.battery <= 0 ? 'balanced' : car.radio.ers);
+    segment += (paceMode.lapS + ersMode.lapS) * shape.share;
 
     // ── Things going wrong ──
     // A spun car, or one crawling to the pits on a punctured tyre, is driven around, not overtaken.
@@ -512,12 +869,13 @@ export function simulateRace(input: RaceInput): RaceResult {
       const outcome = mistakeOutcome(car.pace, track.profile.safetyCarProbability);
       if (
         mistakeRoll <
-        mistakeChancePerLap({
+        (mistakeChancePerLap({
           consistency: d.consistency,
           wetness: wet,
           gripDeficitS,
           fatigue: car.fatigue,
-        }) /
+        }) *
+          paceMode.mistakes) /
           3
       ) {
         if (outcome.kind === 'crash') {
@@ -608,7 +966,32 @@ export function simulateRace(input: RaceInput): RaceResult {
     const ahead = lastRunning(crossings[exit], car);
     /** The car passed in this sector, if any: the one pass a sector allows. */
     let passed: Crossing | undefined;
-    if (ahead && arrival < ahead.time + b.traffic.minGapS) {
+    const order = teamOrders.get(car.entry.teamId) ?? 'free';
+    const teammateAhead =
+      ahead !== undefined && ahead.lap === lap && ahead.car.entry.teamId === car.entry.teamId;
+    if (
+      teammateAhead &&
+      flag === 'green' &&
+      order === 'swap' &&
+      ahead.car.obeys === true &&
+      car.obeys === true &&
+      arrival < ahead.time + b.teamOrders.swapWindowS
+    ) {
+      // On orders: the teammate ahead lets this car by, both losing a little; then they hold.
+      arrival = Math.min(arrival + b.teamOrders.yieldLossS, ahead.time - b.overtaking.successMarginS);
+      passed = ahead;
+      delay(ahead, Math.max(b.teamOrders.yieldLossS, arrival + b.traffic.minGapS - ahead.time));
+      emit(arrival, lap, k, 'let-by', car.entry.driverId, ahead.car.entry.driverId);
+      teamOrders.set(car.entry.teamId, 'hold');
+    } else if (
+      teammateAhead &&
+      order === 'hold' &&
+      car.obeys !== false &&
+      arrival < ahead.time + b.traffic.minGapS
+    ) {
+      // Holding position: no attack on the teammate.
+      arrival = ahead.time + b.traffic.minGapS;
+    } else if (ahead && arrival < ahead.time + b.traffic.minGapS) {
       // A crossing from an earlier lap at this boundary means the car ahead is a lap down.
       if (ahead.lap < lap) {
         // Blue flags: the backmarker lets the leader through, both lose a little.
@@ -637,13 +1020,16 @@ export function simulateRace(input: RaceInput): RaceResult {
           lap1: lap === 1,
           attackerPushes,
           defenderPushes,
+          aggression:
+            aggressionEffects(car.radio.aggression).attack -
+            aggressionEffects(defender.radio.aggression).defence,
         });
         // A driver lunges only when the move is on; otherwise follows and keeps the battery for later.
         if (p < o.minAttackChance) {
           arrival = ahead.time + b.traffic.minGapS;
         } else {
           const passRoll = traffic.next();
-          const contact = traffic.chance(o.contactChance);
+          const contact = traffic.chance(o.contactChance * aggressionEffects(car.radio.aggression).contact);
           if (attackerPushes) car.battery -= b.ers.attackCost;
           if (defenderPushes) defender.battery -= b.ers.attackCost;
           if (passRoll < p) {
@@ -701,10 +1087,11 @@ export function simulateRace(input: RaceInput): RaceResult {
         wetness: wet,
       }) *
       shape.share *
+      paceMode.wear *
       (neutral ? rc.neutralisedWearFactor : 1);
     car.fuelKg = Math.max(
       0,
-      car.fuelKg - car.fuelPerLapKg * shape.share * (neutral ? rc.neutralisedFuelFactor : 1),
+      car.fuelKg - car.fuelPerLapKg * shape.share * paceMode.fuel * (neutral ? rc.neutralisedFuelFactor : 1),
     );
     carLapsSinceSurface += shape.share;
 
@@ -767,7 +1154,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       }
       car.cleanThisLap = true;
       car.incidentThisLap = false;
-      car.battery = Math.min(1, car.battery + b.ers.harvestPerLap);
+      car.battery = Math.min(1, Math.max(0, car.battery + b.ers.harvestPerLap + ersMode.batteryPerLap));
       car.fatigue = Math.min(100, car.fatigue + fatiguePerLap(d, sample.airTempC, track));
 
       if (lap > leaderLaps) {
@@ -814,6 +1201,10 @@ export function simulateRace(input: RaceInput): RaceResult {
     if (crossings[exit].length > 64) crossings[exit].splice(0, crossings[exit].length - 64);
     car.sector = exit;
     car.nextTime = exitTime;
+    if (exit === 0 && car.status === 'running') {
+      updateRadio(car, exitTime, lap);
+      if (isPlayerTeam(car.entry.teamId)) recordForecast(car, exitTime, lap);
+    }
     if (car.status === 'running') queue.push(exitTime, orderOf.get(car)!, car);
   }
 
@@ -837,7 +1228,7 @@ export function simulateRace(input: RaceInput): RaceResult {
   }
 
   const launchS = Object.fromEntries([...launches].map(([id, l]) => [id, round3(l.timeS)]));
-  return { ...buildResult(input, cars, events, conditions, plans, totalLaps), launchS };
+  return { ...buildResult(input, cars, events, conditions, plans, totalLaps), launchS, pitWall };
 }
 
 /**
@@ -913,7 +1304,7 @@ function buildResult(
   conditions: ConditionsRecord[],
   plans: Map<string, StrategyPlan>,
   totalLaps: number,
-): Omit<RaceResult, 'launchS'> {
+): Omit<RaceResult, 'launchS' | 'pitWall'> {
   // Positions and gaps at each line crossing, from the final crossing times.
   const laps: Record<string, LapRecord[]> = {};
   for (const car of cars) laps[car.entry.driverId] = [];
