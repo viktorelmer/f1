@@ -38,14 +38,19 @@ export function provisionalGrid(
 }
 
 /** The player's side of a race: how the team is run and what was said on the radio. */
-export type RaceControlInput = { control?: RaceControl | null; commands?: readonly RaceCommand[] };
+export type RaceControlInput = {
+  control?: RaceControl | null;
+  commands?: readonly RaceCommand[];
+  /** The grid from qualifying, pole first; without one the provisional shootout stands in. */
+  grid?: readonly string[];
+};
 
 export function buildRaceInput(
   world: World,
   pack: Pack,
   round: number,
   seed: string = world.seed,
-  { control = null, commands = [] }: RaceControlInput = {},
+  { control = null, commands = [], grid }: RaceControlInput = {},
 ): RaceInput {
   const season = world.season;
   const weekend = season.calendar.find((r) => r.round === round);
@@ -135,7 +140,7 @@ export function buildRaceInput(
     geometry,
     regulation,
     weather,
-    grid: provisionalGrid(entries, { track, weather }, stream('grid')),
+    grid: grid ? [...grid] : provisionalGrid(entries, { track, weather }, stream('grid')),
     entries,
     raceDate: weekend.raceDate,
     control,

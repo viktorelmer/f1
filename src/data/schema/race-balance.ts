@@ -161,6 +161,7 @@ export const raceBalanceSchema = z.strictObject({
   start: tuned(
     z.strictObject({
       gridSlotS: nonNegative,
+      dirtySideS: nonNegative,
       standingStartLossS: nonNegative,
       skillRef: positive,
       skillSPerPoint: nonNegative,

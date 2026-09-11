@@ -316,7 +316,12 @@ export function simulateRace(input: RaceInput): RaceResult {
       const spread = startRng.normal(0, s.spreadSd);
       const bogged = startRng.chance(s.badLaunchChance);
       const lossS = bogged ? s.badLaunchLossS * (0.5 + startRng.next()) : 0;
-      return [id, { timeS: Math.max(0, gridIndex * s.gridSlotS + skill + spread + lossS), bogged }] as const;
+      // Even slots stand on the dirty side, off the racing line: less grip when the lights go out.
+      const dirtySide = gridIndex % 2 === 1 ? s.dirtySideS : 0;
+      return [
+        id,
+        { timeS: Math.max(0, gridIndex * s.gridSlotS + dirtySide + skill + spread + lossS), bogged },
+      ] as const;
     }),
   );
   const cars: CarState[] = gridOrder.map((id) => {

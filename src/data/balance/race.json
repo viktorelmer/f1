@@ -74,6 +74,7 @@
   "start": {
     "value": {
       "gridSlotS": 0.2,
+      "dirtySideS": 0.07,
       "standingStartLossS": 2.2,
       "skillRef": 85,
       "skillSPerPoint": 0.02,
@@ -82,7 +83,7 @@
       "badLaunchLossS": 1.2,
       "lap1ContactChance": 0.012
     },
-    "why": "Standing start: grid slots 0.2 s apart, 2.2 s lost accelerating from rest; the starts attribute gains or loses 0.02 s per point with 0.3 s of random spread, and one car in forty bogs down, losing 0.6–1.8 s (three to nine places). The launch sets the order into the first corner: a car that gets away better than the one in front is ahead of it without an overtaking move; each car has a 1.2% chance of lap-1 contact."
+    "why": "Standing start: grid slots 0.2 s apart, and an even slot — the dirty side, off the racing line — costs another 0.07 s off the line (plan 5.3). 2.2 s lost accelerating from rest; the starts attribute gains or loses 0.02 s per point with 0.3 s of random spread, and one car in forty bogs down, losing 0.6–1.8 s (three to nine places). The launch sets the order into the first corner: a car that gets away better than the one in front is ahead of it without an overtaking move; each car has a 1.2% chance of lap-1 contact."
   },
   "traffic": {
     "value": {

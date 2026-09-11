@@ -36,6 +36,25 @@
     },
     "why": "A car straight off the truck runs 0.5 s a lap away from where it should be (plan 5.3: practice is what turns time and tyres into a car that works). Setup laps close that gap exponentially on a 5-lap scale, so six laps take out about 70% of it. What is left depends on the race engineer: at 70 he gets it down to 0.08 s, every point above or below moves that by 0.002 s. The full nine-parameter setup arrives in M6; this is the one number it will replace."
   },
+  "qualifying": {
+    "value": {
+      "partMinutes": [18, 15, 12],
+      "knockedOut": 5,
+      "fuelKg": 10,
+      "pitExitS": 20,
+      "outLapFactor": 1.3,
+      "gripAtStart": 0.75,
+      "evolutionGainFraction": 0.012,
+      "runWindows": [0.15, 0.45, 0.75, 0.95],
+      "windowSpreadS": 100,
+      "safetyValueS": 0.25,
+      "roomValueS": 0.15,
+      "trafficWindowS": 2.5,
+      "trafficLossS": 0.9,
+      "maxTrafficShare": 0.04
+    },
+    "why": "Qualifying as the regulations run it: 18, 15 and 12 minutes, five cars out of each of the first two parts. A car leaves the pits with 10 kg aboard, takes 20 s to get out and an out-lap 30% longer than a flying one. The track starts the hour at 75% of its final grip and a fully evolving track is worth 1.2% of a lap by the end — over a minute and a half that is a tenth or two, which is why everyone wants to be last. A car inside 2.5 s of another at a segment loses up to 0.9 s of that segment, and no lap can lose more than 4% to traffic — past that the driver has backed off and will come round again. Teams choose between four moments in the part, and inside the chosen one every car picks its own second over a 100 s spread — nobody wants to leave the pits in a queue, and in life the field strings itself out over a couple of minutes."
+  },
   "learning": {
     "value": {
       "degradationSdBase": 0.45,

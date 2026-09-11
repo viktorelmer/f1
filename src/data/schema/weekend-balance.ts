@@ -37,6 +37,24 @@ export const weekendBalanceSchema = z.strictObject({
       floorPerPoint: nonNegative,
     }),
   ),
+  qualifying: tuned(
+    z.strictObject({
+      partMinutes: z.tuple([positive, positive, positive]),
+      knockedOut: z.number().int().min(1),
+      fuelKg: positive,
+      pitExitS: nonNegative,
+      outLapFactor: z.number().min(1),
+      gripAtStart: unit,
+      evolutionGainFraction: unit,
+      runWindows: z.array(unit).min(2),
+      windowSpreadS: nonNegative,
+      safetyValueS: nonNegative,
+      roomValueS: nonNegative,
+      trafficWindowS: positive,
+      trafficLossS: nonNegative,
+      maxTrafficShare: unit,
+    }),
+  ),
   learning: tuned(
     z.strictObject({
       degradationSdBase: positive,

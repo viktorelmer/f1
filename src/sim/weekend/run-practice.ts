@@ -11,6 +11,7 @@ import type { RaceInput } from '../race/types';
 import type { SessionKind, TeamId, World } from '../types/world';
 import type { PracticePlan, PracticeResult } from './practice';
 import { defaultPlan, runPractice } from './practice';
+import { type QualifyingResult, runQualifying } from './qualifying';
 
 /** The practice sessions of each weekend format (plan 5.3). */
 export const PRACTICE_SESSIONS: Record<'standard' | 'sprint', readonly SessionKind[]> = {
@@ -62,8 +63,9 @@ export function runPracticeSessions(
 }
 
 /**
- * A race weekend up to the lights: practice is run, every team learns what it learns, and the race
- * input is rebuilt so each strategist plans on what its own team now believes.
+ * A race weekend up to the lights: practice is run, every team learns what it learns and dials its
+ * car in, qualifying sets the grid, and the race input is rebuilt so each strategist plans on what
+ * its own team now believes and starts where it qualified.
  */
 export function weekendRaceInput(
   world: World,
@@ -71,9 +73,20 @@ export function weekendRaceInput(
   round: number,
   seed: string = world.seed,
   options: RaceControlInput & { plans?: Partial<Record<SessionKind, PracticePlan>> } = {},
-): { input: RaceInput; practice: PracticeWeekend; world: World } {
+): { input: RaceInput; practice: PracticeWeekend; qualifying: QualifyingResult; world: World } {
   const { plans, ...control } = options;
   const practice = runPracticeSessions(world, buildRaceInput(world, pack, round, seed, control), plans);
   const after: World = { ...world, knowledge: practice.knowledge };
-  return { input: buildRaceInput(after, pack, round, seed, control), practice, world: after };
+  const dialled = buildRaceInput(after, pack, round, seed, control);
+  const qualifying = runQualifying({
+    race: dialled,
+    session: 'qualifying',
+    setupLossS: Object.fromEntries(dialled.entries.map((e) => [e.driverId, e.setupLossS])),
+  });
+  return {
+    input: buildRaceInput(after, pack, round, seed, { ...control, grid: qualifying.order }),
+    practice,
+    qualifying,
+    world: after,
+  };
 }
