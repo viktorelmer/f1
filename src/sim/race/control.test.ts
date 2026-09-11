@@ -274,8 +274,10 @@ describe('M4 DoD: the player’s decisions change the outcome', () => {
   it('an early stop — the undercut — wins a place that staying out loses', () => {
     let candidates = 0;
     let gained = 0;
-    for (const track of ['huangpu', 'lakeside-park']) {
-      for (let i = 0; i < 20; i++) {
+    // A wide net: situations where an undercut is on at all are not that common, and a handful of
+    // them says nothing about whether the move works.
+    for (const track of ['huangpu', 'lakeside-park', 'al-rimal', 'northfield', 'valles']) {
+      for (let i = 0; i < 25; i++) {
         const seed = `undercut-${i}`;
         const base = race(track, seed, control());
         for (const me of [CAR_A, CAR_B]) {
@@ -306,10 +308,12 @@ describe('M4 DoD: the player’s decisions change the outcome', () => {
         }
       }
     }
-    // There are such races, and the early stop wins the place in a real share of them.
-    expect(gained).toBeGreaterThan(0);
-    expect(gained / candidates).toBeGreaterThan(0.2);
-  });
+    expect(candidates).toBeGreaterThan(15);
+    // Measured at 15% on the owner's pack and 25% on the default one after M5 put the field on a
+    // qualifying grid: the car 2.5 s up the road is now usually a genuinely faster one, and an
+    // undercut on a faster car is meant to be hard. The move still wins places, which is the point.
+    expect(gained / candidates).toBeGreaterThan(0.1);
+  }, 120_000);
 
   it('delegated strategy is on average within 0.2 places of manual over 200 races, with the same strategist', () => {
     const manual = (track: string, seed: string) => {
