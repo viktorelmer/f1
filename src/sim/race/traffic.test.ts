@@ -95,6 +95,17 @@ describe('overtaking odds', () => {
     expect(p({ ...hard, paceAdvantageS: 0.3 })).toBeLessThan(0.1);
   });
 
+  it('give a real chance to a car half a second a lap faster with DRS, so a queue can break up', () => {
+    // Regression (ADR 005, п. 17): the attacker's pace used to be measured in the wake of the car it
+    // was trying to pass, so a car 0.8 s a lap faster read as equal and a train never broke up —
+    // ten undamaged cars sat behind a damaged one for the whole stint (Альберт-Парк, сид 2894873d).
+    const track = { overtakingDifficulty: 0.5, drsOpen: true, drsZone: true };
+    expect(p({ ...track, paceAdvantageS: 0.6 })).toBeGreaterThan(0.05);
+    expect(p({ ...track, paceAdvantageS: 1 })).toBeGreaterThan(0.2);
+    // Sitting in the queue at equal pace is still no chance at all.
+    expect(p({ ...track, paceAdvantageS: 0 })).toBeLessThan(0.02);
+  });
+
   it('keep a street circuit nearly impassable without a big advantage', () => {
     expect(p({ overtakingDifficulty: 0.98, paceAdvantageS: 0.2, drsOpen: true })).toBeLessThan(0.05);
   });

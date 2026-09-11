@@ -77,33 +77,34 @@ describe('commands', () => {
       { timeS: 300, kind: 'radio', driverId: CAR_A, radio: { pace: 'push', aggression: 'aggressive' } },
       { timeS: 900, kind: 'team-order', teamId: TEAM, order: 'swap' },
     ]);
-    expect(fingerprint(a)).toBe('1cb7de4ecf51c1');
+    expect(fingerprint(a)).toBe('063f0e93405226');
   });
 });
 
 describe('radio', () => {
   const manual = control({ radio: { mode: 'manual', aggression: 'normal', saving: 'none' } });
-  /** Laps 2–7, before anyone's first stop: mean lap time and tyre wear gained per lap. */
-  const stint = (r: RaceResult) => {
-    const laps = r.laps[CAR_A]!.slice(1, 7);
-    expect(laps.some((l) => l.pitted)).toBe(false);
+  /** Laps of the opening stint, the first one out: mean lap time and tyre wear gained per lap. */
+  const stint = (r: RaceResult, laps: number) => {
+    const run = r.laps[CAR_A]!.slice(1, 1 + laps);
     return {
-      lap: laps.reduce((sum, l) => sum + l.lapTimeS, 0) / laps.length,
-      wearPerLap: (laps.at(-1)!.tyreWear - laps[0]!.tyreWear) / (laps.length - 1),
+      lap: run.reduce((sum, l) => sum + l.lapTimeS, 0) / run.length,
+      wearPerLap: (run.at(-1)!.tyreWear - run[0]!.tyreWear) / (run.length - 1),
     };
+  };
+  /** How long the car ran before its first stop: the window both runs can be compared over. */
+  const beforeFirstStop = (r: RaceResult) => {
+    const pit = r.laps[CAR_A]!.findIndex((l) => l.pitted);
+    return pit === -1 ? r.laps[CAR_A]!.length : pit;
   };
 
   it('push is quicker and wears the tyres harder; saving tyres is the other way round', () => {
-    const push = stint(
-      race('valles', 'radio-1', manual, [
-        { timeS: 0, kind: 'radio', driverId: CAR_A, radio: { pace: 'push' } },
-      ]),
-    );
-    const save = stint(
-      race('valles', 'radio-1', manual, [
-        { timeS: 0, kind: 'radio', driverId: CAR_A, radio: { pace: 'save-tyres' } },
-      ]),
-    );
+    const run = (pace: 'push' | 'save-tyres') =>
+      race('valles', 'radio-1', manual, [{ timeS: 0, kind: 'radio', driverId: CAR_A, radio: { pace } }]);
+    const [a, b] = [run('push'), run('save-tyres')];
+    const laps = Math.min(6, beforeFirstStop(a) - 1, beforeFirstStop(b) - 1);
+    expect(laps).toBeGreaterThanOrEqual(4);
+    const push = stint(a, laps);
+    const save = stint(b, laps);
     expect(push.lap).toBeLessThan(save.lap);
     expect(push.wearPerLap).toBeGreaterThan(save.wearPerLap);
   });

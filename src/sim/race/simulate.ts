@@ -992,14 +992,19 @@ export function simulateRace(input: RaceInput): RaceResult {
       hasDrsZone(model, k) &&
       gapAtEntry < b.drs.windowS &&
       !isLeader;
+    /**
+     * What the car could do in clean air: the pace an overtake is judged on (ADR 005, п. 17). Dirty
+     * air and DRS are what the fight is about and enter the odds as their own terms — measuring the
+     * attacker while it sits in the wake of the car it is trying to pass says only that the wake is
+     * working, and no queue would ever break up.
+     */
+    const ownPaceS = segment;
     if (flag === 'green' && aheadAtEntry && gapAtEntry < b.traffic.dirtyAirWindowS && !aheadAtEntry.off) {
       segment +=
         dirtyAirLossS(gapAtEntry, car.entry.car.dirtyAirTolerance, track.profile.aeroSensitivity) -
         slipstreamGainS(gapAtEntry, shape, track.profile.powerSensitivity);
       car.cleanThisLap = false;
     }
-    // Pace advantage for an overtake is judged before DRS: DRS enters the odds as its own term.
-    const segmentBeforeDrs = segment;
     if (drsOpen) segment -= drsGainS(model, k);
 
     let arrival = t + segment;
@@ -1040,17 +1045,17 @@ export function simulateRace(input: RaceInput): RaceResult {
       } else if (
         flag === 'green' &&
         ahead.car.status === 'running' &&
-        arrival < ahead.time &&
-        (hasDrsZone(model, k) || ahead.paceS - segmentBeforeDrs >= b.overtaking.outsideDrsMinAdvantageS)
+        (hasDrsZone(model, k) || ahead.paceS - ownPaceS >= b.overtaking.outsideDrsMinAdvantageS)
       ) {
-        // A chance only when the follower would have got there first — and, away from a DRS zone,
-        // only when clearly faster. Otherwise it queues.
+        // Being right behind into the braking zone is the chance: a car held at the minimum gap is
+        // close enough to have a go (ADR 005, п. 17). Away from a DRS zone it must be clearly
+        // faster. Whether the move is on at all is then the odds' business, not this gate's.
         const o = b.overtaking;
         const defender = ahead.car;
         const attackerPushes = car.battery >= b.ers.attackCost;
         const defenderPushes = defender.battery >= b.ers.attackCost;
         const p = overtakeProbability({
-          paceAdvantageS: lapAdvantageS(car, segmentBeforeDrs, defender, ahead.paceS, k, model),
+          paceAdvantageS: lapAdvantageS(car, ownPaceS, defender, ahead.paceS, k, model),
           drsOpen,
           drsZone: hasDrsZone(model, k),
           attackerRacecraft: d.racecraft,
@@ -1236,8 +1241,12 @@ export function simulateRace(input: RaceInput): RaceResult {
       }
     }
 
-    crossings[exit].push({ car, time: exitTime, lap, sector: k, segmentS, paceS: segmentBeforeDrs, off });
-    car.recentPaceS[k] = segmentBeforeDrs;
+    crossings[exit].push({ car, time: exitTime, lap, sector: k, segmentS, paceS: ownPaceS, off });
+    // Typical pace in this sector, not the last lap of it: one lap carries the driver's own scatter,
+    // and a duel judged on a single sample is decided by noise (ADR 005, п. 17).
+    const remembered = car.recentPaceS[k];
+    car.recentPaceS[k] =
+      remembered === null ? ownPaceS : remembered + b.overtaking.paceMemory * (ownPaceS - remembered);
     if (crossings[exit].length > 64) crossings[exit].splice(0, crossings[exit].length - 64);
     car.sector = exit;
     car.nextTime = exitTime;
@@ -1303,10 +1312,10 @@ function lastRunning(list: readonly Crossing[], self: CarState, after?: Crossing
 const round3 = (x: number) => Math.round(x * 1000) / 1000;
 
 /**
- * How much faster the attacker is over a lap, in its own pace (dirty air in, DRS and queueing out):
- * this sector as both drive it now, the other two as each last drove them. A car faster all round
- * the lap gets a better run at the passing place, not just the sector where the pass happens.
- * Sectors not yet driven (lap 1) are left out and the rest scaled up to a lap.
+ * How much faster the attacker is over a lap in clean air (dirty air, DRS and queueing out), from
+ * each car's remembered pace in every sector. A car faster all round the lap gets a better run at
+ * the passing place, not just the sector where the pass happens. Sectors neither car has driven yet
+ * (lap 1) fall back on how both are driving this one, and the rest is scaled up to a lap.
  */
 function lapAdvantageS(
   attacker: CarState,
@@ -1316,15 +1325,16 @@ function lapAdvantageS(
   k: SectorIndex,
   model: TrackModel,
 ): number {
-  let advantage = defenderPaceS - attackerPaceS;
-  let share = model.sectors[k].share;
+  let advantage = 0;
+  let share = 0;
   for (const j of [0, 1, 2] as const) {
-    const [mine, theirs] = [attacker.recentPaceS[j], defender.recentPaceS[j]];
-    if (j === k || mine === null || theirs === null) continue;
+    const mine = attacker.recentPaceS[j] ?? (j === k ? attackerPaceS : null);
+    const theirs = defender.recentPaceS[j] ?? (j === k ? defenderPaceS : null);
+    if (mine === null || theirs === null) continue;
     advantage += theirs - mine;
     share += model.sectors[j].share;
   }
-  return advantage / share;
+  return share > 0 ? advantage / share : 0;
 }
 
 /** Stints laid out on the race's laps, the first starting at `fromLap`. */

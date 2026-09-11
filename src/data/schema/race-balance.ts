@@ -212,6 +212,7 @@ export const raceBalanceSchema = z.strictObject({
       paceAdvantageCapS: positive,
       contactChance: unit,
       minAttackChance: unit,
+      paceMemory: unit,
       defenceReportLaps: positive,
     }),
   ),

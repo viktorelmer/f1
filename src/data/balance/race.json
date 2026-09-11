@@ -111,13 +111,13 @@
   },
   "overtaking": {
     "value": {
-      "base": -5.9,
+      "base": -5.5,
       "perPaceS": 4.5,
       "drs": 1.4,
       "outsideDrsZone": -1.1,
       "perRacecraft": 0.035,
       "perWearDifference": 1,
-      "perDifficulty": -2,
+      "perDifficulty": -2.56,
       "lap1Bonus": 0.8,
       "ersAttack": 0.5,
       "successMarginS": 0.15,
@@ -128,9 +128,10 @@
       "outsideDrsMinAdvantageS": 0.25,
       "paceAdvantageCapS": 1.15,
       "minAttackChance": 0.05,
+      "paceMemory": 0.4,
       "defenceReportLaps": 10
     },
-    "why": "Overtake probability is a logistic function: the attacker's pace advantage over a lap in seconds (this sector as driven now, the other two as last driven — a car faster all round gets a better run at the passing place), DRS, the racecraft gap, the tyre-wear gap and an ERS push raise it; a hard track to pass (overtakingDifficulty) and passing outside a DRS zone lower it. Failed attempts cost both cars time; about one attack in a hundred ends in contact for a normal driver (twice that for an aggressive one, half for a calm one — see radio) — attacks are real lunges now that hopeless ones are not made, so each carries the risk the many half-attempts of M2 used to share (it keeps collision safety cars, and so SC in ~40% of races). The pace advantage counts only up to 1.15 s a lap: a car that has run wide is not automatically passable on a narrow street circuit. A spun car is driven around, not overtaken. Away from a DRS zone a car only attempts when at least 0.25 s faster over the sector. A driver only lunges when the chance is at least 5%: below that he follows and keeps the ERS charge, instead of wasting it and 0.25 s on a move that is not on. The chance rises steeply with the pace advantage and the track's difficulty weighs less than in M2: the chance rises steeply with it: at a hard track (difficulty 0.7) with DRS an attack from 0.3 s a lap faster comes off about once in eighty, from 1 s faster about once in four (with two DRS zones, a pass within a lap or two); at Monaco even 1 s a lap buys only one in seven; the calendar averages ~40 overtakes and Monaco ~10. A repelled attack is reported once per duel, again only after 10 laps: duels are common (~45 a race) and the feed must stay readable."
+    "why": "Overtake probability is a logistic function: the attacker's pace advantage over a lap in seconds, measured in clean air from each car's remembered sector pace (a new lap weighs 0.4 of it, so one scruffy lap does not decide a duel) (this sector as driven now, the other two as last driven — a car faster all round gets a better run at the passing place), DRS, the racecraft gap, the tyre-wear gap and an ERS push raise it; a hard track to pass (overtakingDifficulty) and passing outside a DRS zone lower it. Failed attempts cost both cars time; about one attack in a hundred ends in contact for a normal driver (twice that for an aggressive one, half for a calm one — see radio) — attacks are real lunges now that hopeless ones are not made, so each carries the risk the many half-attempts of M2 used to share (it keeps collision safety cars, and so SC in ~40% of races). The pace advantage counts only up to 1.15 s a lap: a car that has run wide is not automatically passable on a narrow street circuit. A spun car is driven around, not overtaken. Away from a DRS zone a car only attempts when at least 0.25 s faster over the sector. A driver only lunges when the chance is at least 5%: below that he follows and keeps the ERS charge, instead of wasting it and 0.25 s on a move that is not on. The chance rises steeply with the pace advantage and the track's difficulty weighs less than in M2: the chance rises steeply with it: at a hard track (difficulty 0.7) with DRS an attack from 0.3 s a lap faster comes off about once in eighty, from 1 s faster about once in four (with two DRS zones, a pass within a lap or two); at Monaco even 1 s a lap buys only one in seven; the calendar averages ~40 overtakes and Monaco ~10. A repelled attack is reported once per duel, again only after 10 laps: duels are common (~45 a race) and the feed must stay readable."
   },
   "ers": {
     "value": {

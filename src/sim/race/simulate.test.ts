@@ -43,13 +43,13 @@ describe('simulateRace', () => {
     const b = simulateRace(input('al-rimal', 'M2-determinism'));
     expect(fingerprint(b)).toBe(fingerprint(a));
     // Pinned for the default pack only: a local pack has other content and so other hashes.
-    if (!isLocalPack) expect(fingerprint(a)).toBe('1e988a9feb257b');
+    if (!isLocalPack) expect(fingerprint(a)).toBe('1246d21a5d0a0b');
   });
 
   it('pins a race with a safety car too', () => {
     const race = simulateRace(input('marina-lights', 'M3-flag'));
     expect(race.events.some((e) => e.kind === 'safety-car')).toBe(true);
-    if (!isLocalPack) expect(fingerprint(race)).toBe('18e0988e22cb3a');
+    if (!isLocalPack) expect(fingerprint(race)).toBe('1b7dc642373096');
   });
 
   it('shows a flag to a car only once it is out: no call "under the safety car" before it', () => {
