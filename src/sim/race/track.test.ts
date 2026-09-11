@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { balance } from '@/data/balance';
 import { loadActivePack } from '@/data/packs/active';
 import type { PackGeometry } from '@/data/schema/pack';
 import { parsePath, prepareTrack, windInSector } from './track';
@@ -28,34 +29,82 @@ describe('prepareTrack', () => {
     ]);
   });
 
-  it('splits every pack track into three sectors covering the whole lap', () => {
+  it('cuts every pack track into segments covering the whole lap', () => {
     for (const t of pack.tracks) {
       const model = prepareTrack(t, geometry(t.id));
-      expect(model.sectors.reduce((s, x) => s + x.share, 0)).toBeCloseTo(1, 10);
-      for (const s of model.sectors) {
-        expect(s.straightShare + s.cornerShare).toBeCloseTo(1, 6);
-        expect(Math.hypot(...s.straight)).toBeLessThanOrEqual(s.straightShare + 1e-9);
+      expect(model.bounds[0]).toBe(0);
+      expect(model.bounds.at(-1)).toBe(1);
+      expect(model.segments).toHaveLength(model.bounds.length - 1);
+      expect(model.segments.reduce((sum, x) => sum + x.share, 0)).toBeCloseTo(1, 10);
+      for (const seg of model.segments) {
+        expect(seg.share).toBeGreaterThan(0);
+        expect(seg.straightShare + seg.cornerShare).toBeCloseTo(1, 6);
+        expect(Math.hypot(...seg.straight)).toBeLessThanOrEqual(seg.straightShare + 1e-9);
       }
-      expect(model.drsZones).toHaveLength(t.drsZones);
     }
   });
 
-  it('assigns a DRS zone to the sector where it ends, even across the line', () => {
-    const model = prepareTrack(squareTrack, square);
-    expect(model.drsZones).toEqual([{ sector: 0, share: expect.closeTo(0.2, 10) as number }]);
+  it('keeps the three timing lines as segment boundaries, and each segment inside one sector', () => {
+    for (const t of pack.tracks) {
+      const g = geometry(t.id);
+      const model = prepareTrack(t, g);
+      for (const line of g.sectors) expect(model.bounds).toContain(line);
+      // A segment lies inside one timing sector: its two ends agree on which one.
+      model.segments.forEach((seg, k) => {
+        const [from, to] = [model.bounds[k]!, model.bounds[k + 1]!];
+        const sectorAt = (f: number) => (f < g.sectors[0] ? 0 : f < g.sectors[1] ? 1 : 2);
+        expect(sectorAt(from)).toBe(seg.sector);
+        expect(sectorAt(to - 1e-9)).toBe(seg.sector);
+      });
+    }
   });
 
-  it('records which way each sector’s straights face', () => {
+  it('keeps every segment between the minimum and maximum share of a lap', () => {
+    const { minShare, maxShare } = balance.race.segments;
+    for (const t of pack.tracks) {
+      const model = prepareTrack(t, geometry(t.id));
+      // A boundary of its own may be closer than minShare to a timing line; nothing else may.
+      for (const seg of model.segments) expect(seg.share).toBeLessThanOrEqual(maxShare + 1e-9);
+      expect(model.segments.length).toBeGreaterThanOrEqual(Math.ceil(1 / maxShare));
+      expect(model.segments.length).toBeLessThanOrEqual(Math.ceil(1 / minShare));
+    }
+  });
+
+  it('accounts for every DRS zone across the segments it touches', () => {
+    for (const t of pack.tracks) {
+      const g = geometry(t.id);
+      const model = prepareTrack(t, g);
+      // The DRS lengths of the segments add up to exactly the zones of the geometry: an edge that
+      // is too close to a boundary already kept does not get one of its own, but the share stays.
+      const marked = model.segments.reduce((sum, seg) => sum + seg.drsShare, 0);
+      const zones = g.drsZones.reduce(
+        (sum, z) => sum + (z.to >= z.from ? z.to - z.from : 1 - z.from + z.to),
+        0,
+      );
+      expect(marked).toBeCloseTo(zones, 9);
+    }
+  });
+
+  it('marks the segments that lie in a DRS zone, and no others', () => {
     const model = prepareTrack(squareTrack, square);
-    // Sector 1 (first quarter) runs east along the top: +x in SVG axes.
-    expect(model.sectors[0].straight[0]).toBeGreaterThan(0.5);
-    expect(Math.abs(model.sectors[0].straight[1])).toBeLessThan(1e-9);
+    // The square track's single zone runs across the line, from 0.9 to 0.1.
+    for (const [k, seg] of model.segments.entries()) {
+      const mid = (model.bounds[k]! + model.bounds[k + 1]!) / 2;
+      expect(seg.drsShare > 0).toBe(mid >= 0.9 || mid < 0.1);
+    }
+  });
+
+  it('records which way each segment’s straights face', () => {
+    const model = prepareTrack(squareTrack, square);
+    // The first segment runs east along the top: +x in SVG axes.
+    expect(model.segments[0]!.straight[0]).toBeGreaterThan(0.5);
+    expect(Math.abs(model.segments[0]!.straight[1])).toBeLessThan(1e-9);
   });
 });
 
 describe('wind by direction', () => {
   const model = prepareTrack(squareTrack, square);
-  const east = model.sectors[0];
+  const east = model.segments[0]!;
 
   it('is a tailwind for a straight running away from where it blows from', () => {
     // A westerly (blowing from 270°) pushes an eastbound car.

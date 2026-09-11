@@ -328,6 +328,13 @@ export const raceBalanceSchema = z.strictObject({
       }),
     }),
   ),
+  segments: tuned(
+    z.strictObject({
+      minShare: unit,
+      maxShare: unit,
+      brakingAfterStraightM: positive,
+    }),
+  ),
   motion: tuned(
     z.strictObject({
       sampleM: positive,

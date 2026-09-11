@@ -11,6 +11,7 @@
 import { balance } from '@/data/balance';
 import type { Compound } from '@/data/schema/race-balance';
 import { fractionAtTimeShare, type LapMotion, lapMotion, timeShareAt } from './motion';
+import { prepareTrack } from './track';
 import { sampleAt } from './weather';
 import type { Estimate } from '../knowledge/estimate';
 import type {
@@ -45,7 +46,8 @@ export type Replay = {
   result: RaceResult;
   cars: CarTimeline[];
   /** Sector boundaries as fractions of the lap: [0, s2, s3, 1]. */
-  sectorBounds: [number, number, number, number];
+  /** Segment boundaries as lap fractions, `segments + 1` of them (docs/systems/lap-segments.md). */
+  segmentBounds: number[];
   /** How a car spends its time round the lap — slow in corners, fast on straights (drawing only). */
   motion: LapMotion;
   /** Events in time order. */
@@ -104,7 +106,8 @@ export type RaceFrame = {
 };
 
 export function buildReplay(input: RaceInput, result: RaceResult): Replay {
-  const [s2, s3] = input.geometry.sectors;
+  const model = prepareTrack(input.track, input.geometry);
+  const segments = model.segments.length;
   const events = [...result.events].sort((a, b) => a.timeS - b.timeS);
 
   const cars = result.classification.map((c): CarTimeline => {
@@ -114,23 +117,24 @@ export function buildReplay(input: RaceInput, result: RaceResult): Replay {
     const pitS: number[] = [];
     let t = 0;
     for (const lap of laps) {
-      lap.sectorsS.forEach((seconds, k) => {
+      lap.segmentsS.forEach((seconds, k) => {
         starts.push(t);
-        // Each lap ends on its recorded line time, so rounded sector times never add up to drift.
-        t = k === 2 ? lap.lineTimeS : t + seconds;
+        // Each lap ends on its recorded line time, so rounded segment times never add up to drift.
+        t = k === segments - 1 ? lap.lineTimeS : t + seconds;
         ends.push(t);
-        pitS.push(k === 2 ? lap.pitLaneS : 0);
+        pitS.push(k === segments - 1 ? lap.pitLaneS : 0);
       });
     }
     const retirement = events.find((e) => e.kind === 'retirement' && e.driverId === c.driverId);
     // The lap chart only holds completed laps. A car that stopped mid-lap is carried on through its
     // last lap at its previous lap's sector pace, up to the sector where it stopped.
     if (retirement && retirement.timeS > t) {
-      const pace = laps.at(-1)?.sectorsS ?? [0, 1, 2].map(() => input.track.baseLapTime / 3);
-      const lastSector = retirement.sector ?? 0;
-      for (let k = 0; k <= lastSector && t < retirement.timeS; k++) {
+      const pace =
+        laps.at(-1)?.segmentsS ?? model.segments.map((shape) => input.track.baseLapTime * shape.share);
+      const lastSegment = retirement.segment ?? 0;
+      for (let k = 0; k <= lastSegment && t < retirement.timeS; k++) {
         starts.push(t);
-        t = k === lastSector ? retirement.timeS : Math.min(retirement.timeS, t + pace[k]!);
+        t = k === lastSegment ? retirement.timeS : Math.min(retirement.timeS, t + pace[k]!);
         ends.push(t);
         pitS.push(0);
       }
@@ -163,7 +167,7 @@ export function buildReplay(input: RaceInput, result: RaceResult): Replay {
     input,
     result,
     cars,
-    sectorBounds: [0, s2, s3, 1],
+    segmentBounds: model.bounds,
     motion: lapMotion(input.track, input.geometry),
     events,
     durationS,
@@ -189,15 +193,16 @@ function lastAtOrBefore(xs: readonly number[], x: number): number {
 type Position = { segmentsDone: number; progress: number; inPit: boolean };
 
 /** Where a car is at time t: segments completed and progress in laps. */
-function locate(car: CarTimeline, bounds: Replay['sectorBounds'], motion: LapMotion, t: number): Position {
+function locate(car: CarTimeline, bounds: Replay['segmentBounds'], motion: LapMotion, t: number): Position {
   const done = lastAtOrBefore(car.ends, t) + 1;
   if (done >= car.ends.length)
-    return { segmentsDone: car.ends.length, progress: car.ends.length / 3, inPit: false };
+    return { segmentsDone: car.ends.length, progress: car.ends.length / (bounds.length - 1), inPit: false };
   const start = car.starts[done]!;
   const end = car.ends[done]!;
   const pit = car.pitS[done]!;
-  const k = done % 3;
-  const lapBase = Math.floor(done / 3);
+  const perLap = bounds.length - 1;
+  const k = done % perLap;
+  const lapBase = Math.floor(done / perLap);
   const driveEnd = end - pit;
   const share = Math.min(1, Math.max(0, (t - start) / Math.max(1e-6, driveEnd - start)));
   // The first sector starts on the grid slot: up to the line by the launch time, so the cars stand
@@ -207,7 +212,7 @@ function locate(car: CarTimeline, bounds: Replay['sectorBounds'], motion: LapMot
     const moved = t <= 0 ? 0 : t / car.launchS;
     return { segmentsDone: 0, progress: -car.gridOffset * (1 - moved), inPit: false };
   }
-  // The sector's time spread along the lap's speed profile: braking into corners, fast on straights.
+  // The segment's time spread along the lap's speed profile: braking into corners, fast on straights.
   const [from, to] = [timeShareAt(motion, bounds[k]!), timeShareAt(motion, bounds[k + 1]!)];
   const fraction = fractionAtTimeShare(motion, from + (to - from) * share);
   return { segmentsDone: done, progress: lapBase + fraction, inPit: pit > 0 && t > driveEnd };
@@ -238,15 +243,17 @@ function planAt(history: RaceResult['planHistory'][string], t: number): readonly
 export function frameAt(replay: Replay, timeS: number): RaceFrame {
   const t = Math.max(0, Math.min(timeS, replay.durationS));
   const { result, totalLaps } = replay;
+  /** Segments in a lap of this track: laps and lap counts are read off the segment count. */
+  const perLap = replay.segmentBounds.length - 1;
 
   // ── Each car's state ──
   type CarState = { car: CarTimeline; pos: ReturnType<typeof locate>; status: CarStatus; frame: CarFrame };
   const states = replay.cars.map((car): CarState => {
     const retired = car.retireTime !== null && t >= car.retireTime;
     const finished = car.finishTime !== null && t >= car.finishTime;
-    const pos = locate(car, replay.sectorBounds, replay.motion, retired ? car.retireTime! : t);
+    const pos = locate(car, replay.segmentBounds, replay.motion, retired ? car.retireTime! : t);
     const laps = result.laps[car.driverId] ?? [];
-    const completedLaps = Math.min(laps.length, Math.floor(pos.segmentsDone / 3));
+    const completedLaps = Math.min(laps.length, Math.floor(pos.segmentsDone / perLap));
     const current = laps[Math.min(completedLaps, laps.length - 1)];
     const previous = completedLaps > 0 ? laps[completedLaps - 1] : undefined;
     const done = laps.slice(0, completedLaps);
@@ -293,7 +300,7 @@ export function frameAt(replay: Replay, timeS: number): RaceFrame {
     if (aOut !== bOut) return aOut ? 1 : -1;
     if (aOut) {
       return (
-        Math.floor(b.pos.segmentsDone / 3) - Math.floor(a.pos.segmentsDone / 3) ||
+        Math.floor(b.pos.segmentsDone / perLap) - Math.floor(a.pos.segmentsDone / perLap) ||
         b.car.retireTime! - a.car.retireTime!
       );
     }
@@ -308,19 +315,21 @@ export function frameAt(replay: Replay, timeS: number): RaceFrame {
   states.forEach((s, i) => {
     s.frame.position = i + 1;
     if (s.status === 'retired') return;
-    const lapsBehind = Math.floor((leader.pos.segmentsDone - s.pos.segmentsDone) / 3);
+    const lapsBehind = Math.floor((leader.pos.segmentsDone - s.pos.segmentsDone) / perLap);
     s.frame.lapsDown = Math.max(0, lapsBehind);
     if (lapsBehind === 0 && i > 0 && s.pos.segmentsDone > 0) {
       // At the line the lap chart has the gap to the ms; between lines, the two cars' crossings.
       const atLine =
-        s.pos.segmentsDone % 3 === 0 ? result.laps[s.car.driverId]?.[s.pos.segmentsDone / 3 - 1] : undefined;
+        s.pos.segmentsDone % perLap === 0
+          ? result.laps[s.car.driverId]?.[s.pos.segmentsDone / perLap - 1]
+          : undefined;
       s.frame.gapS =
         atLine?.gapToLeaderS ??
         crossingTime(s.car, s.pos.segmentsDone) - crossingTime(leader.car, s.pos.segmentsDone);
     } else if (i === 0) s.frame.gapS = 0;
     const ahead = states[i - 1];
     if (ahead && ahead.status !== 'retired' && s.pos.segmentsDone > 0) {
-      const apart = Math.floor((ahead.pos.segmentsDone - s.pos.segmentsDone) / 3);
+      const apart = Math.floor((ahead.pos.segmentsDone - s.pos.segmentsDone) / perLap);
       if (apart === 0) {
         s.frame.intervalS =
           crossingTime(s.car, s.pos.segmentsDone) - crossingTime(ahead.car, s.pos.segmentsDone);
@@ -336,7 +345,7 @@ export function frameAt(replay: Replay, timeS: number): RaceFrame {
     else if (e.kind === 'vsc' && status !== 'sc') status = 'vsc';
     else if (e.kind === 'safety-car-in' || e.kind === 'vsc-end') status = 'green';
   }
-  const leaderLaps = Math.floor(leader.pos.segmentsDone / 3);
+  const leaderLaps = Math.floor(leader.pos.segmentsDone / perLap);
   const conditions = result.conditions.filter((c) => c.lap <= leaderLaps).at(-1) ?? result.conditions[0];
 
   return {

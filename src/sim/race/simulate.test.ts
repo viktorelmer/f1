@@ -43,13 +43,13 @@ describe('simulateRace', () => {
     const b = simulateRace(input('al-rimal', 'M2-determinism'));
     expect(fingerprint(b)).toBe(fingerprint(a));
     // Pinned for the default pack only: a local pack has other content and so other hashes.
-    if (!isLocalPack) expect(fingerprint(a)).toBe('1246d21a5d0a0b');
+    if (!isLocalPack) expect(fingerprint(a)).toBe('09c395f2bd5b04');
   });
 
   it('pins a race with a safety car too', () => {
     const race = simulateRace(input('marina-lights', 'M3-flag'));
     expect(race.events.some((e) => e.kind === 'safety-car')).toBe(true);
-    if (!isLocalPack) expect(fingerprint(race)).toBe('1b7dc642373096');
+    if (!isLocalPack) expect(fingerprint(race)).toBe('12e01d6539a3e7');
   });
 
   it('shows a flag to a car only once it is out: no call "under the safety car" before it', () => {
@@ -175,16 +175,14 @@ describe('simulateRace', () => {
       punctures += race.events.filter(
         (e) => e.kind === 'strategy-call' && e.detail.trigger === 'puncture',
       ).length;
+      // Measured over the lap, not the segment: a segment is a few seconds long, so ordinary
+      // traffic shows up there, while 20 s behind a crawling car cannot hide in a lap time.
       for (const [driverId, laps] of Object.entries(race.laps)) {
-        const median = [0, 1, 2].map((k) => {
-          const xs = laps.map((l) => l.sectorsS[k]!).sort((a, b) => a - b);
-          return xs[Math.floor(xs.length / 2)]!;
-        });
+        const times = laps.map((l) => l.lapTimeS).sort((a, b) => a - b);
+        const median = times[Math.floor(times.length / 2)]!;
         for (const l of laps) {
           if (l.lap < 2 || l.incident || l.pitted || l.status !== 'green' || neutralLaps.has(l.lap)) continue;
-          l.sectorsS.forEach((sector, k) => {
-            if (sector > median[k]! * 1.4) expect.fail(`${driverId} lap ${l.lap} S${k + 1}: ${sector} s`);
-          });
+          if (l.lapTimeS > median * 1.4) expect.fail(`${driverId} lap ${l.lap}: ${l.lapTimeS} s`);
         }
       }
     }
@@ -197,20 +195,23 @@ describe('simulateRace', () => {
     const explains = new Set(['pit', 'spin', 'puncture', 'retirement', 'crash', 'contact', 'failure']);
     let silent = 0;
     let races = 0;
+    let perLapSegments = 3;
     for (const track of ['parco-reale', 'al-rimal']) {
       for (let i = 0; i < 10; i++) {
         const raceInput = input(track, `swaps-${i}`);
         const result = simulateRace(raceInput);
         const { cars } = buildReplay(raceInput, result);
         races++;
+        const perLap = result.laps[cars[0]!.driverId]![0]!.segmentsS.length;
+        perLapSegments = perLap;
         const segments = Math.max(...cars.map((c) => c.ends.length));
         for (let k = 1; k < segments; k++) {
           const among = cars.filter((c) => c.ends.length > k && c.pitS[k] === 0 && c.pitS[k - 1] === 0);
           const order = (seg: number) =>
             [...among].sort((a, b) => a.ends[seg]! - b.ends[seg]!).map((c) => c.driverId);
           const [before, after] = [order(k - 1), order(k)];
-          const [lap, sector] = [Math.floor(k / 3) + 1, k % 3];
-          const at = result.events.filter((e) => e.lap === lap && e.sector === sector);
+          const [lap, segment] = [Math.floor(k / perLap) + 1, k % perLap];
+          const at = result.events.filter((e) => e.lap === lap && e.segment === segment);
           for (let a = 0; a < before.length; a++) {
             for (let c = a + 1; c < before.length; c++) {
               const [ahead, behind] = [before[a]!, before[c]!];
@@ -226,7 +227,9 @@ describe('simulateRace', () => {
         }
       }
     }
-    expect(silent / races).toBeLessThan(2);
+    // Per boundary, not per race: a lap is cut into `perLap` segments, so there are that many more
+    // places to look than the three of M2–M4, and the budget scales with them.
+    expect(silent / races).toBeLessThan((2 * perLapSegments) / 3);
   });
 
   it('decides the order into the first corner at the launch and reports the places won', () => {
@@ -279,7 +282,7 @@ describe('simulateRace', () => {
       const sum = laps.reduce((s, l) => s + l.lapTimeS, 0);
       expect(Math.abs(sum - c.totalTimeS)).toBeLessThan(2);
       for (const l of laps)
-        expect(Math.abs(l.sectorsS.reduce((a, b) => a + b, 0) - l.lapTimeS)).toBeLessThan(0.01);
+        expect(Math.abs(l.segmentsS.reduce((a, b) => a + b, 0) - l.lapTimeS)).toBeLessThan(0.01);
     }
   });
 

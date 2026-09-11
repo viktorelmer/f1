@@ -167,7 +167,7 @@ describe('GapChart', () => {
     const at = (kind: RaceEventKind, lap: number): RaceEvent => ({
       timeS: lap * 90,
       lap,
-      sector: null,
+      segment: null,
       kind,
       driverId: null,
       otherId: null,
@@ -328,6 +328,26 @@ describe('race screen (M3 DoD: the race can be watched to the flag, and everythi
 });
 
 describe('race control on the screen (M4)', () => {
+  /** A race whose strategist runs into a call the player must answer — not every race has one. */
+  const manualControl = {
+    ...mockControl(world),
+    strategy: { mode: 'manual', risk: 0.5, goal: 'fastest' },
+  } as const;
+  const manualSeed = (() => {
+    for (let i = 0; i < 40; i++) {
+      const seed = `manual-${i}`;
+      const { result } = raceApi.run({
+        world,
+        round: MOCK_RACE.round,
+        seed,
+        control: manualControl,
+        commands: [],
+      });
+      if (result.pitWall!.decisions.some((d) => d.by === 'unanswered')) return seed;
+    }
+    throw new Error('no race in 40 seeds leaves the player a call to answer');
+  })();
+
   beforeEach(() => {
     setRaceEngine(createInlineEngine());
     useCareer.setState({ world });
@@ -338,13 +358,13 @@ describe('race control on the screen (M4)', () => {
       paused: false,
       speed: 1,
       round: MOCK_RACE.round,
-      seed: mockSeed,
+      seed: manualSeed,
       plans: null,
       pending: null,
       handled: [],
       commands: [],
       suggestWithPause: false,
-      control: { ...mockControl(world), strategy: { mode: 'manual', risk: 0.5, goal: 'fastest' } },
+      control: manualControl,
     });
   });
   afterEach(() => useRace.setState({ phase: 'setup', replay: null, timeS: 0, pending: null }));

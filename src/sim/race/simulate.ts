@@ -73,7 +73,6 @@ import type {
   RaceInput,
   RaceResult,
   ScheduledStint,
-  SectorIndex,
   RadioSettings,
   Stint,
   StrategyGoal,
@@ -100,7 +99,7 @@ type CarState = {
   nextTime: number;
   version: number;
   lapsDone: number;
-  sector: SectorIndex;
+  segment: number;
   compound: Compound;
   wear: number;
   tyreAge: number;
@@ -111,7 +110,7 @@ type CarState = {
   battery: number;
   fatigue: number;
   /** Own pace in each sector as last driven (dirty air in, DRS and queueing out): for lap-level advantage. */
-  recentPaceS: [number | null, number | null, number | null];
+  recentPaceS: (number | null)[];
   damageS: number;
   partialFailureS: number;
   /** Remaining stints, the current one first; `stintLaps` counts laps done on the current one. */
@@ -128,8 +127,8 @@ type CarState = {
   radioOverride: Partial<RadioSettings>;
   /** Whether the driver follows the team's current order; null when no order concerns them. */
   obeys: boolean | null;
-  /** Per lap: sector times, line time, and what the lap looked like. */
-  sectors: [number, number, number][];
+  /** Per lap: segment times, line time, and what the lap looked like. */
+  segments: number[][];
   lineTimes: number[];
   lapInfo: {
     compound: Compound;
@@ -157,7 +156,7 @@ type Crossing = {
   car: CarState;
   time: number;
   lap: number;
-  sector: SectorIndex;
+  segment: number;
   segmentS: number;
   /**
    * The car's own pace over the segment: its dirty air included, DRS and queueing behind others
@@ -246,6 +245,9 @@ export function raceStrategy(
 export function simulateRace(input: RaceInput): RaceResult {
   const b = balance.race;
   const model: TrackModel = prepareTrack(input.track, input.geometry);
+  /** How many segments this track's lap is cut into, and the last one — the one that ends on the line. */
+  const SEGMENTS = model.segments.length;
+  const LAST = SEGMENTS - 1;
   const track = input.track;
   const totalLaps = track.laps;
   const base = track.baseLapTime;
@@ -258,12 +260,12 @@ export function simulateRace(input: RaceInput): RaceResult {
   const emit = (
     timeS: number,
     lap: number,
-    sector: SectorIndex | null,
+    segment: number | null,
     kind: RaceEventKind,
     driverId: string | null = null,
     otherId: string | null = null,
     detail: Record<string, string | number> = {},
-  ) => events.push({ timeS: round3(timeS), lap, sector, kind, driverId, otherId, detail });
+  ) => events.push({ timeS: round3(timeS), lap, segment, kind, driverId, otherId, detail });
 
   const entriesById = new Map(input.entries.map((e) => [e.driverId, e]));
   // The player's team and how it is run — changed by 'control' commands during the race.
@@ -328,7 +330,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       nextTime: launches.get(id)!.timeS,
       version: 0,
       lapsDone: 0,
-      sector: 0,
+      segment: 0,
       compound: plan.stints[0]!.compound,
       wear: 0,
       tyreAge: 0,
@@ -338,7 +340,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       fuelKg: perLap * totalLaps + b.fuel.marginKg,
       battery: 1,
       fatigue: entry.driver.fatigue,
-      recentPaceS: [null, null, null],
+      recentPaceS: model.segments.map(() => null),
       damageS: 0,
       partialFailureS: 0,
       plan: plan.stints.map((st) => ({ ...st })),
@@ -351,7 +353,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       radio: { ...NEUTRAL_RADIO, aggression: aggressionFor(entry) },
       radioOverride: {},
       obeys: null,
-      sectors: [],
+      segments: [],
       // The race clock starts at the signal for everyone: lap 1 includes the run from the grid slot.
       lineTimes: [0],
       lapInfo: [],
@@ -390,10 +392,17 @@ export function simulateRace(input: RaceInput): RaceResult {
   const queue = new SegmentQueue();
   for (const car of cars) queue.push(car.nextTime, orderOf.get(car)!, car);
   // The grid itself: at the start, the car ahead of each car is the one on the slot in front.
-  const crossings: [Crossing[], Crossing[], Crossing[]] = [
-    cars.map((car) => ({ car, time: car.nextTime, lap: 0, sector: 2, segmentS: 0, paceS: 0, off: false })),
-    [],
-    [],
+  const crossings: Crossing[][] = [
+    cars.map((car) => ({
+      car,
+      time: car.nextTime,
+      lap: 0,
+      segment: LAST,
+      segmentS: 0,
+      paceS: 0,
+      off: false,
+    })),
+    ...Array.from({ length: LAST }, (): Crossing[] => []),
   ];
   emit(0, 1, 0, 'start', null, null, { cars: cars.length });
   // Places won and lost off the line: each gain reported, and each car that bogged down.
@@ -471,7 +480,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       response === 'sc' ? b.raceControl.safetyCarLapFactor : b.raceControl.virtualSafetyCarLapFactor;
     for (const car of cars) {
       if (car.status !== 'running' || car.nextTime <= shownAt) continue;
-      const crossing = crossings[car.sector].find((c) => c.car === car && c.time === car.nextTime);
+      const crossing = crossings[car.segment]!.find((c) => c.car === car && c.time === car.nextTime);
       if (!crossing || crossing.time - crossing.segmentS > shownAt) continue;
       delay(crossing, (crossing.time - shownAt) * (factor - 1));
     }
@@ -485,7 +494,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     car.retireReason = reason;
     car.retireTime = timeS;
     car.version++;
-    emit(timeS, lap, car.sector, 'retirement', car.entry.driverId, null, { reason });
+    emit(timeS, lap, car.segment, 'retirement', car.entry.driverId, null, { reason });
     incident(kind, timeS, lap, reason);
   };
 
@@ -583,7 +592,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       });
     }
     const choice = options[applied]!;
-    emit(timeS, lap, car.sector, 'strategy-call', car.entry.driverId, null, {
+    emit(timeS, lap, car.segment, 'strategy-call', car.entry.driverId, null, {
       trigger,
       call: choice.call,
       compound: choice.compound,
@@ -605,7 +614,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     );
     if (!option) return;
     car.pitRequest = { compound, plan: option.stints };
-    emit(timeS, lap, car.sector, 'strategy-call', car.entry.driverId, null, {
+    emit(timeS, lap, car.segment, 'strategy-call', car.entry.driverId, null, {
       trigger: 'player',
       call: 'pit',
       compound,
@@ -627,7 +636,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     car.pitRequest = null;
     car.plan = stints.map((st, i) => (i === 0 ? { ...st, laps: st.laps + car.stintLaps } : { ...st }));
     car.planHistory.push({ timeS: round3(timeS), stints: schedule(car.plan, lap - car.stintLaps) });
-    emit(timeS, lap, car.sector, 'strategy-call', car.entry.driverId, null, {
+    emit(timeS, lap, car.segment, 'strategy-call', car.entry.driverId, null, {
       trigger: 'player',
       call: 'plan',
       stops: stints.length - 1,
@@ -644,12 +653,12 @@ export function simulateRace(input: RaceInput): RaceResult {
   ) {
     pitWall?.radio[car.entry.driverId]?.push({ timeS: round3(timeS), settings: { ...car.radio } });
     if (by === 'player' || car.radio.pace !== before.pace || car.radio.aggression !== before.aggression) {
-      emit(timeS, lap, car.sector, 'radio', car.entry.driverId, null, { ...car.radio, by });
+      emit(timeS, lap, car.segment, 'radio', car.entry.driverId, null, { ...car.radio, by });
     }
   }
 
   /** How far round the race a car is, for team orders: laps and sectors done, earlier entry first. */
-  const progressOf = (c: CarState) => c.lapsDone * 3 + c.sector - c.nextTime * 1e-6;
+  const progressOf = (c: CarState) => c.lapsDone * SEGMENTS + c.segment - c.nextTime * 1e-6;
 
   /** A team order: who it asks to give way or stay put, and whether they will. */
   function applyTeamOrder(teamId: string, order: TeamOrder, timeS: number, lap: number) {
@@ -726,9 +735,9 @@ export function simulateRace(input: RaceInput): RaceResult {
     if (lapsLeft <= 0) return;
     const player = isPlayerTeam(car.entry.teamId);
     const mode = player ? ctl!.radio.mode : 'delegated';
-    const ahead = aheadAt(crossings[0], car, timeS);
+    const ahead = aheadAt(crossings[0]!, car, timeS);
     const previous = car.lineTimes[lap - 1] ?? 0;
-    const behind = crossings[0]
+    const behind = crossings[0]!
       .filter((c) => c.car !== car && c.lap === lap - 1 && !c.off && c.time > previous)
       .reduce<number>((min, c) => Math.min(min, c.time - previous), Infinity);
     const goal: RadioGoal = player && mode === 'directed' ? ctl!.radio.saving : 'none';
@@ -817,23 +826,23 @@ export function simulateRace(input: RaceInput): RaceResult {
     popped = queue.pop();
     if (car.status !== 'running' || version !== car.version) continue;
 
-    const k = car.sector;
+    const k = car.segment;
     const lap = car.lapsDone + 1;
-    const shape = model.sectors[k];
+    const shape = model.segments[k]!;
     if (carLapsSinceSurface > 0 || t / 60 >= surface.minute + 1) {
       surface = advanceSurface(surface, input.weather, t, carLapsSinceSurface);
       carLapsSinceSurface = 0;
     }
     const sample = sampleAt(input.weather, t);
-    const wet = surface.wetness[k];
+    const wet = surface.wetness[shape.sector];
     const d = car.entry.driver;
     // The flag this car sees on entering the sector.
     const shown = flagAt(t);
     const flag = shown.status;
     applyCommands(car, t, lap);
 
-    // Strategy triggers are reviewed before the last sector: a stop happens at the end of the lap.
-    if (k === 2 && lap < totalLaps && !car.pitRequest && flagTime === null) {
+    // Strategy triggers are reviewed in the last segment: a stop happens at the end of the lap.
+    if (k === LAST && lap < totalLaps && !car.pitRequest && flagTime === null) {
       const avgWet = (surface.wetness[0] + surface.wetness[1] + surface.wetness[2]) / 3;
       const planned = car.plan.length > 1 && car.stintLaps + 1 >= car.plan[0]!.laps;
       if (car.damageS > 0 && car.damageS !== car.reviewedDamageS) {
@@ -873,7 +882,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     let segment =
       (lapTime + perLapExtras) * shape.share +
       windSeconds(shape, sample) +
-      car.pace.normal(0, lapNoiseSd(d.consistency) / Math.sqrt(3));
+      car.pace.normal(0, lapNoiseSd(d.consistency) * Math.sqrt(shape.share));
     if (lap === 1 && k === 0) segment += s.standingStartLossS;
     // Radio: the pace mode and ERS deployment (an empty battery has nothing to deploy).
     const paceMode = paceEffects(car.radio.pace);
@@ -894,14 +903,14 @@ export function simulateRace(input: RaceInput): RaceResult {
       const outcome = mistakeOutcome(car.pace, track.profile.safetyCarProbability);
       if (
         mistakeRoll <
-        (mistakeChancePerLap({
+        mistakeChancePerLap({
           consistency: d.consistency,
           wetness: wet,
           gripDeficitS,
           fatigue: car.fatigue,
         }) *
-          paceMode.mistakes) /
-          3
+          paceMode.mistakes *
+          shape.share
       ) {
         if (outcome.kind === 'crash') {
           emit(t, lap, k, 'crash', car.entry.driverId);
@@ -921,7 +930,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     const component = car.reliabilityRng.chance(b.reliability.powerUnitShare) ? 'power-unit' : 'chassis';
     if (
       car.partialFailureS === 0 &&
-      failureRoll < failureChancePerLap(car.entry.car.reliability, totalLaps) / 3
+      failureRoll < failureChancePerLap(car.entry.car.reliability, totalLaps) * shape.share
     ) {
       if (partial) {
         car.partialFailureS = b.reliability.partialLossS;
@@ -935,7 +944,10 @@ export function simulateRace(input: RaceInput): RaceResult {
     }
     const punctureRoll = car.tyreRng.next();
     const punctureRetires = car.tyreRng.chance(balance.tyres.puncture.retireShare);
-    if (punctureRoll < punctureChancePerLap(car.wear, balance.tyres.compounds[car.compound].cliffWear) / 3) {
+    if (
+      punctureRoll <
+      punctureChancePerLap(car.wear, balance.tyres.compounds[car.compound].cliffWear) * shape.share
+    ) {
       emit(t, lap, k, 'puncture', car.entry.driverId);
       if (punctureRetires) {
         retire(car, t, lap, 'puncture', 'stopped-car');
@@ -956,8 +968,8 @@ export function simulateRace(input: RaceInput): RaceResult {
 
     // ── Traffic: the car ahead at the sector's entry and exit ──
     const rc = b.raceControl;
-    const exit = ((k + 1) % 3) as SectorIndex;
-    const aheadAtEntry = aheadAt(crossings[k], car, t);
+    const exit = (k + 1) % SEGMENTS;
+    const aheadAtEntry = aheadAt(crossings[k]!, car, t);
     const gapAtEntry = aheadAtEntry ? t - aheadAtEntry.time : Infinity;
     const isLeader = !aheadAtEntry || aheadAtEntry.lap < (k === 0 ? lap - 1 : lap);
 
@@ -1008,7 +1020,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     if (drsOpen) segment -= drsGainS(model, k);
 
     let arrival = t + segment;
-    const ahead = lastRunning(crossings[exit], car);
+    const ahead = lastRunning(crossings[exit]!, car);
     /** The car passed in this sector, if any: the one pass a sector allows. */
     let passed: Crossing | undefined;
     const order = teamOrders.get(car.entry.teamId) ?? 'free';
@@ -1115,7 +1127,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     // Every other car on this lap that went through the sector ahead stays ahead: one pass a sector,
     // and none without a fight. Checked by crossing time — a defender pushed back behind its attacker
     // is not the car the next one in the queue follows, but it is still in the way.
-    for (const c of crossings[exit]) {
+    for (const c of crossings[exit]!) {
       if (c === passed || c.car === car || c.lap !== lap || c.off || c.car.status !== 'running') continue;
       if (arrival < c.time + b.traffic.minGapS) arrival = c.time + b.traffic.minGapS;
     }
@@ -1141,9 +1153,9 @@ export function simulateRace(input: RaceInput): RaceResult {
     carLapsSinceSurface += shape.share;
 
     const segmentS = arrival - t;
-    const lapSectors = (car.sectors[lap - 1] ??= [0, 0, 0]);
+    const lapSegments = (car.segments[lap - 1] ??= model.segments.map(() => 0));
     // Lap 1 sector 1 runs from the start signal, like the lap itself (grid slots start later).
-    lapSectors[k] = lap === 1 && k === 0 ? arrival : segmentS;
+    lapSegments[k] = lap === 1 && k === 0 ? arrival : segmentS;
 
     // ── Line crossing: lap complete, pit stop, flags ──
     let off = offLine;
@@ -1155,9 +1167,9 @@ export function simulateRace(input: RaceInput): RaceResult {
       if (car.pitRequest) {
         const stop = stationaryTimeS(car.entry.pitCrew, pitRngs.get(car.entry.teamId)!);
         exitTime = arrival + track.pitLoss * pitLaneFactor(flagAt(arrival).status) + stop.seconds;
-        lapSectors[2] += exitTime - arrival;
+        lapSegments[LAST]! += exitTime - arrival;
         off = true;
-        emit(arrival, lap, 2, 'pit', car.entry.driverId, null, {
+        emit(arrival, lap, LAST, 'pit', car.entry.driverId, null, {
           from: car.compound,
           to: car.pitRequest.compound,
           stationaryS: round3(stop.seconds),
@@ -1241,14 +1253,16 @@ export function simulateRace(input: RaceInput): RaceResult {
       }
     }
 
-    crossings[exit].push({ car, time: exitTime, lap, sector: k, segmentS, paceS: ownPaceS, off });
+    crossings[exit]!.push({ car, time: exitTime, lap, segment: k, segmentS, paceS: ownPaceS, off });
     // Typical pace in this sector, not the last lap of it: one lap carries the driver's own scatter,
     // and a duel judged on a single sample is decided by noise (ADR 005, п. 17).
     const remembered = car.recentPaceS[k];
     car.recentPaceS[k] =
-      remembered === null ? ownPaceS : remembered + b.overtaking.paceMemory * (ownPaceS - remembered);
-    if (crossings[exit].length > 64) crossings[exit].splice(0, crossings[exit].length - 64);
-    car.sector = exit;
+      remembered === null || remembered === undefined
+        ? ownPaceS
+        : remembered + b.overtaking.paceMemory * (ownPaceS - remembered);
+    if (crossings[exit]!.length > 64) crossings[exit]!.splice(0, crossings[exit]!.length - 64);
+    car.segment = exit;
     car.nextTime = exitTime;
     if (exit === 0 && car.status === 'running') {
       updateRadio(car, exitTime, lap);
@@ -1265,9 +1279,9 @@ export function simulateRace(input: RaceInput): RaceResult {
     const isLatest = car.nextTime === crossing.time;
     crossing.time += seconds;
     crossing.segmentS += seconds;
-    const lapSectors = car.sectors[crossing.lap - 1];
-    if (lapSectors) lapSectors[crossing.sector] += seconds;
-    if (crossing.sector === 2 && car.lineTimes[crossing.lap] !== undefined)
+    const lapSegments = car.segments[crossing.lap - 1];
+    if (lapSegments) lapSegments[crossing.segment]! += seconds;
+    if (crossing.segment === LAST && car.lineTimes[crossing.lap] !== undefined)
       car.lineTimes[crossing.lap]! += seconds;
     if (car.status === 'running' && isLatest) {
       car.nextTime = crossing.time;
@@ -1322,17 +1336,17 @@ function lapAdvantageS(
   attackerPaceS: number,
   defender: CarState,
   defenderPaceS: number,
-  k: SectorIndex,
+  k: number,
   model: TrackModel,
 ): number {
   let advantage = 0;
   let share = 0;
-  for (const j of [0, 1, 2] as const) {
+  for (let j = 0; j < model.segments.length; j++) {
     const mine = attacker.recentPaceS[j] ?? (j === k ? attackerPaceS : null);
     const theirs = defender.recentPaceS[j] ?? (j === k ? defenderPaceS : null);
     if (mine === null || theirs === null) continue;
     advantage += theirs - mine;
-    share += model.sectors[j].share;
+    share += model.segments[j]!.share;
   }
   return share > 0 ? advantage / share : 0;
 }
@@ -1365,12 +1379,12 @@ function buildResult(
     const leaderTime = crossed[0]?.lineTimes[lap];
     crossed.forEach((car, i) => {
       const info = car.lapInfo[lap - 1]!;
-      const sectors = car.sectors[lap - 1] ?? [0, 0, 0];
+      const segments = car.segments[lap - 1] ?? [];
       laps[car.entry.driverId]!.push({
         lap,
         lapTimeS: round3(car.lineTimes[lap]! - car.lineTimes[lap - 1]!),
         lineTimeS: round3(car.lineTimes[lap]!),
-        sectorsS: sectors.map(round3) as [number, number, number],
+        segmentsS: segments.map(round3),
         position: i + 1,
         gapToLeaderS: round3(car.lineTimes[lap]! - leaderTime!),
         compound: info.compound,

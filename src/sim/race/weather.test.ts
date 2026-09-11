@@ -127,7 +127,7 @@ describe('the surface during a race', () => {
       base,
       pack.geometry.find((g) => g.trackId === base.id)!,
     );
-    const sector = model.sectors.reduce((a, b) => (b.straightShare > a.straightShare ? b : a));
+    const sector = model.segments.reduce((a, b) => (b.straightShare > a.straightShare ? b : a));
     const heading = (Math.atan2(sector.straight[1], sector.straight[0]) * 180) / Math.PI;
     // Bearing the straight points to, clockwise from north (SVG: x east, y south).
     const towards = (90 + heading + 360) % 360;

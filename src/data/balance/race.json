@@ -111,7 +111,7 @@
   },
   "overtaking": {
     "value": {
-      "base": -5.5,
+      "base": -5.62,
       "perPaceS": 4.5,
       "drs": 1.4,
       "outsideDrsZone": -1.1,
@@ -124,7 +124,7 @@
       "defenseLossS": 0.15,
       "failedAttackerLossS": 0.25,
       "failedDefenderLossS": 0.1,
-      "contactChance": 0.0098,
+      "contactChance": 0.0076,
       "outsideDrsMinAdvantageS": 0.25,
       "paceAdvantageCapS": 1.15,
       "minAttackChance": 0.05,
@@ -312,6 +312,14 @@
       }
     },
     "why": "Team orders: a swap happens when the teammate is within 1.5 s, costing both 0.4 s. Whether a driver obeys is a logistic chance: 2 (≈88%) at loyalty, ego and morale of 50, +0.03 per point of loyalty and +0.02 per point of morale above 50, −0.04 per point of ego; −1.2 when asked to yield while faster over the lap, −0.8 when yielding costs a podium or points."
+  },
+  "segments": {
+    "value": {
+      "minShare": 0.04,
+      "maxShare": 0.12,
+      "brakingAfterStraightM": 250
+    },
+    "why": "How a lap is cut into simulation segments (docs/systems/lap-segments.md). Boundaries are the three timing lines, the edges of every DRS zone and the braking point of every corner that follows a straight of at least 250 m — the places where a lap is actually decided. A segment shorter than 4% of the lap is merged away, and anything longer than 12% is split evenly, so no stretch runs unwatched for more than an eighth of a lap and every track lands between 9 and 14 segments rather than at a hundred or at three."
   },
   "motion": {
     "value": {

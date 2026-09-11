@@ -5,7 +5,6 @@
  */
 import { balance } from '@/data/balance';
 import type { SectorShape, TrackModel } from './track';
-import type { SectorIndex } from './types';
 
 /** Seconds lost in a sector following another car at `gapS`, for a car of this dirty-air tolerance. */
 export function dirtyAirLossS(gapS: number, tolerance: number, aeroSensitivity: number): number {
@@ -25,16 +24,14 @@ export function slipstreamGainS(gapS: number, shape: SectorShape, powerSensitivi
   );
 }
 
-/** DRS gain in a sector: the sum over zones ending in it, scaled by each zone's length. */
-export function drsGainS(model: TrackModel, sector: SectorIndex): number {
+/** DRS gain in a segment: it scales with how much of the segment lies inside a zone. */
+export function drsGainS(model: TrackModel, segment: number): number {
   const d = balance.race.drs;
-  return model.drsZones
-    .filter((z) => z.sector === sector)
-    .reduce((sum, z) => sum + d.gainS * (z.share / d.referenceZoneShare), 0);
+  return (d.gainS * model.segments[segment]!.drsShare) / d.referenceZoneShare;
 }
 
-export function hasDrsZone(model: TrackModel, sector: SectorIndex): boolean {
-  return model.drsZones.some((z) => z.sector === sector);
+export function hasDrsZone(model: TrackModel, segment: number): boolean {
+  return model.segments[segment]!.drsShare > 0;
 }
 
 export type OvertakeFactors = {

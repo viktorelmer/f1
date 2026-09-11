@@ -76,7 +76,8 @@ describe('buildReplay / frameAt', () => {
     const p2 = result.classification[1]!;
     for (const lap of result.laps[p2.driverId]!.filter((l) => l.lap % 7 === 0)) {
       // Its own line crossing: summing the rounded lap times drifts by a few ms over a race.
-      const crossing = replay.cars.find((c) => c.driverId === p2.driverId)!.ends[lap.lap * 3 - 1]!;
+      const perLap = replay.segmentBounds.length - 1;
+      const crossing = replay.cars.find((c) => c.driverId === p2.driverId)!.ends[lap.lap * perLap - 1]!;
       const car = frameAt(replay, crossing + 1e-3).cars.find((c) => c.driverId === p2.driverId)!;
       if (car.position === 2 && lap.position === 2 && car.gapS !== null)
         expect(car.gapS).toBeCloseTo(lap.gapToLeaderS, 1);

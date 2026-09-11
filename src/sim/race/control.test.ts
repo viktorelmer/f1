@@ -6,7 +6,7 @@ import { buildRaceInput } from './build-input';
 import { obeyChance } from './orders';
 import { raceStrategy, simulateRace } from './simulate';
 import { overtakeProbability } from './traffic';
-import type { RaceCommand, RaceControl, RaceResult } from './types';
+import type { LapRecord, RaceCommand, RaceControl, RaceResult } from './types';
 
 const pack = loadActivePack();
 const TEAM = 'kestrel';
@@ -77,36 +77,39 @@ describe('commands', () => {
       { timeS: 300, kind: 'radio', driverId: CAR_A, radio: { pace: 'push', aggression: 'aggressive' } },
       { timeS: 900, kind: 'team-order', teamId: TEAM, order: 'swap' },
     ]);
-    expect(fingerprint(a)).toBe('063f0e93405226');
+    expect(fingerprint(a)).toBe('1c43b888403f17');
   });
 });
 
 describe('radio', () => {
   const manual = control({ radio: { mode: 'manual', aggression: 'normal', saving: 'none' } });
-  /** Laps of the opening stint, the first one out: mean lap time and tyre wear gained per lap. */
-  const stint = (r: RaceResult, laps: number) => {
-    const run = r.laps[CAR_A]!.slice(1, 1 + laps);
-    return {
-      lap: run.reduce((sum, l) => sum + l.lapTimeS, 0) / run.length,
-      wearPerLap: (run.at(-1)!.tyreWear - run[0]!.tyreWear) / (run.length - 1),
-    };
-  };
-  /** How long the car ran before its first stop: the window both runs can be compared over. */
-  const beforeFirstStop = (r: RaceResult) => {
-    const pit = r.laps[CAR_A]!.findIndex((l) => l.pitted);
-    return pit === -1 ? r.laps[CAR_A]!.length : pit;
-  };
+  /** The opening laps of a race, for comparing one radio setting against another. */
+  const opening = (r: RaceResult) => r.laps[CAR_A]!.slice(1, 4);
+  const usable = (l: LapRecord | undefined) =>
+    l !== undefined && !l.incident && !l.pitted && l.status === 'green';
 
   it('push is quicker and wears the tyres harder; saving tyres is the other way round', () => {
-    const run = (pace: 'push' | 'save-tyres') =>
-      race('valles', 'radio-1', manual, [{ timeS: 0, kind: 'radio', driverId: CAR_A, radio: { pace } }]);
-    const [a, b] = [run('push'), run('save-tyres')];
-    const laps = Math.min(6, beforeFirstStop(a) - 1, beforeFirstStop(b) - 1);
-    expect(laps).toBeGreaterThanOrEqual(4);
-    const push = stint(a, laps);
-    const save = stint(b, laps);
-    expect(push.lap).toBeLessThan(save.lap);
-    expect(push.wearPerLap).toBeGreaterThan(save.wearPerLap);
+    // Lap for lap over the opening stint of many races: a car held in a queue laps at the pace of
+    // the car in front however hard it is asked to push, so one race says nothing on its own. Later
+    // in a stint the comparison turns over by design — push has worn its tyres out by then.
+    const run = (seed: string, pace: 'push' | 'save-tyres') =>
+      opening(race('valles', seed, manual, [{ timeS: 0, kind: 'radio', driverId: CAR_A, radio: { pace } }]));
+    let pairs = 0;
+    let lapDelta = 0;
+    let wearDelta = 0;
+    for (let i = 0; i < 24; i++) {
+      const [push, save] = [run(`radio-${i}`, 'push'), run(`radio-${i}`, 'save-tyres')];
+      for (const [lap, a] of push.entries()) {
+        const b = save[lap];
+        if (!usable(a) || !usable(b)) continue;
+        pairs++;
+        lapDelta += a.lapTimeS - b!.lapTimeS;
+        wearDelta += a.tyreWear - b!.tyreWear;
+      }
+    }
+    expect(pairs).toBeGreaterThan(40);
+    expect(lapDelta / pairs).toBeLessThan(-0.05);
+    expect(wearDelta / pairs).toBeGreaterThan(0);
   });
 
   it('ERS attack drains the battery, harvesting charges it', () => {

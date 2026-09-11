@@ -169,7 +169,8 @@ export type RaceEventKind =
 export type RaceEvent = {
   timeS: number;
   lap: number;
-  sector: SectorIndex | null;
+  /** Which segment of the lap it happened in (docs/systems/lap-segments.md); null for race-wide events. */
+  segment: number | null;
   kind: RaceEventKind;
   driverId: DriverId | null;
   otherId: DriverId | null;
@@ -181,7 +182,8 @@ export type LapRecord = {
   lapTimeS: number;
   /** Race time at the line that ends this lap: exact, where summing lap times drifts by rounding. */
   lineTimeS: number;
-  sectorsS: [number, number, number];
+  /** Time in each segment of the lap; the three timing sectors are sums of these. */
+  segmentsS: number[];
   position: number;
   /** Time behind the leader's crossing of the same lap. */
   gapToLeaderS: number;

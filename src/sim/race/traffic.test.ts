@@ -55,13 +55,14 @@ describe('dirty air and the tow', () => {
     expect(slipstreamGainS(0.4, straight, 0.9)).toBeGreaterThan(slipstreamGainS(0.4, straight, 0.2));
   });
 
-  it('scales DRS gain with the length of the zones in a sector', () => {
-    const total = [0, 1, 2].reduce((s, k) => s + drsGainS(model, k as 0 | 1 | 2), 0);
-    const expected = model.drsZones.reduce(
-      (s, z) => s + (balance.race.drs.gainS * z.share) / balance.race.drs.referenceZoneShare,
-      0,
-    );
+  it('gives DRS only in the segments of a zone, and scales it with their length', () => {
+    const total = model.segments.reduce((sum, _, k) => sum + drsGainS(model, k), 0);
+    const inZone = model.segments.reduce((sum, seg) => sum + seg.drsShare, 0);
+    const expected = (balance.race.drs.gainS * inZone) / balance.race.drs.referenceZoneShare;
     expect(total).toBeCloseTo(expected, 10);
+    model.segments.forEach((seg, k) => {
+      if (seg.drsShare === 0) expect(drsGainS(model, k)).toBe(0);
+    });
   });
 });
 
