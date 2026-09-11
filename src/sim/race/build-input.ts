@@ -43,6 +43,8 @@ export type RaceControlInput = {
   commands?: readonly RaceCommand[];
   /** The grid from qualifying, pole first; without one the provisional shootout stands in. */
   grid?: readonly string[];
+  /** A sprint runs the same race over a share of the distance, on the sprint points. */
+  format?: 'race' | 'sprint';
 };
 
 export function buildRaceInput(
@@ -50,7 +52,7 @@ export function buildRaceInput(
   pack: Pack,
   round: number,
   seed: string = world.seed,
-  { control = null, commands = [], grid }: RaceControlInput = {},
+  { control = null, commands = [], grid, format = 'race' }: RaceControlInput = {},
 ): RaceInput {
   const season = world.season;
   const weekend = season.calendar.find((r) => r.round === round);
@@ -143,6 +145,11 @@ export function buildRaceInput(
     grid: grid ? [...grid] : provisionalGrid(entries, { track, weather }, stream('grid')),
     entries,
     raceDate: weekend.raceDate,
+    format,
+    distanceLaps:
+      format === 'sprint'
+        ? Math.max(2, Math.round(track.laps * balance.race.sprint.distanceShare))
+        : track.laps,
     control,
     commands: [...commands].sort((a, b) => a.timeS - b.timeS),
   };

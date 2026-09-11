@@ -183,6 +183,19 @@
     },
     "why": "Contact: usually front-wing damage worth 0.8 s/lap until the next stop; a third of contacts puncture a tyre, one in five ends the race."
   },
+  "stewards": {
+    "value": {
+      "penaltyChance": 0.3,
+      "penaltyS": 5
+    },
+    "why": "Contact in a fight is looked at by the stewards, and about one in three is judged the attacker's fault: five seconds added at the flag (plan 5.3). Enough to cost a place in a close finish, not enough to end a race."
+  },
+  "sprint": {
+    "value": {
+      "distanceShare": 0.33
+    },
+    "why": "A sprint runs a third of the race distance (plan 5.3, раздел 10 п. 4): long enough for tyres to matter, short enough that nobody needs to stop."
+  },
   "raceControl": {
     "value": {
       "crashSafetyCarBase": 0.1,

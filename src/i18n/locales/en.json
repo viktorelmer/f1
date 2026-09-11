@@ -273,6 +273,7 @@
       "team-order": "Team order to {{driver}} and {{other}}: {{order}}",
       "order-refused": "{{driver}} ignores the order: “{{retort}}”",
       "let-by": "{{other}} lets {{driver}} through on team orders",
+      "penalty": "{{driver}} takes a {{seconds}} s penalty for the contact with {{other}}",
       "retort": {
         "swap": "I’m not moving over.",
         "hold": "I’m faster, let me race.",

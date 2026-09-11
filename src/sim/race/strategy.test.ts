@@ -17,6 +17,7 @@ const pack = loadActivePack();
 const track = (id: string) => pack.tracks.find((t) => t.id === id)!;
 const model = (id: string, over: Partial<StintModel> = {}): StintModel => ({
   track: track(id),
+  twoCompoundRule: true,
   tyreDegFactor: track(id).profile.tyreDegFactor,
   carTyreManagement: 80,
   driverTyreManagement: 85,

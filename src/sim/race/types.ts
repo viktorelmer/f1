@@ -92,6 +92,13 @@ export type RaceInput = {
   entries: RaceEntry[];
   /** The day of the race, for the estimates the race produces. */
   raceDate: GameDate;
+  /**
+   * A sprint is the same race over a third of the distance, on its own points, and without the rule
+   * that a dry race must use two compounds (plan 5.3).
+   */
+  format: 'race' | 'sprint';
+  /** Laps of this event: the track's distance for a race, a share of it for a sprint. */
+  distanceLaps: number;
   /** The player's team and how it is run; null in a race without a player (batch runs). */
   control: RaceControl | null;
   /** What the player said and when, in race time (docs/systems/race-control.md). */
@@ -177,6 +184,8 @@ export type RaceEventKind =
   | 'order-refused'
   /** A teammate let through on orders: `driverId` passes, `otherId` yields. */
   | 'let-by'
+  /** The stewards adding seconds to a driver's race for causing a collision. */
+  | 'penalty'
   | 'chequered-flag';
 
 export type RaceEvent = {
@@ -224,7 +233,10 @@ export type ClassifiedCar = {
   status: 'finished' | 'retired';
   retireReason: string | null;
   laps: number;
+  /** Race time including any penalty the stewards added at the flag. */
   totalTimeS: number;
+  /** Seconds the stewards added, 0 for a clean race. */
+  penaltyS: number;
   /** Behind the winner, in seconds; null when lapped or retired. */
   gapS: number | null;
   lapsDown: number;

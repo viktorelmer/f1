@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { balance } from '@/data/balance';
 import { isLocalPack, loadActivePack } from '@/data/packs/active';
 import { buildRaceInput } from '../race/build-input';
+import { simulateRace } from '../race/simulate';
 import { createRng } from '../rng/rng';
 import { fingerprint } from '../util/hash';
 import { createWorld } from '../world/create-world';
@@ -109,4 +110,57 @@ describe('qualifying', () => {
     expect(fingerprint(quali('al-rimal', 'quali-1').order)).toBe(fingerprint(result.order));
     if (!isLocalPack) expect(fingerprint(result.session)).toBe('02c71dcff1dc7d');
   });
+});
+
+describe('a sprint weekend', () => {
+  const sprintRound = world.season.calendar.find((r) => r.format === 'sprint')!.round;
+
+  it('runs its own qualifying and a short race on sprint points', () => {
+    const weekend = weekendRaceInput(world, pack, sprintRound, 'sprint-1');
+    expect(weekend.sprint).not.toBeNull();
+    const { qualifying: sq, input, result } = weekend.sprint!;
+    expect(sq.session.session).toBe('sprint-qualifying');
+    expect(input.format).toBe('sprint');
+    expect(input.distanceLaps).toBeLessThan(input.track.laps);
+    expect(input.distanceLaps).toBeGreaterThan(2);
+    expect(input.grid).toEqual(sq.order);
+    // Sprint points, and only where the sprint table pays.
+    const paid = result.classification.filter((c) => c.points > 0);
+    expect(paid.length).toBeLessThanOrEqual(input.regulation.points.sprint.length);
+    expect(Math.max(...result.classification.map((c) => c.points))).toBe(input.regulation.points.sprint[0]);
+  });
+
+  it('needs no second compound: a sprint can be run on one set', () => {
+    const { sprint } = weekendRaceInput(world, pack, sprintRound, 'sprint-2');
+    const oneCompound = sprint!.result.classification.filter((c) => c.compounds.length === 1);
+    expect(oneCompound.length).toBeGreaterThan(0);
+  });
+
+  it('leaves a normal weekend without a sprint', () => {
+    const normal = world.season.calendar.find((r) => r.format === 'standard')!.round;
+    expect(weekendRaceInput(world, pack, normal, 'sprint-3').sprint).toBeNull();
+  });
+});
+
+describe('the stewards', () => {
+  it('add seconds at the flag for causing a collision, and the classification stands on them', () => {
+    let penalised = 0;
+    for (let i = 0; i < 20; i++) {
+      const { input } = weekendRaceInput(world, pack, roundOf('al-rimal'), `stewards-${i}`);
+      const result = simulateRace(input);
+      for (const car of result.classification) {
+        if (car.penaltyS === 0) continue;
+        penalised++;
+        // The penalty is in the total time, and the event says so.
+        const events = result.events.filter((e) => e.kind === 'penalty' && e.driverId === car.driverId);
+        expect(events.length).toBeGreaterThan(0);
+        expect(car.penaltyS).toBe(events.length * balance.race.stewards.penaltyS);
+      }
+      // Whoever is classified ahead is ahead on the time that counts.
+      const finished = result.classification.filter((c) => c.status === 'finished' && c.lapsDown === 0);
+      for (let k = 1; k < finished.length; k++)
+        expect(finished[k]!.totalTimeS).toBeGreaterThanOrEqual(finished[k - 1]!.totalTimeS);
+    }
+    expect(penalised).toBeGreaterThan(0);
+  }, 60_000);
 });

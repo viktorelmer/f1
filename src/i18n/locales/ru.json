@@ -281,6 +281,7 @@
       "team-order": "Командный приказ для {{driver}} и {{other}}: {{order}}",
       "order-refused": "{{driver}} не выполняет приказ: «{{retort}}»",
       "let-by": "{{other}} пропускает {{driver}} по командному приказу",
+      "penalty": "{{driver}} получает штраф {{seconds}} с за контакт с {{other}}",
       "retort": {
         "swap": "Я не уступлю.",
         "hold": "Я быстрее, дайте мне гоняться.",

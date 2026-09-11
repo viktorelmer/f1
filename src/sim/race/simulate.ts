@@ -122,6 +122,8 @@ type CarState = {
   reviewedNeutralisation: number;
   /** The damage the strategist last decided on: the same damage is not re-decided every lap. */
   reviewedDamageS: number;
+  /** Seconds the stewards have added for causing a collision (plan 5.3). */
+  penaltyS: number;
   /** Radio: what the car runs now, and what the player has taken over from a delegated engineer. */
   radio: RadioSettings;
   radioOverride: Partial<RadioSettings>;
@@ -221,6 +223,7 @@ export function raceStrategy(
   const surface = initialSurface(input.weather);
   const stintModel: StintModel = {
     track,
+    twoCompoundRule: input.format !== 'sprint',
     tyreDegFactor: lead.beliefs.tyreDegradation,
     carTyreManagement: lead.car.tyreManagement,
     driverTyreManagement: cars.reduce((sum, c) => sum + c.driver.tyreManagement, 0) / cars.length,
@@ -250,7 +253,7 @@ export function simulateRace(input: RaceInput): RaceResult {
   const SEGMENTS = model.segments.length;
   const LAST = SEGMENTS - 1;
   const track = input.track;
-  const totalLaps = track.laps;
+  const totalLaps = input.distanceLaps;
   const base = track.baseLapTime;
   const rng = streams(input.seed);
   const stream = (name: string) => rng(`race:${input.season}:r${input.round}:${name}`);
@@ -362,6 +365,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       reviewedWetness: Math.max(...surface.wetness),
       reviewedNeutralisation: 0,
       reviewedDamageS: 0,
+      penaltyS: 0,
       radio: { ...NEUTRAL_RADIO, aggression: aggressionFor(entry) },
       radioOverride: {},
       obeys: null,
@@ -399,6 +403,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       }
     : null;
   const pitRngs = new Map(teams.map((t) => [t, stream(`pit:${t}`)]));
+  const stewardsRng = stream('stewards');
   const callRngs = new Map(teams.map((t) => [t, stream(`decisions:${t}:calls`)]));
 
   const queue = new SegmentQueue();
@@ -532,6 +537,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     const sample = sampleAt(input.weather, timeS);
     return {
       track,
+      twoCompoundRule: input.format !== 'sprint',
       tyreDegFactor: car.entry.beliefs.tyreDegradation,
       carTyreManagement: car.entry.car.tyreManagement,
       driverTyreManagement: car.entry.driver.tyreManagement,
@@ -695,7 +701,11 @@ export function simulateRace(input: RaceInput): RaceResult {
         { loyalty: d.loyalty, ego: d.ego, morale: d.morale },
         {
           faster: pace(asked) < pace(other),
-          pointsAtStake: order === 'swap' && position <= input.regulation.points.race.length,
+          pointsAtStake:
+            order === 'swap' &&
+            position <=
+              (input.format === 'sprint' ? input.regulation.points.sprint : input.regulation.points.race)
+                .length,
         },
       );
     asked.obeys = obeys;
@@ -1130,6 +1140,14 @@ export function simulateRace(input: RaceInput): RaceResult {
             emit(arrival, lap, k, 'contact', car.entry.driverId, defender.entry.driverId, {
               phase: 'battle',
             });
+            // The stewards look at it, and about one in three is the attacker's fault.
+            if (stewardsRng.chance(b.stewards.penaltyChance)) {
+              car.penaltyS += b.stewards.penaltyS;
+              emit(arrival, lap, k, 'penalty', car.entry.driverId, defender.entry.driverId, {
+                seconds: b.stewards.penaltyS,
+                reason: 'collision',
+              });
+            }
             const lossS = contactDamage(car, arrival, lap);
             arrival += lossS;
             if (lossS > 0) offLine = true; // a puncture: crawling to the pits
@@ -1418,20 +1436,23 @@ function buildResult(
     });
   }
 
+  // A penalty is served at the flag: the lap chart is what happened on track, the classification is
+  // what the stewards left standing (plan 5.3).
+  const finalTime = (c: CarState) => (c.lineTimes[c.lapsDone] ?? 0) + c.penaltyS;
   const finishers = cars
     .filter((c) => c.status === 'finished')
-    .sort((a, b) => b.lapsDone - a.lapsDone || a.lineTimes[a.lapsDone]! - b.lineTimes[b.lapsDone]!);
+    .sort((a, b) => b.lapsDone - a.lapsDone || finalTime(a) - finalTime(b));
   const retired = cars
     .filter((c) => c.status !== 'finished')
     .sort((a, b) => b.lapsDone - a.lapsDone || b.retireTime - a.retireTime);
   const winner = finishers[0];
-  const winnerTime = winner ? winner.lineTimes[winner.lapsDone]! : 0;
-  const points = input.regulation.points.race;
+  const winnerTime = winner ? finalTime(winner) : 0;
+  const points = input.format === 'sprint' ? input.regulation.points.sprint : input.regulation.points.race;
   const classificationCutoff = Math.ceil(totalLaps * input.regulation.classifiedShareOfLaps);
 
   const classification: ClassifiedCar[] = [...finishers, ...retired].map((car, i) => {
     const finished = car.status === 'finished';
-    const time = car.lineTimes[car.lapsDone] ?? 0;
+    const time = finalTime(car);
     const lapsDown = winner ? winner.lapsDone - car.lapsDone : 0;
     const classified = finished || car.lapsDone >= classificationCutoff;
     const bestLap = laps[car.entry.driverId]!.reduce<number | null>(
@@ -1446,6 +1467,7 @@ function buildResult(
       retireReason: car.retireReason,
       laps: car.lapsDone,
       totalTimeS: round3(time),
+      penaltyS: car.penaltyS,
       gapS: finished && lapsDown === 0 ? round3(time - winnerTime) : null,
       lapsDown,
       bestLapS: bestLap,

@@ -255,6 +255,8 @@ export const raceBalanceSchema = z.strictObject({
     }),
   ),
   damage: tuned(z.strictObject({ contactLossS: nonNegative, retireShare: unit, punctureShare: unit })),
+  stewards: tuned(z.strictObject({ penaltyChance: unit, penaltyS: nonNegative })),
+  sprint: tuned(z.strictObject({ distanceShare: unit })),
   raceControl: tuned(
     z.strictObject({
       crashSafetyCarBase: unit,

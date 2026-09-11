@@ -128,6 +128,8 @@ export function describeEvent(event: RaceEvent, roster: Roster, t: TFunction): s
       });
     case 'let-by':
       return t('race.events.let-by', { driver, other });
+    case 'penalty':
+      return t('race.events.penalty', { driver, other, seconds: Number(d.seconds ?? 0) });
     case 'chequered-flag':
       return t('race.events.chequered-flag', { driver });
   }

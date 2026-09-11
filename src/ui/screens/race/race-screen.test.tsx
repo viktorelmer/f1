@@ -57,6 +57,7 @@ const EVENT_KINDS: Record<RaceEventKind, true> = {
   'team-order': true,
   'order-refused': true,
   'let-by': true,
+  penalty: true,
   'chequered-flag': true,
 };
 

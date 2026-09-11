@@ -11,6 +11,8 @@ import type { RaceInput } from '../race/types';
 import type { SessionKind, TeamId, World } from '../types/world';
 import type { PracticePlan, PracticeResult } from './practice';
 import { defaultPlan, runPractice } from './practice';
+import { simulateRace } from '../race/simulate';
+import type { RaceResult } from '../race/types';
 import { type QualifyingResult, runQualifying } from './qualifying';
 
 /** The practice sessions of each weekend format (plan 5.3). */
@@ -73,20 +75,42 @@ export function weekendRaceInput(
   round: number,
   seed: string = world.seed,
   options: RaceControlInput & { plans?: Partial<Record<SessionKind, PracticePlan>> } = {},
-): { input: RaceInput; practice: PracticeWeekend; qualifying: QualifyingResult; world: World } {
+): {
+  input: RaceInput;
+  practice: PracticeWeekend;
+  qualifying: QualifyingResult;
+  /** A sprint weekend's Saturday: its own qualifying, its own short race (plan 5.3). */
+  sprint: { qualifying: QualifyingResult; input: RaceInput; result: RaceResult } | null;
+  world: World;
+} {
   const { plans, ...control } = options;
   const practice = runPracticeSessions(world, buildRaceInput(world, pack, round, seed, control), plans);
   const after: World = { ...world, knowledge: practice.knowledge };
   const dialled = buildRaceInput(after, pack, round, seed, control);
-  const qualifying = runQualifying({
-    race: dialled,
-    session: 'qualifying',
-    setupLossS: Object.fromEntries(dialled.entries.map((e) => [e.driverId, e.setupLossS])),
-  });
+  const setupLossS = Object.fromEntries(dialled.entries.map((e) => [e.driverId, e.setupLossS]));
+  const isSprint = world.season.calendar.find((r) => r.round === round)?.format === 'sprint';
+
+  let sprint: { qualifying: QualifyingResult; input: RaceInput; result: RaceResult } | null = null;
+  if (isSprint) {
+    const sprintQualifying = runQualifying({
+      race: dialled,
+      session: 'sprint-qualifying',
+      setupLossS,
+    });
+    const sprintInput = buildRaceInput(after, pack, round, `${seed}-sprint`, {
+      ...control,
+      grid: sprintQualifying.order,
+      format: 'sprint',
+    });
+    sprint = { qualifying: sprintQualifying, input: sprintInput, result: simulateRace(sprintInput) };
+  }
+
+  const qualifying = runQualifying({ race: dialled, session: 'qualifying', setupLossS });
   return {
     input: buildRaceInput(after, pack, round, seed, { ...control, grid: qualifying.order }),
     practice,
     qualifying,
+    sprint,
     world: after,
   };
 }

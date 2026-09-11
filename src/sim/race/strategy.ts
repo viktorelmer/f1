@@ -13,6 +13,8 @@ import type { StrategyGoal, StrategyPlan, Stint, TrackStatus } from './types';
 
 export type StintModel = {
   track: PackTrack;
+  /** A dry race must use two compounds; a sprint need not (plan 5.3). */
+  twoCompoundRule: boolean;
   /** Degradation factor the strategist plans on: what the team believes, not what the track is. */
   tyreDegFactor: number;
   carTyreManagement: number;
@@ -158,8 +160,9 @@ export function planOptions(laps: number, model: StintModel): PlanOption[] {
   };
 
   const options: PlanOption[] = [];
+  const rule = dry && model.twoCompoundRule;
   for (const start of candidates) {
-    for (let stops = dry ? 1 : 0; stops <= balance.race.strategy.maxStops; stops++) {
+    for (let stops = rule ? 1 : 0; stops <= balance.race.strategy.maxStops; stops++) {
       const range = { min: stops, max: stops };
       const best = bestCompletion(
         laps,
@@ -167,7 +170,7 @@ export function planOptions(laps: number, model: StintModel): PlanOption[] {
         fresh,
         pitS,
         range,
-        dry ? start : null,
+        rule ? start : null,
         candidates,
       );
       if (best) options.push({ plan: { stints: best.stints }, timeS: best.timeS, stops });
@@ -249,7 +252,7 @@ export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
   // The two-dry-compound rule is open while every compound used is the same dry one.
   const usedWet = ctx.compoundsUsed.some((c) => !isDry(c));
   const drySet = new Set(ctx.compoundsUsed.filter(isDry));
-  const needAnother = !usedWet && drySet.size === 1 ? [...drySet][0]! : null;
+  const needAnother = ctx.model.twoCompoundRule && !usedWet && drySet.size === 1 ? [...drySet][0]! : null;
   const maxStops = balance.race.strategy.maxStops;
 
   const options: PitCallOption[] = [];
@@ -311,7 +314,7 @@ export function replan(
   };
   const usedWet = ctx.compoundsUsed.some((c) => !isDry(c));
   const drySet = new Set(ctx.compoundsUsed.filter(isDry));
-  const needAnother = !usedWet && drySet.size === 1 ? [...drySet][0]! : null;
+  const needAnother = ctx.model.twoCompoundRule && !usedWet && drySet.size === 1 ? [...drySet][0]! : null;
   const current = {
     compound: ctx.current.compound,
     cum: cumulativeTyreLoss(ctx.current.compound, ctx.current.wear, laps, model, false),
