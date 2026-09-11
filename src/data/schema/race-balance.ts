@@ -257,6 +257,7 @@ export const raceBalanceSchema = z.strictObject({
       stoppedCarSafetyCarPerProfile: unit,
       contactSafetyCarPerProfile: unit,
       backgroundIncidentsPerRace: nonNegative,
+      reactionS: range(nonNegative),
       safetyCarLaps: range(z.number().int().min(1)),
       virtualSafetyCarLaps: range(z.number().int().min(1)),
       safetyCarLapFactor: z.number().min(1),

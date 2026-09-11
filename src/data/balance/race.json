@@ -189,6 +189,7 @@
       "stoppedCarSafetyCarPerProfile": 0.15,
       "contactSafetyCarPerProfile": 0.2,
       "backgroundIncidentsPerRace": 0.5,
+      "reactionS": [6, 16],
       "safetyCarLaps": [3, 5],
       "virtualSafetyCarLaps": [1, 3],
       "safetyCarLapFactor": 1.4,
@@ -199,7 +200,7 @@
       "neutralisedFuelFactor": 0.6,
       "catchUpBeyondGaps": 1.5
     },
-    "why": "Race control: a crash brings the safety car 10% + 90% × the track SC profile of the time, otherwise a VSC; a stranded car is usually handled with a VSC (12% + 30% × profile), sometimes the safety car; debris from contact sometimes a safety car. Background incidents (debris, stray objects) add ~0.5 × profile triggers per race. SC laps run 40% slower and the field closes to 0.8 s gaps; a VSC slows everyone equally. Calibrated so a track SC profile is roughly its share of races with a safety car, and the calendar averages ~40% (docs/calibration/M2.md). Behind the safety car or under VSC tyres wear at 40% and fuel burns at 60% of the racing rate. A car more than 1.5 bunch gaps behind the car ahead drives faster than safety-car pace to close up."
+    "why": "Race control: a crash brings the safety car 10% + 90% × the track SC profile of the time, otherwise a VSC; a stranded car is usually handled with a VSC (12% + 30% × profile), sometimes the safety car; debris from contact sometimes a safety car. Background incidents (debris, stray objects) add ~0.5 × profile triggers per race. Race control needs 6-16 s to see an incident, decide and show the flag, so the field keeps racing towards it meanwhile. SC laps run 40% slower and the field closes to 0.8 s gaps; a VSC slows everyone equally. Calibrated so a track SC profile is roughly its share of races with a safety car, and the calendar averages ~40% (docs/calibration/M2.md). Behind the safety car or under VSC tyres wear at 40% and fuel burns at 60% of the racing rate. A car more than 1.5 bunch gaps behind the car ahead drives faster than safety-car pace to close up."
   },
   "strategy": {
     "value": {

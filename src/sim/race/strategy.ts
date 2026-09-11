@@ -219,6 +219,8 @@ export type PitCallContext = {
   compoundsUsed: readonly Compound[];
   status: TrackStatus;
   model: StintModel;
+  /** Seconds a lap the car is losing to damage, which a stop repairs (0 for an undamaged car). */
+  damageS: number;
 };
 
 export type PitCallOption = { call: 'stay' | 'pit'; compound: Compound; timeS: number; stints: Stint[] };
@@ -264,7 +266,13 @@ export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
       candidates,
     );
     if (stay)
-      options.push({ call: 'stay', compound: ctx.current.compound, timeS: stay.timeS, stints: stay.stints });
+      options.push({
+        call: 'stay',
+        compound: ctx.current.compound,
+        // Damage rides along until the first stop of this plan — to the flag when there is none.
+        timeS: stay.timeS + ctx.damageS * (stay.stints[0]?.laps ?? laps),
+        stints: stay.stints,
+      });
   }
   for (const c of candidates) {
     const rest = bestCompletion(
@@ -286,7 +294,10 @@ export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
  * is on: the strategist's fastest way to do it, or null when it cannot be done (too few laps left,
  * or no way to satisfy the compound rule).
  */
-export function replan(ctx: Omit<PitCallContext, 'trigger' | 'status'>, stops: number): Stint[] | null {
+export function replan(
+  ctx: Omit<PitCallContext, 'trigger' | 'status' | 'damageS'>,
+  stops: number,
+): Stint[] | null {
   const { remainingLaps: laps, model } = ctx;
   if (laps <= 0) return null;
   const candidates = candidateCompounds(model);

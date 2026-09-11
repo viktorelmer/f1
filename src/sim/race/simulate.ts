@@ -432,6 +432,8 @@ export function simulateRace(input: RaceInput): RaceResult {
     while (i > 0 && flagChanges[i]!.time > time) i--;
     return flagChanges[i]!;
   };
+  /** The next change of flag strictly after `time`, for a car that is mid-sector when it is shown. */
+  const nextFlagAfter = (time: number) => flagChanges.find((f) => f.time > time);
   let drsFromLap = b.drs.enabledFromLap;
   let leaderLaps = 0;
   let flagTime: number | null = null;
@@ -442,16 +444,38 @@ export function simulateRace(input: RaceInput): RaceResult {
   const rainingAt = (timeS: number) => sampleAt(input.weather, timeS).rain.some((r) => r > 0);
   let wasRaining = rainingAt(0);
 
+  /**
+   * Race control sees the incident, decides and shows the flag — never in the same instant (ADR 005,
+   * п. 15). Until then the field races on towards it, as it does in life.
+   */
   const deploy = (response: 'sc' | 'vsc' | null, timeS: number, lap: number, cause: string) => {
     if (!response) return;
     if (status === 'sc' || (status === 'vsc' && response === 'vsc')) return;
     const rc = b.raceControl;
     const [lo, hi] = response === 'sc' ? rc.safetyCarLaps : rc.virtualSafetyCarLaps;
+    const shownAt = timeS + control.range(rc.reactionS[0], rc.reactionS[1]);
     neutralisation++;
-    setFlag(timeS, response);
+    setFlag(shownAt, response);
+    neutraliseInFlight(shownAt, response);
     neutralisedUntilLap = leaderLaps + control.int(lo, hi) + 1;
-    emit(timeS, lap, null, response === 'sc' ? 'safety-car' : 'vsc', null, null, { cause });
+    emit(shownAt, lap, null, response === 'sc' ? 'safety-car' : 'vsc', null, null, { cause });
   };
+
+  /**
+   * A flag shown at a moment, not at a sector boundary: cars already on their way through a sector
+   * lose the rest of it to the neutralisation too. Sectors are computed whole at their entry, so a
+   * car that entered before the flag has its crossing pushed back here instead (ADR 005, п. 16).
+   */
+  function neutraliseInFlight(shownAt: number, response: 'sc' | 'vsc') {
+    const factor =
+      response === 'sc' ? b.raceControl.safetyCarLapFactor : b.raceControl.virtualSafetyCarLapFactor;
+    for (const car of cars) {
+      if (car.status !== 'running' || car.nextTime <= shownAt) continue;
+      const crossing = crossings[car.sector].find((c) => c.car === car && c.time === car.nextTime);
+      if (!crossing || crossing.time - crossing.segmentS > shownAt) continue;
+      delay(crossing, (crossing.time - shownAt) * (factor - 1));
+    }
+  }
 
   const incident = (kind: IncidentKind, timeS: number, lap: number, cause: string) =>
     deploy(raceControlResponse(kind, track.profile.safetyCarProbability, control), timeS, lap, cause);
@@ -503,6 +527,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       compoundsUsed: car.compoundsUsed,
       status: flagAt(timeS).status,
       model: stintModelFor(car, timeS),
+      damageS: car.damageS,
     });
 
   /** The player's answer to the decision taken at `timeS` for a driver, if there is one. */
@@ -929,22 +954,37 @@ export function simulateRace(input: RaceInput): RaceResult {
       if (car.status !== 'running') continue;
     }
 
-    // ── Neutralisation ──
-    const rc = b.raceControl;
-    const neutralFloor = base * shape.share;
-    if (flag === 'vsc') segment = Math.max(segment, neutralFloor * rc.virtualSafetyCarLapFactor);
-
     // ── Traffic: the car ahead at the sector's entry and exit ──
+    const rc = b.raceControl;
     const exit = ((k + 1) % 3) as SectorIndex;
     const aheadAtEntry = aheadAt(crossings[k], car, t);
     const gapAtEntry = aheadAtEntry ? t - aheadAtEntry.time : Infinity;
     const isLeader = !aheadAtEntry || aheadAtEntry.lap < (k === 0 ? lap - 1 : lap);
-    if (flag === 'sc') {
-      const catchingUp = !isLeader && gapAtEntry > rc.bunchGapS * rc.catchUpBeyondGaps;
-      segment = Math.max(
-        segment,
-        (neutralFloor * rc.safetyCarLapFactor) / (catchingUp ? rc.catchUpFactor : 1),
-      );
+
+    // ── Neutralisation ──
+    // A flag thrown while the car is mid-sector neutralises only the rest of it (ADR 005, п. 16):
+    // the driver keeps racing up to the moment it is shown, then slows. Without this a car that
+    // entered the sector a tenth of a second earlier races all of it and the field tears in two.
+    const catchingUp = !isLeader && gapAtEntry > rc.bunchGapS * rc.catchUpBeyondGaps;
+    const neutralFloor = base * shape.share;
+    const floorFor = (shown: TrackStatus) =>
+      shown === 'sc'
+        ? (neutralFloor * rc.safetyCarLapFactor) / (catchingUp ? rc.catchUpFactor : 1)
+        : shown === 'vsc'
+          ? neutralFloor * rc.virtualSafetyCarLapFactor
+          : 0;
+    for (let done = 0, from = t, left = 1; ;) {
+      // The sector's remaining share at racing pace, or slower if a flag is out for it.
+      const take = Math.max(segment * left, floorFor(flagAt(from).status) * left);
+      const change = nextFlagAfter(from);
+      if (!change || change.time >= from + take) {
+        segment = done + take;
+        break;
+      }
+      const ran = change.time - from;
+      done += ran;
+      left -= (ran / take) * left;
+      from = change.time;
     }
     const drsOpen =
       flag === 'green' &&

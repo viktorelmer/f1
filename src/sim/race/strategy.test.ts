@@ -90,6 +90,7 @@ describe('decidePitCall', () => {
     compoundsUsed: ['medium'],
     status: 'sc',
     model: model('al-rimal'),
+    damageS: 0,
   };
 
   it('offers staying out and boxing for each sensible compound', () => {
@@ -101,6 +102,31 @@ describe('decidePitCall', () => {
       'hard',
     ]);
     for (const o of options) expect(o.stints.reduce((s, st) => s + st.laps, 0)).toBe(25);
+  });
+
+  it('counts what damage will cost if the car stays out, and that a stop repairs it', () => {
+    const clean = pitCallOptions(base).find((o) => o.call === 'stay')!;
+    const damaged = pitCallOptions({ ...base, damageS: 0.8 }).find((o) => o.call === 'stay')!;
+    // Damage rides along to the first stop of the plan, and only there.
+    expect(damaged.timeS - clean.timeS).toBeCloseTo(0.8 * clean.stints[0]!.laps, 6);
+    // Boxing now repairs it, so those options are untouched.
+    const pitClean = pitCallOptions(base).filter((o) => o.call === 'pit');
+    const pitDamaged = pitCallOptions({ ...base, damageS: 0.8 }).filter((o) => o.call === 'pit');
+    expect(pitDamaged.map((o) => o.timeS)).toEqual(pitClean.map((o) => o.timeS));
+  });
+
+  it('boxes a badly damaged car under the safety car, and leaves a clean one out', () => {
+    // Fresh tyres: nothing to gain from a stop unless the car is dragging damage to the flag.
+    const fresh = { ...base, current: { compound: 'medium' as const, wear: 0.05 } };
+    const call = (damageS: number) =>
+      decidePitCall(
+        pitCallOptions({ ...fresh, damageS }),
+        STRONG,
+        intent,
+        createRng('M4', 'decisions:kestrel:calls'),
+      ).choice.call;
+    expect(call(0)).toBe('stay');
+    expect(call(0.8)).toBe('pit');
   });
 
   it('never keeps a dry race on one compound to the flag', () => {
