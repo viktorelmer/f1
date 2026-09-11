@@ -221,6 +221,7 @@ export function raceStrategy(
   const surface = initialSurface(input.weather);
   const stintModel: StintModel = {
     track,
+    tyreDegFactor: lead.beliefs.tyreDegradation,
     carTyreManagement: lead.car.tyreManagement,
     driverTyreManagement: cars.reduce((sum, c) => sum + c.driver.tyreManagement, 0) / cars.length,
     trackTempC: start.trackTempC,
@@ -337,7 +338,13 @@ export function simulateRace(input: RaceInput): RaceResult {
       freshSet: true,
       compoundsUsed: [plan.stints[0]!.compound],
       stops: 0,
-      fuelKg: perLap * totalLaps + b.fuel.marginKg,
+      // Fuelled on what the team believes it burns here, plus a margin for how unsure it is: a team
+      // that never calibrated its fuel carries the doubt as weight, and a team that got it wrong
+      // anyway lifts and coasts to the flag (plan 5.3, docs/systems/weekend.md).
+      fuelKg:
+        entry.beliefs.fuelPerLapKg * totalLaps +
+        b.fuel.marginKg +
+        b.fuel.safetyZ * entry.beliefs.fuelSdKg * totalLaps,
       battery: 1,
       fatigue: entry.driver.fatigue,
       recentPaceS: model.segments.map(() => null),
@@ -520,6 +527,7 @@ export function simulateRace(input: RaceInput): RaceResult {
     const sample = sampleAt(input.weather, timeS);
     return {
       track,
+      tyreDegFactor: car.entry.beliefs.tyreDegradation,
       carTyreManagement: car.entry.car.tyreManagement,
       driverTyreManagement: car.entry.driver.tyreManagement,
       trackTempC: sample.trackTempC,
@@ -820,10 +828,13 @@ export function simulateRace(input: RaceInput): RaceResult {
   }
 
   // ── The main loop ────────────────────────────────────────────────────────────────────────
-  let popped = queue.pop();
-  while (popped) {
+  // One car at a time, in the order they enter their next segment. The next car is taken at the top
+  // of the iteration, never before the body runs: the body queues the car it just moved, and a car
+  // taken out early is a car that can be left in the queue when the last one round finishes.
+  for (;;) {
+    const popped = queue.pop();
+    if (!popped) break;
     const { car, version, time: t } = popped;
-    popped = queue.pop();
     if (car.status !== 'running' || version !== car.version) continue;
 
     const k = car.segment;
@@ -876,6 +887,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       tyreLossS(car.compound, car.wear, sample.trackTempC, wet) +
       massSeconds(car.fuelKg + car.entry.car.weight, base) +
       fatigueSeconds(car.fatigue) +
+      car.entry.setupLossS +
       car.damageS +
       car.partialFailureS +
       (car.freshSet ? warmupLossS(car.compound) : 0);

@@ -17,6 +17,7 @@ const pack = loadActivePack();
 const track = (id: string) => pack.tracks.find((t) => t.id === id)!;
 const model = (id: string, over: Partial<StintModel> = {}): StintModel => ({
   track: track(id),
+  tyreDegFactor: track(id).profile.tyreDegFactor,
   carTyreManagement: 80,
   driverTyreManagement: 85,
   trackTempC: 32,
@@ -43,7 +44,7 @@ describe('plan options', () => {
 
   it('stop more on a track that eats tyres', () => {
     const best = (id: string, deg: number) => {
-      const m = model(id, { track: { ...track(id), profile: { ...track(id).profile, tyreDegFactor: deg } } });
+      const m = model(id, { tyreDegFactor: deg });
       return planOptions(track(id).laps, m).reduce((a, b) => (b.timeS < a.timeS ? b : a));
     };
     expect(best('al-rimal', 1.8).stops).toBeGreaterThan(best('al-rimal', 0.5).stops);

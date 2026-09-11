@@ -14,6 +14,22 @@
     }
   },
   "quantities": {
+    "track.tyreDegradation": {
+      "value": {
+        "min": 0.4,
+        "max": 2,
+        "wideSd": 0.5
+      },
+      "why": "The track's tyre degradation factor, on the same 0.4..2 scale the pack uses (1 is average). An sd of 0.5 means the team cannot tell a gentle track from a brutal one, so confidence is zero there."
+    },
+    "car.fuelPerLap": {
+      "value": {
+        "min": 0.8,
+        "max": 3,
+        "wideSd": 0.25
+      },
+      "why": "Fuel a car burns per lap, in kilograms, on the pack's 0.8..3 scale. An sd of 0.25 kg over a race distance is more than a pit stop's worth of fuel, so confidence is zero there."
+    },
     "driver.potential": {
       "value": {
         "min": 1,

@@ -8,7 +8,7 @@
 import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { loadActivePack } from './pack';
-import { buildRaceInput } from '@/sim/race/build-input';
+import { weekendRaceInput } from '@/sim/weekend/run-practice';
 import { simulateRace } from '@/sim/race/simulate';
 import { createWorld } from '@/sim/world/create-world';
 
@@ -41,7 +41,8 @@ if (!weekend) {
   process.exit(2);
 }
 
-const input = buildRaceInput(world, pack, weekend.round, values.seed);
+// A normal weekend: practice is run first, so the strategists plan on what they learned there.
+const { input } = weekendRaceInput(world, pack, weekend.round, values.seed);
 const t0 = performance.now();
 const result = simulateRace(input);
 const ms = performance.now() - t0;

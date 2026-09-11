@@ -12,7 +12,7 @@ import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { loadActivePack } from './pack';
 import { raceMetrics, type RaceMetrics } from '@/sim/race/analysis';
-import { buildRaceInput } from '@/sim/race/build-input';
+import { weekendRaceInput } from '@/sim/weekend/run-practice';
 import { simulateRace } from '@/sim/race/simulate';
 import type { RaceResult } from '@/sim/race/types';
 import { createWorld } from '@/sim/world/create-world';
@@ -70,7 +70,8 @@ const rows: Row[] = [];
 for (const round of rounds) {
   const trackId = calendar.find((r) => r.round === round)!.trackId;
   for (let run = 0; run < runs; run++) {
-    const input = buildRaceInput(world, pack, round, `${values.seed}-${round}-${run}`);
+    // Every race gets its weekend: teams practise, learn, and plan on what they learned.
+    const { input } = weekendRaceInput(world, pack, round, `${values.seed}-${round}-${run}`);
     const t0 = performance.now();
     const result = simulateRace(input);
     const ms = performance.now() - t0;

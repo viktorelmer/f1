@@ -195,12 +195,20 @@ type Position = { segmentsDone: number; progress: number; inPit: boolean };
 /** Where a car is at time t: segments completed and progress in laps. */
 function locate(car: CarTimeline, bounds: Replay['segmentBounds'], motion: LapMotion, t: number): Position {
   const done = lastAtOrBefore(car.ends, t) + 1;
-  if (done >= car.ends.length)
-    return { segmentsDone: car.ends.length, progress: car.ends.length / (bounds.length - 1), inPit: false };
+  const perLap = bounds.length - 1;
+  if (done >= car.ends.length) {
+    // Standing where it last crossed a boundary — segments are not equal parts of a lap, so the
+    // progress of a car that has stopped is that boundary's own fraction, not a count of segments.
+    const stopped = car.ends.length;
+    return {
+      segmentsDone: stopped,
+      progress: Math.floor(stopped / perLap) + bounds[stopped % perLap]!,
+      inPit: false,
+    };
+  }
   const start = car.starts[done]!;
   const end = car.ends[done]!;
   const pit = car.pitS[done]!;
-  const perLap = bounds.length - 1;
   const k = done % perLap;
   const lapBase = Math.floor(done / perLap);
   const driveEnd = end - pit;

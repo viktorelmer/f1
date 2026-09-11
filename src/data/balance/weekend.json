@@ -1,0 +1,51 @@
+{
+  "session": {
+    "value": {
+      "practiceMinutes": 60,
+      "outLapShare": 0.6,
+      "inLapShare": 0.5,
+      "boxMinutes": 3
+    },
+    "why": "A practice session is 60 minutes of track time (plan 5.3), and the clock is what runs out, not the laps. A car leaving the pits spends 60% of a lap getting up to speed and 50% of one coming back in, and stands in the garage for 3 minutes between runs."
+  },
+  "programmes": {
+    "value": {
+      "setup": { "laps": 6, "fresh": false },
+      "long-run": { "laps": 14, "fresh": true },
+      "qualifying-sim": { "laps": 3, "fresh": true },
+      "fuel-calibration": { "laps": 5, "fresh": false },
+      "rookie": { "laps": 8, "fresh": false }
+    },
+    "why": "What each run programme costs (plan 5.3). A long run is the expensive one: 14 laps on a set that comes back ruined, and it is the only way to see how the compounds go on this track. A qualifying simulation is three laps on a fresh soft. Setup work, fuel calibration and a rookie outing run on used rubber."
+  },
+  "fuel": {
+    "value": {
+      "longRunKg": 60,
+      "qualifyingKg": 12,
+      "defaultKg": 40
+    },
+    "why": "Fuel carried in each kind of run, in kilograms: a long run simulates a race stint with 60 kg aboard, a qualifying simulation runs light on 12 kg, everything else takes a working 40 kg. Fuel is why practice times are not information (plan 5.13)."
+  },
+  "setup": {
+    "value": {
+      "rawLossS": 0.5,
+      "lapScale": 5,
+      "engineerRef": 70,
+      "floorAtRef": 0.08,
+      "floorPerPoint": 0.002
+    },
+    "why": "A car straight off the truck runs 0.5 s a lap away from where it should be (plan 5.3: practice is what turns time and tyres into a car that works). Setup laps close that gap exponentially on a 5-lap scale, so six laps take out about 70% of it. What is left depends on the race engineer: at 70 he gets it down to 0.08 s, every point above or below moves that by 0.002 s. The full nine-parameter setup arrives in M6; this is the one number it will replace."
+  },
+  "learning": {
+    "value": {
+      "degradationSdBase": 0.45,
+      "fuelSdBase": 0.02,
+      "departmentRef": 60,
+      "sdPerDepartmentPoint": 0.006,
+      "minSdFactor": 0.45,
+      "priorDegradationSd": 0.22,
+      "priorFuelSd": 0.025
+    },
+    "why": "How much a team learns from running (plan 5.3, 5.13). One long-run lap measures the track's degradation factor to about 0.45 (the factor itself is around 1), and the error falls as the square root of the laps, so a 14-lap run lands near 0.12. Fuel per lap is easier and better known beforehand: 0.02 kg from one lap, so a calibration run leaves under 0.01. A data-analysis department at 60 measures at that quality; every point above or below moves the error 0.6%, down to a floor of 45% — a great department cannot invent data that was never collected. Without practice a team goes to the race on a prior of 0.22 on degradation and 0.025 kg a lap on fuel — about 1.5 kg over a race distance, which is exactly the margin a car is fuelled with, so an uncalibrated team can run to the flag but cannot afford to push."
+  }
+}

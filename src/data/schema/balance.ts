@@ -33,11 +33,15 @@ const partWeights = z
   .partialRecord(chassisPartSchema, positive)
   .refine((weights) => Object.keys(weights).length > 0, 'At least one part must contribute.');
 
+const quantitySchema = tuned(z.strictObject({ min: z.number(), max: z.number(), wideSd: positive }));
+
 export const estimateBalanceSchema = z.strictObject({
   intervalZ: tuned(positive),
   confidenceLabels: z.strictObject({ medium: tuned(unit), high: tuned(unit) }),
   quantities: z.strictObject({
-    'driver.potential': tuned(z.strictObject({ min: z.number(), max: z.number(), wideSd: positive })),
+    'driver.potential': quantitySchema,
+    'track.tyreDegradation': quantitySchema,
+    'car.fuelPerLap': quantitySchema,
   }),
   scouting: z.strictObject({
     potentialSdAtSkill1: tuned(positive),

@@ -111,7 +111,7 @@
   },
   "overtaking": {
     "value": {
-      "base": -5.62,
+      "base": -5.73,
       "perPaceS": 4.5,
       "drs": 1.4,
       "outsideDrsZone": -1.1,
@@ -145,9 +145,10 @@
     "value": {
       "efficiencyRef": 83,
       "consumptionPerPoint": 0.004,
-      "marginKg": 1.5
+      "marginKg": 1.5,
+      "safetyZ": 1
     },
-    "why": "Fuel use per lap is the track's figure, 0.4% lower per point of fuel efficiency above 83; cars fuel exactly to the flag plus a 1.5 kg margin."
+    "why": "Fuel use per lap is the track's figure, 0.4% lower per point of fuel efficiency above 83; cars fuel exactly to the flag plus a 1.5 kg margin, and one standard deviation of whatever the team is unsure about on top — not knowing your own consumption is carried as weight."
   },
   "pit": {
     "value": {

@@ -206,7 +206,27 @@ export type SocialPost = {
 // ── Knowledge ─────────────────────────────────────────────────────────────────────────────────
 
 /** What one team believes about hidden values — each team its own, the AI included (plan 5.10). */
-export type TeamKnowledge = { drivers: Record<DriverId, { potential: Estimate }> };
+/**
+ * What a team has worked out about the weekend it is at (docs/systems/weekend.md): the truth is the
+ * track's degradation factor and its own car's fuel use, and practice running narrows both.
+ */
+export type WeekendKnowledge = {
+  round: number;
+  tyreDegradation: Estimate;
+  fuelPerLapKg: Estimate;
+  /** Seconds a lap the car is still away from where it should be: setup running takes this down. */
+  setupLossS: number;
+  /** Laps spent on setup work this weekend. */
+  setupLaps: number;
+  /** Laps of running behind these estimates, for the screen. */
+  laps: number;
+};
+
+export type TeamKnowledge = {
+  drivers: Record<DriverId, { potential: Estimate }>;
+  /** Null before the team has looked at the coming weekend at all. */
+  weekend: WeekendKnowledge | null;
+};
 
 // ── Career and world ──────────────────────────────────────────────────────────────────────────
 

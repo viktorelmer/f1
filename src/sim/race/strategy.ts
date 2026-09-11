@@ -13,6 +13,8 @@ import type { StrategyGoal, StrategyPlan, Stint, TrackStatus } from './types';
 
 export type StintModel = {
   track: PackTrack;
+  /** Degradation factor the strategist plans on: what the team believes, not what the track is. */
+  tyreDegFactor: number;
   carTyreManagement: number;
   driverTyreManagement: number;
   trackTempC: number;
@@ -39,7 +41,7 @@ export function cumulativeTyreLoss(
   const perLap =
     wearFactor *
     wearPerLap(compound, {
-      trackDegFactor: model.track.profile.tyreDegFactor,
+      trackDegFactor: model.tyreDegFactor,
       carTyreManagement: model.carTyreManagement,
       driverTyreManagement: model.driverTyreManagement,
       fuelKg: model.averageFuelKg,

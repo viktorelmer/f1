@@ -224,7 +224,12 @@ export const raceBalanceSchema = z.strictObject({
     }),
   ),
   fuel: tuned(
-    z.strictObject({ efficiencyRef: positive, consumptionPerPoint: nonNegative, marginKg: nonNegative }),
+    z.strictObject({
+      efficiencyRef: positive,
+      consumptionPerPoint: nonNegative,
+      marginKg: nonNegative,
+      safetyZ: nonNegative,
+    }),
   ),
   pit: tuned(
     z.strictObject({

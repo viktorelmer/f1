@@ -9,10 +9,11 @@ import { carPerformance } from '../car/performance';
 import { profileFromAttributes } from '../decide/decide';
 import { type Rng, streams } from '../rng/rng';
 import type { World } from '../types/world';
-import { carPaceFraction, driverPaceFraction, lapNoiseSd } from './pace';
+import { carPaceFraction, driverPaceFraction, fuelPerLap, lapNoiseSd } from './pace';
 import { tyreLossS } from './tyres';
 import type { RaceCommand, RaceControl, RaceEntry, RaceInput } from './types';
 import { generateWeather } from './weather';
+import { priorKnowledge } from '../weekend/knowledge';
 
 /**
  * A provisional grid until qualifying exists (M5): each car's single-lap pace on fresh softs — the
@@ -55,6 +56,30 @@ export function buildRaceInput(
   const rng = streams(seed);
   const stream = (name: string) => rng(`race:${season.year}:r${round}:${name}`);
 
+  /**
+   * What a team believes about this weekend: what it learned in practice, or — when it has not run
+   * here yet — the prior it arrives with (docs/systems/weekend.md). The prior is drawn from the
+   * seed, so a team that skips practice is not handed the truth for free.
+   */
+  const weekendOf = (teamId: string) => {
+    const known = world.knowledge[teamId]?.weekend;
+    if (known && known.round === round) return known;
+    const team = world.teams[teamId];
+    const truth = {
+      tyreDegradation: track.profile.tyreDegFactor,
+      fuelPerLapKg: fuelPerLap(track, carPerformance(team!.chassis, team!.engine.spec).fuelEfficiency),
+    };
+    return priorKnowledge(round, truth, weekend.raceDate, stream(`prior:${teamId}`));
+  };
+  const beliefsOf = (teamId: string): RaceEntry['beliefs'] => {
+    const known = weekendOf(teamId);
+    return {
+      tyreDegradation: known.tyreDegradation.value,
+      fuelPerLapKg: known.fuelPerLapKg.value,
+      fuelSdKg: known.fuelPerLapKg.basis.sd,
+    };
+  };
+
   const entries: RaceEntry[] = Object.values(world.teams).flatMap((team) => {
     const staff = team.staffIds.map((id) => world.staff[id]!);
     const strategist = staff.find((s) => s.role === 'strategist');
@@ -95,6 +120,8 @@ export function buildRaceInput(
           ? profileFromAttributes(engineer.attributes)
           : { skill: 0, consistency: 0, rapport: 0 },
         riskAppetite: team.character.riskAppetite,
+        beliefs: beliefsOf(team.id),
+        setupLossS: weekendOf(team.id).setupLossS,
       };
     });
   });

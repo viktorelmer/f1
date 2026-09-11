@@ -6,6 +6,7 @@ import { fingerprint } from '../util/hash';
 import { createWorld } from '../world/create-world';
 import { raceMetrics } from './analysis';
 import { buildRaceInput } from './build-input';
+import { weekendRaceInput } from '../weekend/run-practice';
 import { buildReplay } from './replay';
 import { simulateRace } from './simulate';
 import { isDry } from './tyres';
@@ -43,13 +44,13 @@ describe('simulateRace', () => {
     const b = simulateRace(input('al-rimal', 'M2-determinism'));
     expect(fingerprint(b)).toBe(fingerprint(a));
     // Pinned for the default pack only: a local pack has other content and so other hashes.
-    if (!isLocalPack) expect(fingerprint(a)).toBe('09c395f2bd5b04');
+    if (!isLocalPack) expect(fingerprint(a)).toBe('118b5f4e3b5174');
   });
 
   it('pins a race with a safety car too', () => {
     const race = simulateRace(input('marina-lights', 'M3-flag'));
     expect(race.events.some((e) => e.kind === 'safety-car')).toBe(true);
-    if (!isLocalPack) expect(fingerprint(race)).toBe('12e01d6539a3e7');
+    if (!isLocalPack) expect(fingerprint(race)).toBe('099f2c2b9bda34');
   });
 
   it('shows a flag to a car only once it is out: no call "under the safety car" before it', () => {
@@ -187,6 +188,19 @@ describe('simulateRace', () => {
       }
     }
     expect(punctures).toBeGreaterThan(0);
+  });
+
+  it('leaves nobody on track when the race is over: every car finishes or has a reason not to', () => {
+    // Regression: the loop took the next car out of the queue before the body put the current one
+    // back, so the last car running could be dropped and turn up "retired" with no reason at all
+    // (marina-lights, seed replay-1, the car a lap down at the flag).
+    for (const track of ['marina-lights', 'al-rimal']) {
+      for (let i = 0; i < 12; i++) {
+        for (const car of simulateRace(input(track, `left-on-track-${i}`)).classification) {
+          if (car.status === 'retired') expect(car.retireReason).not.toBeNull();
+        }
+      }
+    }
   });
 
   it('explains every change of places between timing lines with an event', () => {
@@ -348,9 +362,10 @@ describe('simulateRace', () => {
 });
 
 describe('calibration guard (docs/calibration/M2.md)', () => {
-  // A cheap re-check of the plan's targets on 40 races; the full report uses 1000.
+  // A cheap re-check of the plan's targets on 40 races; the full report uses 1000. Through a whole
+  // weekend, like the report: a strategist who never saw practice plans on a prior and plans worse.
   const metrics = Array.from({ length: 40 }, (_, i) => {
-    const race = input('al-rimal', `guard-${i}`);
+    const race = weekendRaceInput(world, pack, roundOf('al-rimal'), `guard-${i}`).input;
     return raceMetrics(race, simulateRace(race));
   }).filter((m) => !m.wet);
   const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;

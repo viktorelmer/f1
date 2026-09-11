@@ -64,6 +64,19 @@ export type RaceEntry = {
   raceEngineer: DecisionMakerProfile;
   /** Appetite for strategic risk from the team character, 0..1. */
   riskAppetite: number;
+  /**
+   * What the team believes about this weekend after its practice running (docs/systems/weekend.md).
+   * The strategist plans on these; the race itself runs on the truth. A team that skipped practice
+   * believes its prior, and plans worse.
+   */
+  beliefs: {
+    tyreDegradation: number;
+    fuelPerLapKg: number;
+    /** How sure the team is of that fuel figure: the less sure, the more it carries just in case. */
+    fuelSdKg: number;
+  };
+  /** Seconds a lap the car is off its optimum setup: practice running takes this down (plan 5.3). */
+  setupLossS: number;
 };
 
 export type RaceInput = {
