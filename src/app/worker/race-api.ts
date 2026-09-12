@@ -9,7 +9,9 @@ import { buildRaceInput } from '@/sim/race/build-input';
 import { raceStrategy, simulateRace } from '@/sim/race/simulate';
 import type { PlanOption } from '@/sim/race/strategy';
 import type { RaceCommand, RaceControl, RaceInput, RaceResult } from '@/sim/race/types';
-import type { World } from '@/sim/types/world';
+import { runWeekend, type WeekendOutcome } from '@/sim/season/weekend';
+import type { SessionKind, World } from '@/sim/types/world';
+import type { PracticePlan } from '@/sim/weekend/practice';
 
 let pack: Pack | undefined;
 
@@ -32,7 +34,20 @@ const inputFor = (r: RaceRequest) => {
   return buildRaceInput(r.world, pack, r.round, r.seed, { control: r.control, commands: r.commands });
 };
 
+/** A whole weekend to run: practice, qualifying, the sprint if there is one, and the race. */
+export type WeekendRequest = {
+  world: World;
+  round: number;
+  seed: string;
+  plans?: Partial<Record<SessionKind, PracticePlan>>;
+};
+
 export const raceApi = {
+  /** Runs the weekend of `round` and gives back the world it leaves behind (docs/systems/season.md). */
+  weekend(request: WeekendRequest): WeekendOutcome {
+    pack ??= loadActivePack();
+    return runWeekend(request.world, pack, request.round, request.seed, { plans: request.plans });
+  },
   /** Builds the race of `round` from the world and simulates it to the flag. */
   run(request: RaceRequest): RaceRun {
     const input = inputFor(request);

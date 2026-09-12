@@ -320,7 +320,11 @@ describe('race screen (M3 DoD: the race can be watched to the flag, and everythi
   });
 
   it('shows the engine error and keeps the setup', async () => {
-    setRaceEngine({ run: () => Promise.reject(new Error('boom')), plans: () => Promise.resolve(null) });
+    setRaceEngine({
+      ...createInlineEngine(),
+      run: () => Promise.reject(new Error('boom')),
+      plans: () => Promise.resolve(null),
+    });
     const user = userEvent.setup();
     render(<RaceScreen />);
     await user.click(screen.getByRole('button', { name: t('race.setup.start') }));

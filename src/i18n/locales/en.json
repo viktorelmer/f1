@@ -426,5 +426,94 @@
       "track-test": "Track testing",
       "weather-service": "A better weather service"
     }
+  },
+  "season": {
+    "schedule": {
+      "title": "The season",
+      "date": "Date",
+      "next": "Next event",
+      "done": "Rounds run",
+      "round": "Round {{round}} · {{track}}",
+      "seasonOver": "The season is over",
+      "run": "Run the weekend",
+      "running": "Running the weekend…",
+      "advance": "Continue",
+      "notRunYet": "This weekend has not been run yet."
+    },
+    "event": {
+      "preseason-test": "Preseason test",
+      "season-end": "End of the season"
+    },
+    "session": {
+      "fp1": "Free practice 1",
+      "fp2": "Free practice 2",
+      "fp3": "Free practice 3",
+      "sprint-qualifying": "Sprint qualifying",
+      "sprint": "Sprint",
+      "qualifying": "Qualifying",
+      "race": "Race"
+    },
+    "table": {
+      "position": "Pos",
+      "driver": "Driver",
+      "team": "Team",
+      "points": "Pts",
+      "bestLap": "Best lap",
+      "round": "Round",
+      "track": "Track",
+      "format": "Format",
+      "winner": "Winner",
+      "pace": "Pace here"
+    },
+    "standings": {
+      "drivers": "Drivers' championship",
+      "constructors": "Constructors' championship"
+    },
+    "calendar": {
+      "title": "Calendar",
+      "formatStandard": "Standard",
+      "formatSprint": "Sprint",
+      "upcoming": "To come",
+      "season": "{{year}} season"
+    },
+    "rivals": {
+      "title": "The opposition this weekend",
+      "intro": "Practice times are not information: everyone runs a different fuel load and a different mode. This is what the data-analysis department makes of it.",
+      "nothing": "Nobody has run yet this weekend.",
+      "faster": "{{seconds}} s faster than us",
+      "slower": "{{seconds}} s slower than us",
+      "ours": "Our car"
+    },
+    "programmes": {
+      "title": "Run programmes",
+      "intro": "An hour of running per session, and a set of tyres per programme. What you do with it is what you will know on Sunday.",
+      "session": "Session",
+      "driver": "Driver",
+      "add": "Add",
+      "clear": "Clear",
+      "empty": "Not running",
+      "kind": {
+        "setup": "Setup work",
+        "long-run": "Long run",
+        "qualifying-sim": "Qualifying simulation",
+        "fuel-calibration": "Fuel calibration",
+        "rookie": "Rookie outing"
+      },
+      "minutes": "{{used}} / {{budget}} min"
+    },
+    "career": {
+      "title": "A new career",
+      "intro": "One seed for the whole playthrough: the world you start in is always the same, everything that happens after it is not.",
+      "mode": "Career",
+      "takeover": "Take over a team",
+      "founder": "Found the twelfth team",
+      "team": "Team",
+      "name": "Team principal",
+      "seed": "Seed",
+      "newSeed": "New seed",
+      "start": "Start the career",
+      "teamName": "New team name",
+      "newTeam": "Meridian Racing"
+    }
   }
 }

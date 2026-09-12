@@ -88,7 +88,7 @@ export function weekendTruth(race: RaceInput, entry: RaceEntry): WeekendTruth {
 }
 
 /** A sensible session for a team that is not the player's, or a player who did not plan one. */
-export function defaultPlan(entries: readonly RaceEntry[], session: SessionKind): PracticePlan {
+export function defaultPlan(entries: readonly { driverId: DriverId }[], session: SessionKind): PracticePlan {
   const runs: readonly Run[] =
     session === 'fp1'
       ? [

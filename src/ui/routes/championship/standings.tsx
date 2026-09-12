@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { PlaceholderScreen } from '@/ui/screens/PlaceholderScreen';
+import { StandingsScreen } from '@/ui/screens/season/StandingsScreen';
 
 export const Route = createFileRoute('/championship/standings')({
-  component: () => <PlaceholderScreen section="championship" tab="standings" />,
+  component: StandingsScreen,
 });

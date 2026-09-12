@@ -2,6 +2,7 @@ import { Outlet } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useCareer } from '@/app/store/career';
 import { applyAccent, NEUTRAL_ACCENT, visibleTeamColour } from '@/ui/design/accent';
+import { CareerStartScreen } from '@/ui/screens/season/CareerStartScreen';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 
@@ -11,9 +12,15 @@ function useTeamAccent() {
   useEffect(() => applyAccent(team ? visibleTeamColour(team.colours) : NEUTRAL_ACCENT), [team]);
 }
 
-/** Layout from plan section 6.2: top bar across, sections down the left, the screen in the rest. */
+/**
+ * Layout from plan section 6.2: top bar across, sections down the left, the screen in the rest.
+ * Before a career is started the shell gives way to the career screen — there is nothing to manage
+ * yet (docs/systems/season.md).
+ */
 export function AppShell() {
   useTeamAccent();
+  const demo = useCareer((s) => s.demo);
+  if (demo) return <CareerStartScreen />;
   return (
     <div className="flex h-full min-w-[1280px] flex-col">
       <TopBar />

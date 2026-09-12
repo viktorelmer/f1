@@ -1,7 +1,8 @@
 import { createMemoryHistory } from '@tanstack/react-router';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { useCareer } from '@/app/store/career';
 import { i18n } from '@/i18n';
 import { App } from './App';
 import { SECTION_IDS, type SectionId, sectionLabelKey, tabLabelKey, tabPath, tabsOf } from './navigation';
@@ -16,6 +17,9 @@ function renderAt(path: string) {
 const ALL_TABS = SECTION_IDS.flatMap((section) => tabsOf(section).map((tab) => [section, tab] as const));
 
 describe('navigation (M0 DoD: every section can be visited)', () => {
+  // The shell shows the career screen until a career is started; these tests are about the shell.
+  beforeEach(() => useCareer.setState({ demo: false }));
+
   it.each(ALL_TABS)('/%s/%s renders its screen inside its section', async (section, tab) => {
     renderAt(tabPath(section, tab));
 

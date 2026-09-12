@@ -96,6 +96,7 @@ describe('race store', () => {
 
   it('reports an engine failure instead of hanging', async () => {
     setRaceEngine({
+      ...createInlineEngine(),
       run: () => Promise.reject(new Error('worker crashed')),
       plans: () => Promise.resolve(null),
     });
