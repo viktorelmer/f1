@@ -58,6 +58,7 @@
   "scouting": {
     "value": {
       "sdBaseS": 0.5,
+      "effectiveLapsCap": 8,
       "departmentRef": 60,
       "sdPerDepartmentPoint": 0.008,
       "minSdFactor": 0.4,
@@ -66,7 +67,7 @@
       "hidingFuelKg": 25,
       "hidingLearningShare": 0.5
     },
-    "why": "Reading a rival (plan 5.13). One observed lap places another team to about half a second — that is what a fuel and mode correction is worth — and the error falls as the square root of the laps seen. A data-analysis department at 60 reads at that quality; each point is worth 0.8%, down to a floor of 40%. A team running heavy to hide reads about 0.45 s slower than it is, and no correction takes that out, because the lap really was that slow. A team whose character likes a gamble hides more often (appetite 0.55 × its risk), carries 25 kg of ballast for it, and gets half as much out of its own running that session."
+    "why": "Reading a rival (plan 5.13). One observed lap places another team to about half a second — that is what a fuel and mode correction is worth — and the error falls as the square root of the laps seen — but only up to eight of them a session: the twentieth lap of the same car in the same conditions tells an analyst nothing the eighth did not. A data-analysis department at 60 reads at that quality; each point is worth 0.8%, down to a floor of 40%. A team running heavy to hide reads about 0.45 s slower than it is, and no correction takes that out, because the lap really was that slow. A team whose character likes a gamble hides more often (appetite 0.55 × its risk), carries 25 kg of ballast for it, and gets half as much out of its own running that session."
   },
   "learning": {
     "value": {

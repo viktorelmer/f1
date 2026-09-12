@@ -98,7 +98,8 @@ describe('the season on screen (M5)', () => {
     const user = userEvent.setup();
     draw(<ProgrammesScreen />);
     const fp2 = screen.getByRole('region', { name: t('season.session.fp2') });
-    const driver = world.drivers[world.teams.kestrel.drivers.race[0]!];
+    const team = world.teams.kestrel;
+    const driver = team === undefined ? undefined : world.drivers[team.drivers.race[0]!];
     if (!driver) throw new Error('the demo team has no drivers');
     expect(within(fp2).getByText(driver.name)).toBeInTheDocument();
 

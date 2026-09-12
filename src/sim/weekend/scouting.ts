@@ -89,8 +89,10 @@ export type RivalReading = {
 export function rivalPrecision(reading: RivalReading, department: number): { sd: number; bias: number } {
   const s = balance.weekend.scouting;
   const quality = Math.max(s.minSdFactor, 1 - s.sdPerDepartmentPoint * (department - s.departmentRef));
+  // Laps saturate: watching the same car go round in the same trim all afternoon adds nothing.
+  const laps = Math.min(Math.max(1, reading.laps), s.effectiveLapsCap);
   return {
-    sd: (s.sdBaseS / Math.sqrt(Math.max(1, reading.laps))) * quality,
+    sd: (s.sdBaseS / Math.sqrt(laps)) * quality,
     bias: reading.hiding ? s.hidingBiasS * quality : 0,
   };
 }

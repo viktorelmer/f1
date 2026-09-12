@@ -34,9 +34,9 @@
       "value": {
         "min": 50,
         "max": 200,
-        "wideSd": 1.5
+        "wideSd": 0.7
       },
-      "why": "A team's clean-air lap time here, in seconds, on the 50..200 s scale a lap can take. An sd of 1.5 s covers the whole field from front to back, so confidence is zero there."
+      "why": "A team's clean-air lap time here, in seconds, on the 50..200 s scale a lap can take. An sd of 0.7 s spans most of a grid's spread on one track, so a team reading a rival that loosely knows nothing useful: after one session the read is about 0.18 s and reads as medium, after a full Friday about 0.10 s and reads as high."
     },
     "driver.potential": {
       "value": {

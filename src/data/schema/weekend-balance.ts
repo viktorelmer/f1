@@ -58,6 +58,7 @@ export const weekendBalanceSchema = z.strictObject({
   scouting: tuned(
     z.strictObject({
       sdBaseS: positive,
+      effectiveLapsCap: positive,
       departmentRef: positive,
       sdPerDepartmentPoint: nonNegative,
       minSdFactor: unit,

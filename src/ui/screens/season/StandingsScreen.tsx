@@ -15,7 +15,11 @@ export function StandingsScreen() {
   const { t } = useTranslation();
   const world = useCareer((s) => s.world);
   const mine = world.career.playerTeamId;
-  const drivers = driverTable(world.season, Object.keys(world.drivers));
+  // The championship is for the drivers who are racing in it: free agents are in People, not here.
+  const racing = Object.values(world.drivers)
+    .filter((d) => d.contract !== null)
+    .map((d) => d.id);
+  const drivers = driverTable(world.season, racing);
   const teams = constructorTable(
     world.season,
     Object.keys(world.teams),
