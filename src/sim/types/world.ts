@@ -10,6 +10,8 @@
  * plan already fixes; their milestones refine them.
  */
 import type { ChassisPart } from '@/data/schema/balance';
+import type { Compound, DryCompound } from '@/data/schema/race-balance';
+import type { ProgrammeKind } from '@/data/schema/weekend-balance';
 import type {
   Department,
   DriverContract,
@@ -164,6 +166,47 @@ export type Season = {
   standings: { drivers: Record<DriverId, number>; constructors: Record<TeamId, number> };
 };
 
+/**
+ * The tyres a car has for a weekend: sets of each dry compound. Declared before the weekend, blind
+ * to the weather (plan 5.3), and spent for real — practice, qualifying and the race all take sets
+ * out of it. Intermediates and wets are not declared: the supplier brings them.
+ */
+export type TyreAllocation = Record<DryCompound, number>;
+
+/** One run in practice: a programme and the tyre it goes out on (docs/systems/weekend.md). */
+export type PracticeRun = { programme: ProgrammeKind; compound: Compound };
+
+/** What a team is doing in a practice session, per car. A driver without a queue does not run. */
+export type PracticePlan = Record<DriverId, readonly PracticeRun[]>;
+
+/**
+ * The weekend being played right now (docs/systems/weekend-play.md), or null between rounds.
+ *
+ * A weekend is not a function call but a state: it is opened, then moved on one session at a time,
+ * then closed. That is the only reason a player can stop between FP2 and FP3 — and the reason an
+ * interrupted weekend survives a save.
+ */
+export type WeekendProgress = {
+  round: number;
+  /** Fixed when the weekend opens: every session of it draws from this seed. */
+  seed: string;
+  /** The session waiting to be run; 'done' once the race is over and the weekend can be closed. */
+  stage: SessionKind | 'done';
+  /** What each car declared before the weekend, and what it has left right now. */
+  tyres: Record<DriverId, TyreAllocation>;
+  sets: Record<DriverId, TyreAllocation>;
+  /** The practice programmes chosen so far; a session without one runs the default. */
+  plans: Partial<Record<SessionKind, PracticePlan>>;
+  /*
+   * Results are not kept here: a session that has been run goes straight into its round on the
+   * calendar, so the tables are the sum of the sessions at every moment, not only after Sunday.
+   */
+  /** The grid the race starts from, pole first — null until qualifying has run. */
+  grid: DriverId[] | null;
+  /** The grid the sprint starts from, on a sprint weekend. */
+  sprintGrid: DriverId[] | null;
+};
+
 /** The rule set for a season is pack content; the world refers to it by season. */
 export type Regulation = { season: number };
 
@@ -248,6 +291,8 @@ export type World = {
   pack: { id: string; version: string };
   date: GameDate;
   season: Season;
+  /** The weekend in progress, or null between rounds (docs/systems/weekend-play.md). */
+  weekend: WeekendProgress | null;
   career: CareerState;
   teams: Record<TeamId, Team>;
   drivers: Record<DriverId, Driver>;

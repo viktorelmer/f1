@@ -52,12 +52,15 @@ import {
   pitCallOptions,
   plannedPitLossS,
   planOptions,
+  preRaceStintModel,
   replan,
   type StintModel,
 } from './strategy';
 import { prepareTrack, type TrackModel } from './track';
+import { takeSet } from '../weekend/tyres';
 import { dirtyAirLossS, drsGainS, hasDrsZone, overtakeProbability, slipstreamGainS } from './traffic';
 import { bestCompoundFor, COMPARISON_WEAR, isDry, tyreLossS, warmupLossS, wearPerLap } from './tyres';
+import type { TyreAllocation } from '../types/world';
 import type {
   ClassifiedCar,
   ConditionsRecord,
@@ -105,6 +108,8 @@ type CarState = {
   tyreAge: number;
   freshSet: boolean;
   compoundsUsed: Compound[];
+  /** Fresh sets the car still has, or undefined when it races without an allocation behind it. */
+  sets: TyreAllocation | undefined;
   stops: number;
   fuelKg: number;
   battery: number;
@@ -219,19 +224,7 @@ export function raceStrategy(
   const cars = input.entries.filter((e) => e.teamId === teamId);
   const lead = cars[0];
   if (!lead) throw new RangeError(`No team "${teamId}" in this race`);
-  const start = sampleAt(input.weather, 0);
-  const surface = initialSurface(input.weather);
-  const stintModel: StintModel = {
-    track,
-    twoCompoundRule: input.format !== 'sprint',
-    tyreDegFactor: lead.beliefs.tyreDegradation,
-    carTyreManagement: lead.car.tyreManagement,
-    driverTyreManagement: cars.reduce((sum, c) => sum + c.driver.tyreManagement, 0) / cars.length,
-    trackTempC: start.trackTempC,
-    wetness: Math.max(...surface.wetness),
-    averageFuelKg: (fuelPerLap(track, lead.car.fuelEfficiency) * track.laps) / 2,
-  };
-  const options = planOptions(track.laps, stintModel);
+  const options = planOptions(track.laps, preRaceStintModel(input, cars));
   const control = input.control;
   const intent =
     control && control.teamId === teamId && control.strategy.mode === 'directed'
@@ -345,6 +338,8 @@ export function simulateRace(input: RaceInput): RaceResult {
       tyreAge: 0,
       freshSet: true,
       compoundsUsed: [plan.stints[0]!.compound],
+      // The tyre it starts the race on is the first set out of the entry.
+      sets: entry.tyreSets && (takeSet(entry.tyreSets, plan.stints[0]!.compound) ?? entry.tyreSets),
       stops: 0,
       // Fuelled on what the team believes it burns here, plus a margin for how unsure it is: a team
       // that never calibrated its fuel carries the doubt as weight, and a team that got it wrong
@@ -544,6 +539,7 @@ export function simulateRace(input: RaceInput): RaceResult {
       trackTempC: sample.trackTempC,
       wetness: (surface.wetness[0] + surface.wetness[1] + surface.wetness[2]) / 3,
       averageFuelKg: car.fuelKg / 2,
+      sets: car.sets,
     };
   };
 
@@ -1210,6 +1206,9 @@ export function simulateRace(input: RaceInput): RaceResult {
           stationaryS: round3(stop.seconds),
           slow: stop.slow ? 1 : 0,
         });
+        // The set that goes on comes out of what is left; an empty rack means scrubbed rubber,
+        // which the race does not model further — the strategist has already been told it is gone.
+        if (car.sets) car.sets = takeSet(car.sets, car.pitRequest.compound) ?? car.sets;
         car.compound = car.pitRequest.compound;
         car.wear = 0;
         car.tyreAge = 0;
@@ -1484,5 +1483,7 @@ function buildResult(
     conditions,
     plans: Object.fromEntries(cars.map((c) => [c.entry.driverId, plans.get(c.entry.driverId)!])),
     planHistory: Object.fromEntries(cars.map((c) => [c.entry.driverId, c.planHistory])),
+    // What the weekend has left: a sprint spends sets that Sunday will not have.
+    tyreSets: Object.fromEntries(cars.flatMap((c) => (c.sets ? [[c.entry.driverId, c.sets] as const] : []))),
   };
 }

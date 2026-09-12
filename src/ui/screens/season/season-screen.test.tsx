@@ -1,9 +1,12 @@
+import { createMemoryHistory } from '@tanstack/react-router';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCareer } from '@/app/store/career';
-import { setSeasonEngine, useSeason } from '@/app/store/season';
+import { setWeekendEngine, useWeekend } from '@/app/store/weekend';
 import { createInlineEngine } from '@/app/worker/engine';
+import { App } from '@/ui/App';
+import { createAppRouter } from '@/ui/router';
 import { i18n } from '@/i18n';
 import { createWorld } from '@/sim/world/create-world';
 import { TooltipProvider } from '@/ui/design/Tooltip';
@@ -12,7 +15,6 @@ import { CareerStartScreen } from './CareerStartScreen';
 import { ProgrammesScreen } from './ProgrammesScreen';
 import { RivalsScreen } from './RivalsScreen';
 import { StandingsScreen } from './StandingsScreen';
-import { WeekendScheduleScreen } from './WeekendScheduleScreen';
 
 const t = i18n.t.bind(i18n);
 const pack = useCareer.getState().pack;
@@ -24,35 +26,42 @@ const world = createWorld('season-screen', pack, {
 
 const draw = (ui: React.ReactElement) => render(<TooltipProvider>{ui}</TooltipProvider>);
 
+/** The hub links into the session, so it is drawn inside the app's own router. */
+const drawAt = (path: string) =>
+  render(<App router={createAppRouter(createMemoryHistory({ initialEntries: [path] }))} />);
+
+const idle = () => vi.waitFor(() => expect(useWeekend.getState().busy).toBe(false), { timeout: 20_000 });
+
 describe('the season on screen (M5)', () => {
   beforeEach(() => {
-    setSeasonEngine(createInlineEngine());
-    useCareer.setState({ world });
-    useSeason.setState({ busy: false, error: null, programmes: {} });
+    setWeekendEngine(createInlineEngine());
+    useCareer.setState({ world, demo: false });
+    useWeekend.getState().leave();
+    useWeekend.setState({ busy: false, error: null, draft: {} });
   });
 
   it('runs a weekend from the schedule and shows what happened in every session', async () => {
     const user = userEvent.setup();
-    draw(<WeekendScheduleScreen />);
-    expect(screen.getByText(t('season.schedule.notRunYet'))).toBeInTheDocument();
+    drawAt('/weekend/schedule');
+    expect(await screen.findByText(t('season.schedule.notRunYet'))).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: t('season.schedule.run') }));
-    await vi.waitFor(() => expect(useSeason.getState().busy).toBe(false), { timeout: 20_000 });
+    await user.click(await screen.findByRole('button', { name: t('season.schedule.run') }));
+    await idle();
 
     const after = useCareer.getState().world;
     expect(after.season.calendar[0]!.status).toBe('completed');
     // Every session of the weekend is on the screen, the race among them.
     for (const session of after.season.calendar[0]!.sessions)
-      expect(await screen.findByText(t(`season.session.${session.session}`))).toBeInTheDocument();
+      expect((await screen.findAllByText(t(`season.session.${session.session}`))).length).toBeGreaterThan(0);
     // And the clock has moved to race day.
     expect(after.date).toBe(after.season.calendar[0]!.raceDate);
   }, 30_000);
 
   it('shows the championship the race produced, both tables agreeing with it', async () => {
     const user = userEvent.setup();
-    draw(<WeekendScheduleScreen />);
-    await user.click(screen.getByRole('button', { name: t('season.schedule.run') }));
-    await vi.waitFor(() => expect(useSeason.getState().busy).toBe(false), { timeout: 20_000 });
+    drawAt('/weekend/schedule');
+    await user.click(await screen.findByRole('button', { name: t('season.schedule.run') }));
+    await idle();
 
     const after = useCareer.getState().world;
     const race = after.season.calendar[0]!.sessions.find((s) => s.session === 'race')!;
@@ -77,9 +86,9 @@ describe('the season on screen (M5)', () => {
 
   it('shows the opposition only as an estimate, never as a number', async () => {
     const user = userEvent.setup();
-    draw(<WeekendScheduleScreen />);
-    await user.click(screen.getByRole('button', { name: t('season.schedule.run') }));
-    await vi.waitFor(() => expect(useSeason.getState().busy).toBe(false), { timeout: 20_000 });
+    drawAt('/weekend/schedule');
+    await user.click(await screen.findByRole('button', { name: t('season.schedule.run') }));
+    await idle();
     cleanup();
 
     draw(<RivalsScreen />);
@@ -99,14 +108,14 @@ describe('the season on screen (M5)', () => {
     draw(<ProgrammesScreen />);
     const fp2 = screen.getByRole('region', { name: t('season.session.fp2') });
     const team = world.teams.kestrel;
-    const driver = team === undefined ? undefined : world.drivers[team.drivers.race[0]!];
+    const driver = team === undefined ? undefined : world.drivers[team.drivers.race[0]];
     if (!driver) throw new Error('the demo team has no drivers');
     expect(within(fp2).getByText(driver.name)).toBeInTheDocument();
 
     await user.click(
       within(fp2).getAllByRole('button', { name: `+ ${t('season.programmes.kind.long-run')}` })[0]!,
     );
-    const runs = useSeason.getState().programmes.fp2?.[driver.id];
+    const runs = useWeekend.getState().draft.fp2?.[driver.id];
     expect(runs?.at(-1)?.programme).toBe('long-run');
   });
 });

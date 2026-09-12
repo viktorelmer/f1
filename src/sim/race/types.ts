@@ -8,7 +8,7 @@ import type { DecisionMakerProfile } from '../decide/decide';
 import type { DelegationMode } from '../decide/delegation';
 import type { Estimate } from '../knowledge/estimate';
 import type { GameDate } from '../types/game-date';
-import type { CarPerformance, DriverId, TeamId } from '../types/world';
+import type { CarPerformance, DriverId, TeamId, TyreAllocation } from '../types/world';
 
 export type { Compound, DryCompound };
 export type SectorIndex = 0 | 1 | 2;
@@ -77,6 +77,12 @@ export type RaceEntry = {
   };
   /** Seconds a lap the car is off its optimum setup: practice running takes this down (plan 5.3). */
   setupLossS: number;
+  /**
+   * Fresh sets left of each dry compound when the race starts, out of the weekend's entry
+   * (docs/systems/weekend-play.md). Absent means the race is run without an allocation behind it —
+   * the batch runner's shortcut and the tests'.
+   */
+  tyreSets?: TyreAllocation;
 };
 
 export type RaceInput = {
@@ -271,6 +277,11 @@ export type RaceResult = {
   launchS: Record<DriverId, number>;
   /** The player's team, as the pit wall saw it: forecasts, decisions and radio (null without a player). */
   pitWall: PitWall | null;
+  /**
+   * Fresh sets each car has left after the race (docs/systems/weekend-play.md). Empty when the race
+   * was run without an allocation behind it; on a sprint weekend this is what Sunday is left with.
+   */
+  tyreSets: Record<DriverId, TyreAllocation>;
 };
 
 /** One of the strategist's decisions for the player's team, with everything considered. */

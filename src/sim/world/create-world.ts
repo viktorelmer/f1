@@ -106,6 +106,8 @@ export function createWorld(seed: string, pack: Pack, career: CareerSetup): Worl
     pack: { id: pack.manifest.id, version: pack.manifest.version },
     date,
     season,
+    // No weekend is open when a career starts: the first one is opened from the calendar.
+    weekend: null,
     career: {
       mode: career.mode,
       playerTeamId: player.id,

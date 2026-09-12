@@ -9,7 +9,10 @@ import type { PackTrack } from '@/data/schema/pack';
 import { type Compound, DRY_COMPOUNDS } from '@/data/schema/race-balance';
 import { chooseByScore, type Decide, type Decision, type Evaluation } from '../decide/decide';
 import { COMPARISON_WEAR, isDry, tyreLossS, warmupLossS, wearPerLap } from './tyres';
-import type { StrategyGoal, StrategyPlan, Stint, TrackStatus } from './types';
+import { fuelPerLap } from './pace';
+import type { TyreAllocation } from '../types/world';
+import type { RaceEntry, RaceInput, StrategyGoal, StrategyPlan, Stint, TrackStatus } from './types';
+import { initialSurface, sampleAt } from './weather';
 
 export type StintModel = {
   track: PackTrack;
@@ -23,6 +26,12 @@ export type StintModel = {
   wetness: number;
   /** Average fuel over the remaining distance: wear depends on it, the plan does not. */
   averageFuelKg: number;
+  /**
+   * Fresh sets the car still has of each dry compound (docs/systems/weekend-play.md). A plan can
+   * only use rubber that exists: a compound that is gone is not planned on. Absent means unlimited
+   * — the batch runner and the tests race without an allocation behind them.
+   */
+  sets?: Partial<Record<Compound, number>>;
 };
 
 const ALL_COMPOUNDS: readonly Compound[] = ['soft', 'medium', 'hard', 'inter', 'wet'];
@@ -68,12 +77,13 @@ type Completion = { timeS: number; stints: Stint[] };
  */
 function bestCompletion(
   laps: number,
-  first: { compound: Compound; cum: Float64Array },
+  first: { compound: Compound; cum: Float64Array; fresh?: boolean },
   fresh: (c: Compound) => Float64Array,
   pitS: number,
   stops: { min: number; max: number },
   needAnother: Compound | null,
   candidates: readonly Compound[],
+  sets?: Partial<Record<Compound, number>>,
 ): Completion | null {
   const minStint = Math.min(
     balance.race.strategy.minStintLaps,
@@ -81,16 +91,30 @@ function bestCompletion(
   );
   const satisfies = (compounds: Compound[]) =>
     needAnother === null || compounds.some((c) => !isDry(c) || c !== needAnother);
+  /**
+   * Whether the car has the rubber for a sequence: every stint but a tyre already on the car needs
+   * a set of its own, so three stints on the soft need three sets of softs.
+   */
+  const affordable = (used: readonly Compound[]) => {
+    if (!sets || used.length === 0) return true;
+    const need = new Map<Compound, number>();
+    for (const c of used) need.set(c, (need.get(c) ?? 0) + 1);
+    for (const [c, n] of need) if ((sets[c] ?? 0) < n) return false;
+    return true;
+  };
+  /** The tyre the car starts on: a fresh one is a set out of the allocation, a used one is not. */
+  const opening: readonly Compound[] = first.fresh ? [first.compound] : [];
   let best: Completion | null = null;
   const consider = (timeS: number, stints: Stint[]) => {
     if (!best || timeS < best.timeS) best = { timeS, stints };
   };
 
-  if (stops.min <= 0 && satisfies([first.compound]))
+  if (stops.min <= 0 && satisfies([first.compound]) && affordable(opening))
     consider(first.cum[laps]!, [{ compound: first.compound, laps }]);
   if (stops.min <= 1 && stops.max >= 1) {
     for (const c1 of candidates) {
       if (!satisfies([first.compound, c1])) continue;
+      if (sets && !affordable([...opening, c1])) continue;
       const cum1 = fresh(c1);
       for (let k = minStint; k <= laps - minStint; k++) {
         consider(first.cum[k]! + pitS + cum1[laps - k]!, [
@@ -105,6 +129,7 @@ function bestCompletion(
       const cum1 = fresh(c1);
       for (const c2 of candidates) {
         if (!satisfies([first.compound, c1, c2])) continue;
+        if (sets && !affordable([...opening, c1, c2])) continue;
         const cum2 = fresh(c2);
         for (let k1 = minStint; k1 <= laps - 2 * minStint; k1++) {
           for (let k2 = minStint; k1 + k2 <= laps - minStint; k2++) {
@@ -124,10 +149,15 @@ function bestCompletion(
 /** Compounds worth considering in these conditions: slicks when dry, anything close to the best when wet. */
 function candidateCompounds(model: StintModel): Compound[] {
   const s = balance.race.strategy;
-  if (model.wetness < s.dryBelowWetness) return [...DRY_COMPOUNDS];
   const loss = (c: Compound) => tyreLossS(c, COMPARISON_WEAR, model.trackTempC, model.wetness);
-  const bestLoss = Math.min(...ALL_COMPOUNDS.map(loss));
-  return ALL_COMPOUNDS.filter((c) => loss(c) - bestLoss < s.candidateWindowS);
+  const worth =
+    model.wetness < s.dryBelowWetness
+      ? [...DRY_COMPOUNDS]
+      : ALL_COMPOUNDS.filter((c) => loss(c) - Math.min(...ALL_COMPOUNDS.map(loss)) < s.candidateWindowS);
+  if (!model.sets) return worth;
+  // A compound with no set left is not a plan, it is a wish. Wets are the supplier's, never declared.
+  const have = worth.filter((c) => !isDry(c) || (model.sets![c] ?? 0) > 0);
+  return have.length > 0 ? have : worth;
 }
 
 /**
@@ -147,8 +177,55 @@ export function plannedPitLossS(track: PackTrack): number {
 
 export type PlanOption = { plan: StrategyPlan; timeS: number; stops: number };
 
+/**
+ * The model a team plans a race on before the start: its own beliefs about the track, the weather
+ * it can see at the green light, and the rubber it has left. One place, so the pre-race screen, the
+ * tyre entry and the race itself all weigh the same race.
+ */
+export function preRaceStintModel(input: RaceInput, cars: readonly RaceEntry[]): StintModel {
+  const lead = cars[0]!;
+  const track = input.track;
+  const start = sampleAt(input.weather, 0);
+  const surface = initialSurface(input.weather);
+  return {
+    track,
+    twoCompoundRule: input.format !== 'sprint',
+    tyreDegFactor: lead.beliefs.tyreDegradation,
+    carTyreManagement: lead.car.tyreManagement,
+    driverTyreManagement: cars.reduce((sum, c) => sum + c.driver.tyreManagement, 0) / cars.length,
+    trackTempC: start.trackTempC,
+    wetness: Math.max(...surface.wetness),
+    averageFuelKg: (fuelPerLap(track, lead.car.fuelEfficiency) * track.laps) / 2,
+    sets: sharedSets(cars),
+  };
+}
+
+/**
+ * The rubber a team can count on for both its cars. One strategist decides one plan for the team,
+ * and the two racks differ — qualifying takes a set per part, and one car may have gone out in Q1
+ * while the other ran in Q3 — so the plan is held to what the thinner of the two can run.
+ */
+function sharedSets(cars: readonly RaceEntry[]): TyreAllocation | undefined {
+  const racks = cars.map((c) => c.tyreSets);
+  if (racks.some((r) => r === undefined)) return undefined;
+  return racks.reduce((a, b) => ({
+    soft: Math.min(a!.soft, b!.soft),
+    medium: Math.min(a!.medium, b!.medium),
+    hard: Math.min(a!.hard, b!.hard),
+  }))!;
+}
+
 /** Candidate plans for a race of `laps` laps: the best split for each compound sequence. */
 export function planOptions(laps: number, model: StintModel): PlanOption[] {
+  const withinAllocation = affordablePlans(laps, model);
+  // Nothing the car can afford covers the distance under the rules: it plans as if it had the
+  // rubber, and finds out on Sunday. Better a plan the team cannot quite run than no plan at all.
+  return withinAllocation.length > 0
+    ? withinAllocation
+    : affordablePlans(laps, { ...model, sets: undefined });
+}
+
+function affordablePlans(laps: number, model: StintModel): PlanOption[] {
   const pitS = plannedPitLossS(model.track);
   const candidates = candidateCompounds(model);
   const dry = candidates.every(isDry);
@@ -166,12 +243,13 @@ export function planOptions(laps: number, model: StintModel): PlanOption[] {
       const range = { min: stops, max: stops };
       const best = bestCompletion(
         laps,
-        { compound: start, cum: fresh(start) },
+        { compound: start, cum: fresh(start), fresh: true },
         fresh,
         pitS,
         range,
         rule ? start : null,
         candidates,
+        model.sets,
       );
       if (best) options.push({ plan: { stints: best.stints }, timeS: best.timeS, stops });
     }
@@ -231,6 +309,14 @@ export type PitCallContext = {
 export type PitCallOption = { call: 'stay' | 'pit'; compound: Compound; timeS: number; stints: Stint[] };
 
 export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
+  const withinAllocation = affordableCalls(ctx);
+  // Nothing left to bolt on: the strategist calls as if it were there (see `planOptions`).
+  return withinAllocation.length > 0
+    ? withinAllocation
+    : affordableCalls({ ...ctx, model: { ...ctx.model, sets: undefined } });
+}
+
+function affordableCalls(ctx: PitCallContext): PitCallOption[] {
   const { remainingLaps: laps, model } = ctx;
   if (laps <= 0) return [{ call: 'stay', compound: ctx.current.compound, timeS: 0, stints: [] }];
   const pitGreen = plannedPitLossS(model.track);
@@ -269,6 +355,7 @@ export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
       { min: 0, max: maxStops },
       needAnother,
       candidates,
+      model.sets,
     );
     if (stay)
       options.push({
@@ -282,12 +369,13 @@ export function pitCallOptions(ctx: PitCallContext): PitCallOption[] {
   for (const c of candidates) {
     const rest = bestCompletion(
       laps,
-      { compound: c, cum: fresh(c) },
+      { compound: c, cum: fresh(c), fresh: true },
       fresh,
       pitGreen,
       { min: 0, max: maxStops - 1 },
       needAnother,
       candidates,
+      model.sets,
     );
     if (rest) options.push({ call: 'pit', compound: c, timeS: pitNow + rest.timeS, stints: rest.stints });
   }
@@ -328,6 +416,7 @@ export function replan(
       { min: stops, max: stops },
       needAnother,
       candidates,
+      model.sets,
     )?.stints ?? null
   );
 }

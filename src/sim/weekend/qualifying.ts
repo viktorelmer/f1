@@ -11,6 +11,7 @@
  * team that waits too long risks a yellow flag or the flag itself.
  */
 import { balance } from '@/data/balance';
+import { DRY_COMPOUNDS, type DryCompound } from '@/data/schema/race-balance';
 import { chooseByScore, type Decide, type Evaluation } from '../decide/decide';
 import type { Rng } from '../rng/rng';
 import { streams } from '../rng/rng';
@@ -19,7 +20,8 @@ import { prepareTrack, type TrackModel } from '../race/track';
 import { tyreLossS, warmupLossS } from '../race/tyres';
 import type { RaceEntry, RaceInput } from '../race/types';
 import { initialSurface, powerLossFraction, sampleAt, wetSlowdownFraction } from '../race/weather';
-import type { DriverId, SessionKind, SessionResult, TeamId } from '../types/world';
+import type { DriverId, SessionKind, SessionResult, TeamId, TyreAllocation } from '../types/world';
+import { noSets, takeSet } from './tyres';
 
 /** Which part of qualifying: Q1 knocks five out, Q2 five more, Q3 decides the pole. */
 export type QualifyingPart = 0 | 1 | 2;
@@ -42,8 +44,30 @@ export type QualifyingResult = {
   laps: QualifyingLap[];
   /** The order the grid is built from: pole first. */
   order: DriverId[];
-  /** Who went out when, per part — what the delegate decided. */
-  runs: { part: QualifyingPart; driverId: DriverId; outAtS: number }[];
+  /**
+   * Who went out when, per part: what the delegate chose, what was actually used, and who settled
+   * it. A car that never left the pits has `outAtS: null` — in manual strategy, nobody answered.
+   */
+  runs: {
+    part: QualifyingPart;
+    driverId: DriverId;
+    outAtS: number | null;
+    recommendedAtS: number;
+    by: 'strategist' | 'player' | 'unanswered';
+  }[];
+  /** What each car has left after the session. */
+  setsLeft: Record<DriverId, TyreAllocation>;
+};
+
+/**
+ * The pit wall's word in qualifying (docs/systems/weekend-play.md): send the car out now. The
+ * delegate still decides — the command only replaces which moment was used, so taking one decision
+ * over does not shift anyone's rng (ADR 005). In manual strategy the car waits for it.
+ */
+export type QualifyingCommand = {
+  atS: number;
+  part: QualifyingPart;
+  driverId: DriverId;
 };
 
 export type QualifyingInput = {
@@ -51,6 +75,10 @@ export type QualifyingInput = {
   session: SessionKind;
   /** Seconds a lap each car is off its setup, from practice (docs/systems/weekend.md). */
   setupLossS: Record<DriverId, number>;
+  /** Fresh sets each car has left: every part takes one, and a car without one runs on scrubbed rubber. */
+  sets: Record<DriverId, TyreAllocation>;
+  /** What the player said during the session, in session time. */
+  commands?: readonly QualifyingCommand[];
 };
 
 export type RunContext = {
@@ -72,11 +100,19 @@ export type RunChoice = { outAtS: number };
  * second attempt if the lap is spoiled, and risks the flag. `decide()` does the choosing, so a
  * nervous strategist goes early and a bold one waits.
  */
+/**
+ * The latest a car can leave the pits and still get its lap in: the pit exit, the out-lap and the
+ * flying lap have to fit inside the part. Leave later than this and the flag falls on the way round.
+ */
+export function latestOutAtS(partS: number, lapS: number): number {
+  const q = balance.weekend.qualifying;
+  return Math.max(0, partS - (lapS * (q.outLapFactor + 1) + q.pitExitS));
+}
+
 export const decideRunTime: Decide<RunContext, RunGoal, RunChoice> = (ctx, competence, intent, rng) => {
   const q = balance.weekend.qualifying;
-  // Out-lap, flying lap and a margin: the latest a car can leave and still start its lap in time.
+  const latest = latestOutAtS(ctx.partS, ctx.lapS);
   const runS = ctx.lapS * (q.outLapFactor + 1) + q.pitExitS;
-  const latest = Math.max(0, ctx.partS - runS);
   const options: RunChoice[] = q.runWindows.map((share) => ({ outAtS: latest * share }));
   const evaluate = (o: RunChoice): Evaluation => {
     const share = latest > 0 ? o.outAtS / latest : 1;
@@ -96,7 +132,7 @@ export const decideRunTime: Decide<RunContext, RunGoal, RunChoice> = (ctx, compe
 function flyingLapS(
   entry: RaceEntry,
   input: QualifyingInput,
-  ctx: { grip: number; fuelKg: number; rng: Rng },
+  ctx: { grip: number; fuelKg: number; compound: DryCompound; wear: number; rng: Rng },
 ): number {
   const { race } = input;
   const sample = sampleAt(race.weather, 0);
@@ -114,8 +150,8 @@ function flyingLapS(
       (1 + driverPaceFraction(driver, wet)) *
       (1 + weatherFraction) *
       (1 + green) +
-    tyreLossS('soft', 0, sample.trackTempC, wet) +
-    warmupLossS('soft') +
+    tyreLossS(ctx.compound, ctx.wear, sample.trackTempC, wet) +
+    warmupLossS(ctx.compound) +
     massSeconds(ctx.fuelKg + entry.car.weight, base) +
     (input.setupLossS[entry.driverId] ?? 0) +
     ctx.rng.normal(0, lapNoiseSd(entry.driver.consistency))
@@ -130,6 +166,7 @@ export function runQualifying(input: QualifyingInput): QualifyingResult {
   const stream = streams(race.seed);
   const laps: QualifyingLap[] = [];
   const runs: QualifyingResult['runs'] = [];
+  const setsLeft: Record<DriverId, TyreAllocation> = { ...input.sets };
   const lapS = race.track.baseLapTime;
 
   /** Everyone still in, best first at the end of each part. */
@@ -145,7 +182,9 @@ export function runQualifying(input: QualifyingInput): QualifyingResult {
     const partLaps: QualifyingLap[] = [];
 
     for (const entry of entries) {
-      const rng = stream(`race:${race.season}:r${race.round}:quali:${part}:${entry.driverId}`);
+      // The session is part of the name: a sprint weekend qualifies twice, and the two must
+      // not draw the same numbers (ADR 007).
+      const rng = stream(`race:${race.season}:r${race.round}:${input.session}:${part}:${entry.driverId}`);
       const decision = decideRunTime(
         {
           partS,
@@ -157,15 +196,41 @@ export function runQualifying(input: QualifyingInput): QualifyingResult {
         rng,
       );
       // Inside the chosen window every car picks its own second: nobody queues at the pit exit.
-      const outAtS = Math.max(
+      // Both draws happen whatever the player does, so intervening shifts nobody's stream.
+      // The spread never pushes a car out so late that the flag falls on its out-lap: a strategist
+      // who wanted the last moment of the part still gets a lap in.
+      const latest = latestOutAtS(partS, lapS);
+      const recommendedAtS = Math.max(
         0,
-        Math.min(partS, decision.choice.outAtS + rng.range(-q.windowSpreadS / 2, q.windowSpreadS / 2)),
+        Math.min(latest, decision.choice.outAtS + rng.range(-q.windowSpreadS / 2, q.windowSpreadS / 2)),
       );
-      runs.push({ part, driverId: entry.driverId, outAtS });
+      const said = (input.commands ?? []).find(
+        (c) => c.driverId === entry.driverId && c.part === part && c.atS <= partS,
+      );
+      const manual = race.control?.teamId === entry.teamId && race.control.strategy.mode === 'manual';
+      // Manual strategy: the car sits in the garage until the player says go, and a part that ends
+      // without a word ends without a time. Otherwise the command can only send the car out early.
+      const outAtS = manual
+        ? (said?.atS ?? null)
+        : said && said.atS < recommendedAtS
+          ? said.atS
+          : recommendedAtS;
+      const by = outAtS === null ? 'unanswered' : outAtS === recommendedAtS ? 'strategist' : 'player';
+      runs.push({ part, driverId: entry.driverId, outAtS, recommendedAtS, by });
+      // Nobody sent the car out, or the player sent it out too late to get round: no time.
+      if (outAtS === null || outAtS > latest) continue;
       const startS = outAtS + q.pitExitS + lapS * q.outLapFactor;
       // The track is at its best at the end of the part: grip grows with the share of it gone.
       const grip = q.gripAtStart + (1 - q.gripAtStart) * Math.min(1, startS / Math.max(1, partS));
-      const clean = flyingLapS(entry, input, { grip, fuelKg: q.fuelKg, rng });
+      const tyre = qualifyingTyre(setsLeft[entry.driverId] ?? noSets());
+      if (tyre.wear === 0) setsLeft[entry.driverId] = takeSet(setsLeft[entry.driverId]!, tyre.compound)!;
+      const clean = flyingLapS(entry, input, {
+        grip,
+        fuelKg: q.fuelKg,
+        compound: tyre.compound,
+        wear: tyre.wear,
+        rng,
+      });
       partLaps.push({
         part,
         driverId: entry.driverId,
@@ -185,7 +250,10 @@ export function runQualifying(input: QualifyingInput): QualifyingResult {
       best[lap.driverId] = lap.timeS;
     }
 
-    const ranked = [...partLaps].sort((a, b) => a.timeS - b.timeS).map((l) => l.driverId);
+    // A car that never went out is behind everyone who did, in the order it stands in the entry
+    // list — a time is a time, and no time is no time.
+    const timed = [...partLaps].sort((a, b) => a.timeS - b.timeS).map((l) => l.driverId);
+    const ranked = [...timed, ...entries.map((e) => e.driverId).filter((id) => !timed.includes(id))];
     if (part === 2) {
       order.unshift(...ranked);
     } else {
@@ -202,11 +270,21 @@ export function runQualifying(input: QualifyingInput): QualifyingResult {
     position: i + 1,
     laps: laps.filter((l) => l.driverId === driverId).length,
     bestLapS: best[driverId] === undefined ? null : round3(best[driverId]),
-    status: 'finished' as const,
+    // A car that never left the pits did not take part in the session, and the protocol says so.
+    status: best[driverId] === undefined ? ('dns' as const) : ('finished' as const),
     points: 0,
   }));
 
-  return { session: { session: input.session, classification }, laps, order, runs };
+  return { session: { session: input.session, classification }, laps, order, runs, setsLeft };
+}
+
+/**
+ * What a car bolts on for a run: the softest set it still has, and a scrubbed soft when the entry
+ * has run dry — a part on used rubber is a few tenths, which is a row of the grid.
+ */
+function qualifyingTyre(sets: TyreAllocation): { compound: DryCompound; wear: number } {
+  const fresh = DRY_COMPOUNDS.find((c) => sets[c] > 0);
+  return fresh ? { compound: fresh, wear: 0 } : { compound: 'soft', wear: balance.weekend.tyres.usedSetWear };
 }
 
 /**

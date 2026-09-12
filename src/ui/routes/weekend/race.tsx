@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { RaceScreen } from '@/ui/screens/race/RaceScreen';
+import { SessionScreen } from '@/ui/screens/weekend/SessionScreen';
 
 export const Route = createFileRoute('/weekend/race')({
-  component: RaceScreen,
+  component: SessionScreen,
   staticData: { fullBleed: true },
 });

@@ -55,6 +55,17 @@
     },
     "why": "Qualifying as the regulations run it: 18, 15 and 12 minutes, five cars out of each of the first two parts. A car leaves the pits with 10 kg aboard, takes 20 s to get out and an out-lap 30% longer than a flying one. The track starts the hour at 75% of its final grip and a fully evolving track is worth 1.2% of a lap by the end — over a minute and a half that is a tenth or two, which is why everyone wants to be last. A car inside 2.5 s of another at a segment loses up to 0.9 s of that segment, and no lap can lose more than 4% to traffic — past that the driver has backed off and will come round again. Teams choose between four moments in the part, and inside the chosen one every car picks its own second over a 100 s spread — nobody wants to leave the pits in a queue, and in life the field strings itself out over a couple of minutes."
   },
+  "tyres": {
+    "value": {
+      "minPerCompound": 2,
+      "qualifyingSetsPerPart": 1,
+      "usedSetWear": 0.3,
+      "missingSetCostS": 20,
+      "entryScoreScaleS": 40,
+      "riskDiscount": 0.6
+    },
+    "why": "The tyre entry (plan 5.3): sets are declared before the weekend, blind to the weather, and spent for real. Nobody turns up with a single set of a compound, so every declaration keeps at least 2 of each — with 13 sets that still leaves 36 ways to split them. Each part of qualifying is one fresh set; a car with none left runs the part on a scrubbed set 30% worn, which is a few tenths and a grid slot or two. The strategist prices a set he will not have at 20 s of race time, so he does not trade Saturday away for a plan that is one stop cheaper, and he compares declarations over a 40 s scale — wide, because a declaration decides a race, not a lap. A bold strategist discounts that price by up to 60%: he is betting he will not need the set he did not take."
+  },
   "scouting": {
     "value": {
       "sdBaseS": 0.5,

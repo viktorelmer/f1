@@ -129,6 +129,8 @@ export function buildRaceInput(
         riskAppetite: team.character.riskAppetite,
         beliefs: beliefsOf(team.id),
         setupLossS: weekendOf(team.id).setupLossS,
+        // What the car has left of its entry, when there is a weekend open around this race.
+        tyreSets: world.weekend?.round === round ? world.weekend.sets[driverId] : undefined,
       };
     });
   });

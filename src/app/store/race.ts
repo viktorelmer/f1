@@ -11,14 +11,25 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import type { DelegationMode } from '@/sim/decide/delegation';
 import { buildReplay, type Replay } from '@/sim/race/replay';
-import type { PitAnswer, RaceCommand, RaceControl, StrategyDecision, StrategyPlan } from '@/sim/race/types';
+import type {
+  PitAnswer,
+  RaceCommand,
+  RaceControl,
+  RaceInput,
+  RaceResult,
+  StrategyDecision,
+  StrategyPlan,
+} from '@/sim/race/types';
+import type { World } from '@/sim/types/world';
 import { createWorkerEngine, type RaceEngine } from '../worker/engine';
-import type { PlanChoice } from '../worker/race-api';
+import type { PlanChoice, SessionRequest } from '../worker/race-api';
 import { randomSeed, useCareer } from './career';
+import { defaultControl } from './control';
+import type { Speed } from './playback';
+import { commitSession, pendingStage } from './weekend';
 
-/** Playback speeds of plan 3.4. */
-export const SPEEDS = [1, 2, 5, 15] as const;
-export type Speed = (typeof SPEEDS)[number];
+export { SPEEDS, type Speed } from './playback';
+export { defaultControl } from './control';
 
 /** A command as the player gives it: the store stamps it with the race time. */
 export type PlayerCommand = RaceCommand extends infer C
@@ -29,6 +40,15 @@ export type PlayerCommand = RaceCommand extends infer C
 
 type RaceStore = {
   phase: 'setup' | 'loading' | 'ready' | 'error';
+  /**
+   * Sunday of the open weekend, or the sandbox of `/dev/race` — any round, any seed, nothing
+   * written back (docs/systems/weekend-play.md).
+   */
+  mode: 'weekend' | 'sandbox';
+  /** In weekend mode: the world the session starts from, the one it leaves, and whether it is filed. */
+  base: World | null;
+  after: World | null;
+  committed: boolean;
   round: number;
   seed: string;
   replay: Replay | null;
@@ -59,6 +79,8 @@ type RaceStore = {
   setSuggestWithPause: (on: boolean) => void;
   setDecisionTimer: (on: boolean) => void;
   start: () => Promise<void>;
+  /** The race or sprint the open weekend is waiting on: the grid is the one qualifying set. */
+  startWeekend: () => Promise<void>;
   command: (command: PlayerCommand) => Promise<void>;
   /** Settles the paused call: 'accept' takes the strategist's pick. */
   answer: (answer: PitAnswer | 'accept') => Promise<void>;
@@ -80,16 +102,11 @@ export function setRaceEngine(next: RaceEngine) {
 
 const decisionKey = (d: StrategyDecision) => `${d.driverId}@${d.timeS}`;
 
-/** The control a career starts a race with: its delegation settings, neutral instructions. */
-export function defaultControl(): RaceControl {
+/** Who decides in this area from now on: the career's own delegation setting (plan 5.19). */
+function delegate(area: 'race-strategy' | 'race-radio', mode: DelegationMode) {
   const { world } = useCareer.getState();
-  const mode = (area: 'race-strategy' | 'race-radio'): DelegationMode => world.career.delegation[area];
-  return {
-    teamId: world.career.playerTeamId,
-    strategy: { mode: mode('race-strategy'), risk: 0.5, goal: 'fastest' },
-    radio: { mode: mode('race-radio'), aggression: 'normal', saving: 'none' },
-    plans: {},
-  };
+  const delegation = { ...world.career.delegation, [area]: mode };
+  useCareer.setState({ world: { ...world, career: { ...world.career, delegation } } });
 }
 
 export const useRace = create<RaceStore>()(
@@ -99,16 +116,41 @@ export const useRace = create<RaceStore>()(
       return { world: useCareer.getState().world, round, seed, control: startControl, commands };
     };
 
+    /** The same race as a session of the open weekend: the world carries round, seed and grid. */
+    const sessionRequest = (): SessionRequest => {
+      const { base, startControl, commands } = get();
+      return { world: base!, control: startControl, commands };
+    };
+
+    /** Runs the race, whichever side of it this is: the weekend's session, or the sandbox's race. */
+    const runRace = async (): Promise<{ input: RaceInput; result: RaceResult; after: World | null }> => {
+      engine ??= createWorkerEngine();
+      if (get().mode !== 'weekend') {
+        const run = await engine.run(request());
+        return { ...run, after: null };
+      }
+      const outcome = await engine.session(sessionRequest());
+      if (outcome.detail.kind !== 'race') throw new Error(`The weekend is at ${outcome.stage}, not a race`);
+      return { input: outcome.detail.input, result: outcome.detail.result, after: outcome.world };
+    };
+
     /** Re-runs the race with the command log and swaps the replay in at the same moment. */
     const rerun = async () => {
       set({ busy: true });
       try {
-        engine ??= createWorkerEngine();
-        const { input, result } = await engine.run(request());
-        set(() => ({ replay: buildReplay(input, result), busy: false }));
+        const { input, result, after } = await runRace();
+        set(() => ({ replay: buildReplay(input, result), after, busy: false }));
       } catch (error) {
         set({ busy: false, phase: 'error', error: error instanceof Error ? error.message : String(error) });
       }
+    };
+
+    /** The flag: what the race did to the world is the world now, and the weekend moves on. */
+    const commit = () => {
+      const { mode, after, committed } = get();
+      if (mode !== 'weekend' || !after || committed) return;
+      commitSession(after);
+      set({ committed: true });
     };
 
     /** Whether a call stops the race: always when nobody has made it, and when suggesting. */
@@ -117,6 +159,10 @@ export const useRace = create<RaceStore>()(
 
     return {
       phase: 'setup',
+      mode: 'sandbox',
+      base: null,
+      after: null,
+      committed: false,
       round: 1,
       seed: randomSeed(),
       replay: null,
@@ -151,7 +197,13 @@ export const useRace = create<RaceStore>()(
       loadPlans: async () => {
         engine ??= createWorkerEngine();
         const asked = { ...request(), control: get().control, commands: [] };
-        const plans = await engine.plans(asked);
+        // A weekend waiting on its race plans through the weekend; the sandbox builds its own.
+        const base = get().base ?? useCareer.getState().world;
+        const stage = pendingStage(base);
+        const plans =
+          stage === 'race' || stage === 'sprint'
+            ? await engine.sessionPlans({ world: base, control: get().control, commands: [] })
+            : await engine.plans(asked);
         // Dropped if the round, seed or instruction changed while the worker was busy.
         const now = get();
         if (
@@ -176,12 +228,15 @@ export const useRace = create<RaceStore>()(
           if (s.phase !== 'ready') s.plans = null;
         });
         if (get().phase === 'ready') await get().command({ kind: 'control', strategy });
+        // Outside a race the switch is the career's own setting, and every session reads it.
+        else delegate('race-strategy', strategy.mode);
       },
       setRadio: async (radio) => {
         set((s) => {
           s.control.radio = radio;
         });
         if (get().phase === 'ready') await get().command({ kind: 'control', radio });
+        else delegate('race-radio', radio.mode);
       },
       setSuggestWithPause: (on) => set({ suggestWithPause: on }),
       setDecisionTimer: (on) => set({ decisionTimer: on }),
@@ -189,17 +244,56 @@ export const useRace = create<RaceStore>()(
       start: async () => {
         set((s) => {
           s.phase = 'loading';
+          s.mode = 'sandbox';
           s.error = null;
           s.commands = [];
           s.handled = [];
           s.pending = null;
+          s.base = null;
+          s.after = null;
+          s.committed = false;
           s.startControl = s.control;
         });
         try {
-          engine ??= createWorkerEngine();
-          const { input, result } = await engine.run(request());
+          const { input, result } = await runRace();
           // The replay is read-only data: stored as is, not drafted.
           set(() => ({ phase: 'ready', replay: buildReplay(input, result), timeS: 0, paused: false }));
+        } catch (error) {
+          set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
+        }
+      },
+
+      startWeekend: async () => {
+        const base = useCareer.getState().world;
+        const stage = pendingStage(base);
+        if (stage !== 'race' && stage !== 'sprint') {
+          set({ phase: 'error', error: `The weekend is at ${stage ?? 'no session'}, not a race` });
+          return;
+        }
+        // Plain data, set as it is: the world is read-only and must not be drafted.
+        set(() => ({
+          phase: 'loading' as const,
+          mode: 'weekend' as const,
+          error: null,
+          commands: [],
+          handled: [],
+          pending: null,
+          base,
+          after: null,
+          committed: false,
+          round: base.weekend!.round,
+          seed: base.weekend!.seed,
+          startControl: get().control,
+        }));
+        try {
+          const { input, result, after } = await runRace();
+          set(() => ({
+            phase: 'ready',
+            replay: buildReplay(input, result),
+            after,
+            timeS: 0,
+            paused: false,
+          }));
         } catch (error) {
           set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
         }
@@ -240,8 +334,12 @@ export const useRace = create<RaceStore>()(
         const call = replay.result.pitWall?.decisions.find(
           (d) => d.timeS > timeS && d.timeS <= next && needsPlayer(d) && !handled.includes(decisionKey(d)),
         );
-        if (call) set(() => ({ timeS: call.timeS, paused: true, pending: call }));
-        else set({ timeS: next });
+        if (call) {
+          set(() => ({ timeS: call.timeS, paused: true, pending: call }));
+          return;
+        }
+        set({ timeS: next });
+        if (next >= replay.durationS) commit();
       },
       seek: (timeS) => {
         const { replay } = get();
@@ -253,7 +351,11 @@ export const useRace = create<RaceStore>()(
       backToSetup: () =>
         set({
           phase: 'setup',
+          mode: 'sandbox',
           replay: null,
+          base: null,
+          after: null,
+          committed: false,
           timeS: 0,
           seed: randomSeed(),
           commands: [],

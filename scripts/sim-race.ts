@@ -8,7 +8,7 @@
 import { writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { loadActivePack } from './pack';
-import { weekendRaceInput } from '@/sim/weekend/run-practice';
+import { weekendRaceInput } from '@/sim/season/weekend';
 import { simulateRace } from '@/sim/race/simulate';
 import { createWorld } from '@/sim/world/create-world';
 

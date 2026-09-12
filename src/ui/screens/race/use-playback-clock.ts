@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import { useRace } from '@/app/store/race';
+import { MAX_STEP_MS } from '@/app/store/playback';
 
-/** Longest real-time step taken in one frame: a backgrounded tab does not jump the race ahead. */
-const MAX_STEP_MS = 250;
-
-/** Drives the race clock from the browser's frames while a race is on screen. */
-export function usePlaybackClock(active: boolean) {
-  const tick = useRace((s) => s.tick);
+/**
+ * Drives a session clock from the browser's frames while it is on screen: the race, practice or
+ * qualifying — whichever store's `tick` is handed in.
+ */
+export function usePlaybackClock(active: boolean, tick: (realMs: number) => void) {
   useEffect(() => {
     if (!active) return;
     let frame = 0;

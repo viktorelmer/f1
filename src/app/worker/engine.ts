@@ -3,20 +3,28 @@
  * has no workers) the same API runs in-process. Both return the same data.
  */
 import * as Comlink from 'comlink';
-import type { WeekendOutcome } from '@/sim/season/weekend';
+import type { SessionOutcome, WeekendOutcome } from '@/sim/season/weekend';
+import type { World } from '@/sim/types/world';
 import {
   type PlanChoice,
   type RaceApi,
   raceApi,
   type RaceRequest,
   type RaceRun,
+  type SessionRequest,
   type WeekendRequest,
 } from './race-api';
+
+export type OpenRequest = { world: World; round: number; seed: string };
 
 export type RaceEngine = {
   run(request: RaceRequest): Promise<RaceRun>;
   plans(request: RaceRequest): Promise<PlanChoice | null>;
   weekend(request: WeekendRequest): Promise<WeekendOutcome>;
+  /** The weekend as state: opened, then moved on one session at a time (weekend-play.md). */
+  open(request: OpenRequest): Promise<World>;
+  session(request: SessionRequest): Promise<SessionOutcome>;
+  sessionPlans(request: SessionRequest): Promise<PlanChoice | null>;
 };
 
 export function createWorkerEngine(): RaceEngine {
@@ -26,6 +34,9 @@ export function createWorkerEngine(): RaceEngine {
     run: (request) => remote.run(request),
     plans: (request) => remote.plans(request),
     weekend: (request) => remote.weekend(request),
+    open: (request) => remote.open(request),
+    session: (request) => remote.session(request),
+    sessionPlans: (request) => remote.sessionPlans(request),
   };
 }
 
@@ -34,5 +45,8 @@ export function createInlineEngine(): RaceEngine {
     run: (request) => Promise.resolve(raceApi.run(request)),
     plans: (request) => Promise.resolve(raceApi.plans(request)),
     weekend: (request) => Promise.resolve(raceApi.weekend(request)),
+    open: (request) => Promise.resolve(raceApi.open(request)),
+    session: (request) => Promise.resolve(raceApi.session(request)),
+    sessionPlans: (request) => Promise.resolve(raceApi.sessionPlans(request)),
   };
 }

@@ -34,13 +34,15 @@ export function RaceScreen() {
   return <RaceView replay={replay} />;
 }
 
-function RaceView({ replay }: { replay: Replay }) {
+/** The race itself, playing back: the same view whether it is the weekend's Sunday or the sandbox. */
+export function RaceView({ replay }: { replay: Replay }) {
   const { t, i18n } = useTranslation();
   const world = useCareer((s) => s.world);
-  const { timeS, speed, paused, seed, togglePause, setSpeed, restart, backToSetup, command } = useRace();
+  const { timeS, speed, paused, seed, togglePause, setSpeed, restart, backToSetup, command, tick } =
+    useRace();
   const roster = useMemo(() => buildRoster(world), [world]);
   const frame = useMemo(() => frameAt(replay, timeS), [replay, timeS]);
-  usePlaybackClock(!paused && !frame.finished);
+  usePlaybackClock(!paused && !frame.finished, tick);
 
   // The frame is rebuilt every animation frame; these are handed down only when what they show changes.
   const freshRows = boardRows(frame.cars, i18n.language, t, (n) => t('race.board.lapsDown', { count: n }));

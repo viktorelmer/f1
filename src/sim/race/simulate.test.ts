@@ -6,7 +6,7 @@ import { fingerprint } from '../util/hash';
 import { createWorld } from '../world/create-world';
 import { raceMetrics } from './analysis';
 import { buildRaceInput } from './build-input';
-import { weekendRaceInput } from '../weekend/run-practice';
+import { weekendRaceInput } from '../season/weekend';
 import { buildReplay } from './replay';
 import { simulateRace } from './simulate';
 import { isDry } from './tyres';
@@ -44,13 +44,13 @@ describe('simulateRace', () => {
     const b = simulateRace(input('al-rimal', 'M2-determinism'));
     expect(fingerprint(b)).toBe(fingerprint(a));
     // Pinned for the default pack only: a local pack has other content and so other hashes.
-    if (!isLocalPack) expect(fingerprint(a)).toBe('03d1610584337c');
+    if (!isLocalPack) expect(fingerprint(a)).toBe('081d44248fae43');
   });
 
   it('pins a race with a safety car too', () => {
     const race = simulateRace(input('marina-lights', 'M3-flag'));
     expect(race.events.some((e) => e.kind === 'safety-car')).toBe(true);
-    if (!isLocalPack) expect(fingerprint(race)).toBe('056a573e659a49');
+    if (!isLocalPack) expect(fingerprint(race)).toBe('09266539e80586');
   });
 
   it('shows a flag to a car only once it is out: no call "under the safety car" before it', () => {

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { balance } from '@/data/balance';
 import { isLocalPack, loadActivePack } from '@/data/packs/active';
 import { buildRaceInput } from '../race/build-input';
+import type { RaceInput } from '../race/types';
+import type { TyreAllocation } from '../types/world';
 import { simulateRace } from '../race/simulate';
 import { createRng } from '../rng/rng';
 import { fingerprint } from '../util/hash';
@@ -9,7 +11,7 @@ import { createWorld } from '../world/create-world';
 import type { SessionKind } from '../types/world';
 import { readingSd } from './knowledge';
 import { defaultPlan, type PracticePlan, runPractice, weekendTruth } from './practice';
-import { PRACTICE_SESSIONS, runPracticeSessions, weekendRaceInput } from './run-practice';
+import { PRACTICE_SESSIONS, runPracticeSessions, weekendRaceInput } from '../season/weekend';
 import { decideHiding, referencePaceS, rivalPrecision } from './scouting';
 
 const pack = loadActivePack();
@@ -20,11 +22,16 @@ const world = createWorld('practice-tests', pack, {
   principalName: 'Test',
 });
 const roundOf = (trackId: string) => world.season.calendar.find((r) => r.trackId === trackId)!.round;
+/** The player's two cars staying in the garage for a session: an empty queue each. */
+const sitOut: PracticePlan = Object.fromEntries(world.teams[TEAM]!.drivers.race.map((id) => [id, []]));
 const race = (track: string, seed: string) => buildRaceInput(world, pack, roundOf(track), seed);
 const dataAnalysis = Object.fromEntries(Object.values(world.teams).map((t) => [t.id, 60]));
 const known = Object.fromEntries(Object.keys(world.teams).map((id) => [id, null]));
 const rivals = Object.fromEntries(Object.keys(world.teams).map((id) => [id, {}]));
 const setupLossS: Record<string, number> = {};
+/** A rack nobody can run out of: most of these tests are about learning, not about the entry. */
+const plenty = (race: RaceInput): Record<string, TyreAllocation> =>
+  Object.fromEntries(race.entries.map((e) => [e.driverId, { soft: 9, medium: 9, hard: 9 }]));
 
 const session = (track: string, seed: string, plans?: PracticePlan, kind: SessionKind = 'fp2') => {
   const input = race(track, seed);
@@ -37,6 +44,7 @@ const session = (track: string, seed: string, plans?: PracticePlan, kind: Sessio
     known,
     rivals,
     setupLossS,
+    sets: plenty(input),
   });
 };
 
@@ -58,6 +66,7 @@ describe('a practice session', () => {
       known,
       rivals,
       setupLossS,
+      sets: plenty(input),
     });
     for (const minutes of Object.values(result.minutes)) {
       expect(minutes).toBeGreaterThan(balance.weekend.session.practiceMinutes * 0.8);
@@ -89,6 +98,7 @@ describe('a practice session', () => {
       known,
       rivals,
       setupLossS,
+      sets: plenty(input),
     });
     const car = result.session.classification.find((c) => c.driverId === absent)!;
     expect(car.laps).toBe(0);
@@ -108,13 +118,12 @@ describe('what practice teaches', () => {
   };
 
   it('narrows the degradation estimate with laps, and leaves the prior alone without them', () => {
-    const input = race('al-rimal', 'narrow');
-    const prior = runPracticeSessions(world, input, {
-      fp1: {},
-      fp2: {},
-      fp3: {},
+    const prior = runPracticeSessions(world, pack, roundOf('al-rimal'), 'narrow', {
+      fp1: sitOut,
+      fp2: sitOut,
+      fp3: sitOut,
     }).knowledge[TEAM]!.weekend!;
-    const ran = runPracticeSessions(world, input).knowledge[TEAM]!.weekend!;
+    const ran = runPracticeSessions(world, pack, roundOf('al-rimal'), 'narrow').knowledge[TEAM]!.weekend!;
     expect(prior.laps).toBe(0);
     expect(ran.laps).toBeGreaterThan(10);
     expect(ran.tyreDegradation.basis.sd).toBeLessThan(prior.tyreDegradation.basis.sd);
@@ -134,8 +143,8 @@ describe('what practice teaches', () => {
     let inside = 0;
     const runs = 60;
     for (let i = 0; i < runs; i++) {
-      const input = race('al-rimal', `honest-${i}`);
-      const after = runPracticeSessions(world, input).knowledge[TEAM]!.weekend!;
+      const after = runPracticeSessions(world, pack, roundOf('al-rimal'), `honest-${i}`).knowledge[TEAM]!
+        .weekend!;
       if (
         truth.tyreDegradation >= after.tyreDegradation.low &&
         truth.tyreDegradation <= after.tyreDegradation.high
@@ -149,7 +158,7 @@ describe('what practice teaches', () => {
 
   it('keeps the truth out of what the team holds', () => {
     const truth = teamTruth();
-    const after = runPracticeSessions(world, race('al-rimal', 'no-leak')).knowledge[TEAM]!.weekend!;
+    const after = runPracticeSessions(world, pack, roundOf('al-rimal'), 'no-leak').knowledge[TEAM]!.weekend!;
     expect(after.tyreDegradation.basis.mean).not.toBe(truth.tyreDegradation);
     expect(after.fuelPerLapKg.basis.mean).not.toBe(truth.fuelPerLapKg);
     expect(after.tyreDegradation.basis.sd).toBeGreaterThan(0);
@@ -175,16 +184,8 @@ describe('what practice teaches', () => {
 describe('M5 DoD: skipping practice costs the team on Sunday', () => {
   /** The same weekend, with and without the player's team running in practice. */
   const weekend = (track: string, seed: string, skip: boolean) => {
-    const plans = skip
-      ? Object.fromEntries(
-          PRACTICE_SESSIONS.standard.map((s) => {
-            const input = race(track, seed);
-            const full = defaultPlan(input.entries, s);
-            for (const id of world.teams[TEAM]!.drivers.race) delete full[id];
-            return [s, full];
-          }),
-        )
-      : {};
+    // An empty queue is a car that stays in the garage; the rest of the field runs as it would.
+    const plans = skip ? Object.fromEntries(PRACTICE_SESSIONS.standard.map((s) => [s, sitOut])) : {};
     return weekendRaceInput(world, pack, roundOf(track), seed, { plans });
   };
 
@@ -220,7 +221,7 @@ describe('M5 DoD: skipping practice costs the team on Sunday', () => {
 describe('reading the opposition (plan 5.13)', () => {
   const weekendOf = (seed: string) => {
     const input = race('al-rimal', seed);
-    const after = runPracticeSessions(world, input);
+    const after = runPracticeSessions(world, pack, roundOf('al-rimal'), seed);
     return { input, after };
   };
 
@@ -255,6 +256,7 @@ describe('reading the opposition (plan 5.13)', () => {
       known,
       rivals,
       setupLossS,
+      sets: plenty(input),
     }).rivals[observer]![target]!;
     expect(estimate.basis.sd).toBeLessThan(oneSession.basis.sd);
   });

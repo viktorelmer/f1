@@ -16,3 +16,6 @@ coverage/
 
 # The owner's real-world pack (plan section 10): stays local, never enters the repository.
 src/data/packs/local/
+
+# TanStack Router plugin scratch files
+.tanstack/

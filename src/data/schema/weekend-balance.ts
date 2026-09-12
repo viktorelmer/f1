@@ -55,6 +55,16 @@ export const weekendBalanceSchema = z.strictObject({
       maxTrafficShare: unit,
     }),
   ),
+  tyres: tuned(
+    z.strictObject({
+      minPerCompound: z.number().int().min(0),
+      qualifyingSetsPerPart: z.number().int().min(0),
+      usedSetWear: unit,
+      missingSetCostS: nonNegative,
+      entryScoreScaleS: positive,
+      riskDiscount: unit,
+    }),
+  ),
   scouting: tuned(
     z.strictObject({
       sdBaseS: positive,

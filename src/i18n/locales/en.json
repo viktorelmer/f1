@@ -438,7 +438,21 @@
       "run": "Run the weekend",
       "running": "Running the weekend…",
       "advance": "Continue",
-      "notRunYet": "This weekend has not been run yet."
+      "notRunYet": "This weekend has not been run yet.",
+      "open": "Open the weekend",
+      "working": "Working…",
+      "enter": "Enter",
+      "simulateSession": "Simulate",
+      "session": "Session",
+      "statusColumn": "Status",
+      "status": {
+        "done": "Run",
+        "now": "Next up",
+        "ahead": "Ahead"
+      },
+      "result": "Result",
+      "mine": "You: {{positions}}",
+      "results": "Round {{round}} · {{track}} — classifications"
     },
     "event": {
       "preseason-test": "Preseason test",
@@ -499,7 +513,8 @@
         "fuel-calibration": "Fuel calibration",
         "rookie": "Rookie outing"
       },
-      "minutes": "{{used}} / {{budget}} min"
+      "minutes": "{{used}} / {{budget}} min",
+      "queue": "Queue"
     },
     "career": {
       "title": "A new career",
@@ -514,6 +529,80 @@
       "start": "Start the career",
       "teamName": "New team name",
       "newTeam": "Meridian Racing"
+    }
+  },
+  "weekend": {
+    "gate": {
+      "title": "The session",
+      "noWeekend": "No weekend is open: open the one the season is waiting on.",
+      "open": "Open the weekend",
+      "next": "Next session: {{session}}",
+      "enter": "Go to the session",
+      "start": "To the grid",
+      "working": "Working…"
+    },
+    "clock": {
+      "remaining": "{{time}} left",
+      "ended": "Session over",
+      "skip": "To the flag",
+      "leave": "Leave",
+      "rerunning": "Re-running the session…",
+      "progress": "Session progress"
+    },
+    "practice": {
+      "board": "Practice timing",
+      "best": "Best lap",
+      "laps": "Laps",
+      "state": "Doing",
+      "carState": {
+        "garage": "In the garage",
+        "out": "On track",
+        "done": "Finished"
+      },
+      "feed": "Laps",
+      "noLaps": "Nobody has set a lap yet.",
+      "minutes": "Minutes",
+      "sets": "Sets S·M·H",
+      "send": "Send this queue",
+      "knowledge": "What the team knows",
+      "degradation": "Tyre degradation",
+      "fuel": "Fuel per lap",
+      "perLap": "{{value}} s/lap",
+      "kgPerLap": "{{value}} kg/lap",
+      "setupLoss": "Off the setup",
+      "seconds": "{{value}} s",
+      "behind": "Laps behind it"
+    },
+    "qualifying": {
+      "board": "Qualifying timing",
+      "part": "Q{{part}}",
+      "time": "Time",
+      "dropZone": "drop",
+      "noTime": "no time",
+      "carState": {
+        "garage": "In the garage",
+        "out-lap": "Out lap",
+        "flying": "On a lap",
+        "returning": "Coming in",
+        "out": "Knocked out"
+      },
+      "feed": "Laps",
+      "noLaps": "No laps yet.",
+      "traffic": "traffic +{{s}} s",
+      "sendOut": "Out now"
+    },
+    "entry": {
+      "title": "Tyre entry",
+      "intro": "{{limit}} sets for the weekend, declared before the first session and blind to the weather. A compound you did not take is a compound you cannot run.",
+      "notOpen": "The entry is declared when the weekend opens.",
+      "total": "{{total}} / {{limit}}",
+      "fewer": "One fewer set of {{compound}}",
+      "more": "One more set of {{compound}}",
+      "locked": "The weekend has started: the sets are spent, not declared."
+    },
+    "strategy": {
+      "planLater": "The plan for the race is chosen once qualifying has set the grid.",
+      "delegation": "Who makes the calls"
     }
   }
 }

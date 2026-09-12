@@ -31,6 +31,7 @@ import { Route as ChampionshipRegulationsRouteImport } from './routes/championsh
 import { Route as ChampionshipRivalsRouteImport } from './routes/championship/rivals'
 import { Route as ChampionshipStandingsRouteImport } from './routes/championship/standings'
 import { Route as DevComponentsRouteImport } from './routes/dev/components'
+import { Route as DevRaceRouteImport } from './routes/dev/race'
 import { Route as HqIndexRouteImport } from './routes/hq/index'
 import { Route as HqOverviewRouteImport } from './routes/hq/overview'
 import { Route as MediaIndexRouteImport } from './routes/media/index'
@@ -168,6 +169,11 @@ const ChampionshipStandingsRoute = ChampionshipStandingsRouteImport.update({
 const DevComponentsRoute = DevComponentsRouteImport.update({
   id: '/dev/components',
   path: '/dev/components',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevRaceRoute = DevRaceRouteImport.update({
+  id: '/dev/race',
+  path: '/dev/race',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HqIndexRoute = HqIndexRouteImport.update({
@@ -332,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/championship/rivals': typeof ChampionshipRivalsRoute
   '/championship/standings': typeof ChampionshipStandingsRoute
   '/dev/components': typeof DevComponentsRoute
+  '/dev/race': typeof DevRaceRoute
   '/hq/overview': typeof HqOverviewRoute
   '/media/crises': typeof MediaCrisesRoute
   '/media/press': typeof MediaPressRoute
@@ -376,6 +383,7 @@ export interface FileRoutesByTo {
   '/championship/rivals': typeof ChampionshipRivalsRoute
   '/championship/standings': typeof ChampionshipStandingsRoute
   '/dev/components': typeof DevComponentsRoute
+  '/dev/race': typeof DevRaceRoute
   '/hq/overview': typeof HqOverviewRoute
   '/media/crises': typeof MediaCrisesRoute
   '/media/press': typeof MediaPressRoute
@@ -429,6 +437,7 @@ export interface FileRoutesById {
   '/championship/rivals': typeof ChampionshipRivalsRoute
   '/championship/standings': typeof ChampionshipStandingsRoute
   '/dev/components': typeof DevComponentsRoute
+  '/dev/race': typeof DevRaceRoute
   '/hq/overview': typeof HqOverviewRoute
   '/media/crises': typeof MediaCrisesRoute
   '/media/press': typeof MediaPressRoute
@@ -483,6 +492,7 @@ export interface FileRouteTypes {
     | '/championship/rivals'
     | '/championship/standings'
     | '/dev/components'
+    | '/dev/race'
     | '/hq/overview'
     | '/media/crises'
     | '/media/press'
@@ -527,6 +537,7 @@ export interface FileRouteTypes {
     | '/championship/rivals'
     | '/championship/standings'
     | '/dev/components'
+    | '/dev/race'
     | '/hq/overview'
     | '/media/crises'
     | '/media/press'
@@ -579,6 +590,7 @@ export interface FileRouteTypes {
     | '/championship/rivals'
     | '/championship/standings'
     | '/dev/components'
+    | '/dev/race'
     | '/hq/overview'
     | '/media/crises'
     | '/media/press'
@@ -622,6 +634,7 @@ export interface RootRouteChildren {
   TeamRouteRoute: typeof TeamRouteRouteWithChildren
   WeekendRouteRoute: typeof WeekendRouteRouteWithChildren
   DevComponentsRoute: typeof DevComponentsRoute
+  DevRaceRoute: typeof DevRaceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -778,6 +791,13 @@ declare module '@tanstack/react-router' {
       path: '/dev/components'
       fullPath: '/dev/components'
       preLoaderRoute: typeof DevComponentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/race': {
+      id: '/dev/race'
+      path: '/dev/race'
+      fullPath: '/dev/race'
+      preLoaderRoute: typeof DevRaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hq/': {
@@ -1148,6 +1168,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeamRouteRoute: TeamRouteRouteWithChildren,
   WeekendRouteRoute: WeekendRouteRouteWithChildren,
   DevComponentsRoute: DevComponentsRoute,
+  DevRaceRoute: DevRaceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

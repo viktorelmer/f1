@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { balance } from '@/data/balance';
 import { isLocalPack, loadActivePack } from '@/data/packs/active';
 import { buildRaceInput } from '../race/build-input';
+import type { RaceInput } from '../race/types';
+import type { TyreAllocation } from '../types/world';
 import { simulateRace } from '../race/simulate';
 import { createRng } from '../rng/rng';
 import { fingerprint } from '../util/hash';
 import { createWorld } from '../world/create-world';
 import { decideRunTime, runQualifying } from './qualifying';
-import { weekendRaceInput } from './run-practice';
+import { weekendRaceInput } from '../season/weekend';
 
 const pack = loadActivePack();
 const world = createWorld('quali-tests', pack, {
@@ -16,12 +18,13 @@ const world = createWorld('quali-tests', pack, {
   principalName: 'Test',
 });
 const roundOf = (trackId: string) => world.season.calendar.find((r) => r.trackId === trackId)!.round;
-const quali = (track: string, seed: string) =>
-  runQualifying({
-    race: buildRaceInput(world, pack, roundOf(track), seed),
-    session: 'qualifying',
-    setupLossS: {},
-  });
+/** A rack nobody can run out of: these tests are about traffic and the clock, not about the entry. */
+const plenty = (race: RaceInput): Record<string, TyreAllocation> =>
+  Object.fromEntries(race.entries.map((e) => [e.driverId, { soft: 9, medium: 9, hard: 9 }]));
+const quali = (track: string, seed: string) => {
+  const race = buildRaceInput(world, pack, roundOf(track), seed);
+  return runQualifying({ race, session: 'qualifying', setupLossS: {}, sets: plenty(race) });
+};
 
 describe('qualifying', () => {
   const result = quali('al-rimal', 'quali-1');
@@ -108,7 +111,7 @@ describe('qualifying', () => {
 
   it('is deterministic, and pinned for the default pack', () => {
     expect(fingerprint(quali('al-rimal', 'quali-1').order)).toBe(fingerprint(result.order));
-    if (!isLocalPack) expect(fingerprint(result.session)).toBe('02c71dcff1dc7d');
+    if (!isLocalPack) expect(fingerprint(result.session)).toBe('03c8f75065e278');
   });
 });
 

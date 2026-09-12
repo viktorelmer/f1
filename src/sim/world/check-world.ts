@@ -5,6 +5,7 @@
  */
 import type { Pack } from '@/data/schema/pack';
 import { canDelegate, DELEGATION_AREAS } from '../decide/delegation';
+import { WEEKEND_SESSIONS } from '../season/weekend';
 import type { StaffRole, World } from '../types/world';
 
 const ESTIMATE_KEYS = 'basis,confidence,high,low,observedAt,sources,value';
@@ -117,6 +118,37 @@ export function checkWorld(world: World, pack: Pack): string[] {
         fail(`${team.id}/${driver.id}: estimate value outside its interval`);
       if (e.low < e.basis.min || e.high > e.basis.max)
         fail(`${team.id}/${driver.id}: estimate outside the quantity's bounds`);
+    }
+  }
+
+  // The weekend in progress: it belongs to a round that has not been completed, the sessions
+  // behind its stage have results, and the grids exist exactly when the sessions that set them do.
+  const open = world.weekend;
+  if (open) {
+    const weekend = world.season.calendar.find((r) => r.round === open.round);
+    if (!weekend) fail(`weekend: round ${open.round} is not on the calendar`);
+    else {
+      if (weekend.status !== 'upcoming') fail(`weekend: round ${open.round} is already completed`);
+      const order = WEEKEND_SESSIONS[weekend.format];
+      if (open.stage !== 'done' && !order.includes(open.stage))
+        fail(`weekend: "${open.stage}" is not a session of a ${weekend.format} weekend`);
+      const run = open.stage === 'done' ? order : order.slice(0, order.indexOf(open.stage));
+      for (const session of run)
+        if (!weekend.sessions.some((s) => s.session === session))
+          fail(`weekend: "${session}" is behind the stage but has no result`);
+      for (const session of weekend.sessions)
+        if (!run.includes(session.session))
+          fail(`weekend: "${session.session}" has a result but has not been run`);
+      const drivers = teams.flatMap((t) => t.drivers.race);
+      for (const [name, grid, after] of [
+        ['grid', open.grid, 'qualifying'],
+        ['sprintGrid', open.sprintGrid, 'sprint-qualifying'],
+      ] as const) {
+        const expected = order.includes(after) && run.includes(after);
+        if (expected !== (grid !== null)) fail(`weekend: ${name} disagrees with "${after}"`);
+        if (grid && (grid.length !== drivers.length || new Set(grid).size !== grid.length))
+          fail(`weekend: ${name} is not every car exactly once`);
+      }
     }
   }
 

@@ -21,7 +21,7 @@ const ORDERS: readonly TeamOrder[] = ['hold', 'swap', 'free'];
  * itself. Strategy and radio each have a mode and, when directed, an instruction; team orders are
  * the player's own. A delegated area keeps every control live — any call can be taken back.
  */
-export function ControlBar({ inRace }: { inRace: boolean }) {
+export function ControlBar({ inRace, label }: { inRace: boolean; label?: string }) {
   const { t } = useTranslation();
   const world = useCareer((s) => s.world);
   const {
@@ -45,7 +45,10 @@ export function ControlBar({ inRace }: { inRace: boolean }) {
   );
 
   return (
-    <section aria-label={t('race.control.strategy')} className="flex flex-col gap-2 border-b border-line p-3">
+    <section
+      aria-label={label ?? t('race.control.strategy')}
+      className="flex flex-col gap-2 border-b border-line p-3"
+    >
       <Segmented
         label={t('race.control.strategy')}
         {...modes('race-strategy')}
