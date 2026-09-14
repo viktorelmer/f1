@@ -30,6 +30,8 @@ export const setupBalanceSchema = z.strictObject({
     z.strictObject({
       referenceTrackTempC: z.number(),
       windReferenceKph: z.number().min(0),
+      /** How far the pack's factory preset sits from the true optimum, in points, per slider. */
+      factoryPresetSd: perParameter(z.number().min(0)),
       /** Points the optimum moves per °C of track temperature over the reference. */
       perTrackTempC: perParameter(z.number()),
       perWindKph: perParameter(z.number()),

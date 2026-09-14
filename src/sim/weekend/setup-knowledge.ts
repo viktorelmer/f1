@@ -7,14 +7,14 @@
  * here — the same four things the plan names. Truth is touched in one place only: `measure()`.
  */
 import { balance } from '@/data/balance';
-import { SETUP_PARAMETERS, type SetupParameter } from '@/data/schema/pack';
-import { type Estimate, measure, observe, refine } from '../knowledge/estimate';
+import { SETUP_PARAMETERS } from '@/data/schema/pack';
+import { measure, observe, refine } from '../knowledge/estimate';
 import type { Rng } from '../rng/rng';
 import type { GameDate } from '../types/game-date';
+import type { SetupNote, SetupReading } from '../types/world';
 import type { Setup, SetupCapability } from '../car/setup';
 
-/** The engineer's recommendation: a range for every parameter, never a number. */
-export type SetupReading = Record<SetupParameter, Estimate>;
+export type { SetupNote, SetupReading };
 
 /**
  * How wide the engineer's reading is, in points of the scale. Every source of precision takes its
@@ -67,15 +67,6 @@ export function refineSetup(
     reading[p] = refine(prior[p], measure(ideal[p], { sd, bias: 0 }, rng, at));
   return reading;
 }
-
-/** What the driver says after a run: which way the car is wrong, never by how much. */
-export type SetupNote = {
-  parameter: SetupParameter;
-  /** Which way the slider has to go to fix what the driver felt. */
-  direction: 'more' | 'less';
-  /** False when the driver has blamed the wrong thing: the symptom was real, the cause is not. */
-  trusted: boolean;
-};
 
 /**
  * The driver's read of the car after a run (plan 5.2). Only parameters far enough out to be felt

@@ -50,9 +50,9 @@
       "value": {
         "min": 0,
         "max": 100,
-        "wideSd": 14
+        "wideSd": 18
       },
-      "why": "One setup slider on the 0..100 scale the pack uses (plan 5.2). An sd of 14 points is a quarter of the usable scale — a team reading its optimum that loosely is guessing, so confidence is zero there; a good engineer with a simulator and an hour of running lands near 3 points, which is inside the window where the loss plateaus."
+      "why": "One setup slider on the 0..100 scale the pack uses (plan 5.2). An sd of 18 points is what a crew knows before it has run here at all — through the loss curve that is half a second a lap — so confidence is zero there; an hour of setup work takes it to 4.5 points, which reads as high and costs nothing on the track."
     }
   },
   "scouting": {

@@ -20,6 +20,7 @@ import type {
   PackStaff,
   PackTeam,
   Setup,
+  SetupParameter,
   SponsorDeal,
   StaffRole,
 } from '@/data/schema/pack';
@@ -33,7 +34,16 @@ export type StaffId = string;
 export type TrackId = string;
 export type EngineSupplierId = string;
 
-export type { ChassisPart, Department, DriverContract, Facility, Setup, SponsorDeal, StaffRole };
+export type {
+  ChassisPart,
+  Department,
+  DriverContract,
+  Facility,
+  Setup,
+  SetupParameter,
+  SponsorDeal,
+  StaffRole,
+};
 
 // ── Car ───────────────────────────────────────────────────────────────────────────────────────
 
@@ -133,6 +143,9 @@ export type Contract = DriverContract | StaffContract;
 export type DriverHidden = { potential: number; growthRate: number; injuryProneness: number };
 export type TeamHidden = { correlationBias: number };
 
+/** What a track hides: the setup the pack's preset is aiming at, and misses by this much. */
+export type TrackHidden = { setupOffset: Setup };
+
 // ── Season ────────────────────────────────────────────────────────────────────────────────────
 
 export type SessionKind = 'fp1' | 'fp2' | 'fp3' | 'sprint-qualifying' | 'sprint' | 'qualifying' | 'race';
@@ -197,6 +210,10 @@ export type WeekendProgress = {
   sets: Record<DriverId, TyreAllocation>;
   /** The practice programmes chosen so far; a session without one runs the default. */
   plans: Partial<Record<SessionKind, PracticePlan>>;
+  /** What is on each car right now (docs/systems/setup.md): chosen before FP1, changed between sessions. */
+  setups: Record<DriverId, Setup>;
+  /** What each driver said about the car after the last session he ran. */
+  notes: Record<DriverId, SetupNote[]>;
   /*
    * Results are not kept here: a session that has been run goes straight into its round on the
    * calendar, so the tables are the sum of the sessions at every moment, not only after Sunday.
@@ -257,12 +274,29 @@ export type WeekendKnowledge = {
   round: number;
   tyreDegradation: Estimate;
   fuelPerLapKg: Estimate;
-  /** Seconds a lap the car is still away from where it should be: setup running takes this down. */
-  setupLossS: number;
-  /** Laps spent on setup work this weekend. */
-  setupLaps: number;
+  /** What the engineer of each car makes of the optimum setup, and the laps behind that reading. */
+  setup: Record<DriverId, SetupKnowledge>;
   /** Laps of running behind these estimates, for the screen. */
   laps: number;
+};
+
+/**
+ * The engineer's reading of the hidden optimum for one car (docs/systems/setup.md, plan 5.2): a
+ * range per parameter, never a number, and the setup laps that narrowed it.
+ */
+export type SetupKnowledge = { reading: SetupReading; laps: number };
+
+/** The recommendation on the setup screen: one `Estimate` per slider. */
+export type SetupReading = Record<SetupParameter, Estimate>;
+
+/**
+ * What a driver reported after a run: which way the car is wrong, never by how much. `trusted` is
+ * false when he named the wrong cause — he cannot tell, and neither can the player.
+ */
+export type SetupNote = {
+  parameter: SetupParameter;
+  direction: 'more' | 'less';
+  trusted: boolean;
 };
 
 export type TeamKnowledge = {
@@ -307,7 +341,12 @@ export type World = {
       customerPriceM: number;
     }
   >;
-  hidden: { drivers: Record<DriverId, DriverHidden>; teams: Record<TeamId, TeamHidden> };
+  hidden: {
+    drivers: Record<DriverId, DriverHidden>;
+    teams: Record<TeamId, TeamHidden>;
+    /** How far each track's factory preset sits from its true optimum (docs/systems/setup.md). */
+    tracks: Record<string, TrackHidden>;
+  };
   knowledge: Record<TeamId, TeamKnowledge>;
   projects: RnDProject[];
   news: NewsItem[];

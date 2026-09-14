@@ -77,7 +77,7 @@ export function PracticeView({ replay }: { replay: PracticeReplay }) {
               finished={frame.finished}
             />
           ))}
-          <KnowledgePanel knowledge={frame.knowledge[world.career.playerTeamId]} />
+          <KnowledgePanel knowledge={frame.knowledge[world.career.playerTeamId]} driverIds={mine} />
         </div>
       </div>
     </div>
@@ -228,7 +228,13 @@ function CarPanel({
 }
 
 /** What the team has worked out so far — the only way an estimate ever shows (plan 6.6). */
-function KnowledgePanel({ knowledge }: { knowledge: WeekendKnowledge | undefined }) {
+function KnowledgePanel({
+  knowledge,
+  driverIds,
+}: {
+  knowledge: WeekendKnowledge | undefined;
+  driverIds: readonly string[];
+}) {
   const { t } = useTranslation();
   if (!knowledge) return null;
 
@@ -247,8 +253,8 @@ function KnowledgePanel({ knowledge }: { knowledge: WeekendKnowledge | undefined
         />
         <dl className="grid grid-cols-2 gap-2 text-xs">
           <Field
-            label={t('weekend.practice.setupLoss')}
-            value={t('weekend.practice.seconds', { value: knowledge.setupLossS.toFixed(2) })}
+            label={t('weekend.practice.setupLaps')}
+            value={driverIds.map((id) => Math.round(knowledge.setup[id]?.laps ?? 0)).join(' · ')}
           />
           <Field label={t('weekend.practice.behind')} value={String(Math.round(knowledge.laps))} />
         </dl>

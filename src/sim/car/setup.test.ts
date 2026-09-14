@@ -76,14 +76,20 @@ describe('what being off it costs', () => {
     expect(parameterLossS('rearWing', 100)).toBe(l.seconds.rearWing);
   });
 
-  it('costs about half a second for a car nobody has dialled in, and never more than a second', () => {
+  it('costs a tenth on a decent preset, half a second unread, and everything at the wrong end', () => {
     const ideal = idealSetup(track, dry);
-    // Every slider a third of the scale away: a car set up by guesswork, not by malice.
+    // A car on a preset that is the usual few points out: the tenth the plan asks the third level
+    // to be worth (plan 5.2).
+    const preset = { ...ideal };
+    for (const p of SETUP_PARAMETERS) preset[p] = ideal[p] + (ideal[p] > 50 ? -6 : 6);
+    expect(setupLossS(preset, ideal)).toBeGreaterThan(0.05);
+    expect(setupLossS(preset, ideal)).toBeLessThan(0.3);
+
+    // A car set up on a reading nobody has narrowed: about half a second, as in M5.
     const guessed = { ...ideal };
-    for (const p of SETUP_PARAMETERS) guessed[p] = ideal[p] + (ideal[p] > 50 ? -14 : 14);
-    const loss = setupLossS(guessed, ideal);
-    expect(loss).toBeGreaterThan(0.3);
-    expect(loss).toBeLessThan(0.7);
+    for (const p of SETUP_PARAMETERS) guessed[p] = ideal[p] + (ideal[p] > 50 ? -11 : 11);
+    expect(setupLossS(guessed, ideal)).toBeGreaterThan(0.3);
+    expect(setupLossS(guessed, ideal)).toBeLessThan(0.8);
 
     const worst = { ...ideal };
     for (const p of SETUP_PARAMETERS) worst[p] = ideal[p] > 50 ? 0 : 100;

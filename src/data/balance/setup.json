@@ -2,21 +2,21 @@
   "loss": {
     "value": {
       "seconds": {
-        "frontWing": 0.14,
-        "rearWing": 0.16,
-        "brakeBias": 0.08,
-        "frontRideHeight": 0.12,
-        "rearRideHeight": 0.12,
-        "suspensionStiffness": 0.1,
-        "camber": 0.07,
-        "toe": 0.06,
-        "gearRatios": 0.09
+        "frontWing": 0.25,
+        "rearWing": 0.3,
+        "brakeBias": 0.12,
+        "frontRideHeight": 0.2,
+        "rearRideHeight": 0.2,
+        "suspensionStiffness": 0.18,
+        "camber": 0.22,
+        "toe": 0.18,
+        "gearRatios": 0.2
       },
       "tolerance": 18,
-      "plateau": 0.25,
+      "plateau": 0.15,
       "exponent": 2
     },
-    "why": "What a wrong setup costs a lap (plan 5.2). Each parameter is worth its own seconds at full deviation, and the nine together add to 0.94 s — about the 0.5 s a car off the truck was worth in M5 once the factory preset is taken into account, and never more than a second even if every slider is at the wrong end. The wings and the floor (ride heights) matter most, camber and toe least: they are worth a tenth between them and are the hardest to find, which is exactly why they sit behind the third access level. Deviation is measured in points of the 0..100 scale: 18 points off is the full cost, and the quadratic with a 25% plateau means the last few points either side of the optimum are almost free — finding the window matters, hitting its centre does not."
+    "why": "What a wrong setup costs a lap (plan 5.2). Each parameter is worth its own seconds at full deviation and the nine together add to 1.85 s: a car nobody has dialled in is seconds off, which is what makes practice worth its hour. The wings and the floor matter most; the three sliders of the fine level are worth 0.6 s between them, which is why owning that level is worth the tenth or so the plan asks for — not because they are more important, but because a team that cannot touch them carries whatever the preset got wrong. Deviation is measured in points of the 0..100 scale: 18 points off is the full cost, and the quadratic with a 15% plateau means the couple of points either side of the optimum are free — the window matters, its exact centre does not."
   },
   "ideal": {
     "value": {
@@ -28,8 +28,8 @@
         "frontRideHeight": 0.1,
         "rearRideHeight": 0.1,
         "suspensionStiffness": 0,
-        "camber": -0.25,
-        "toe": -0.2,
+        "camber": -0.35,
+        "toe": -0.3,
         "gearRatios": 0
       },
       "perWindKph": {
@@ -54,9 +54,20 @@
         "toe": 3,
         "gearRatios": -5
       },
-      "windReferenceKph": 15
+      "windReferenceKph": 15,
+      "factoryPresetSd": {
+        "frontWing": 4,
+        "rearWing": 4,
+        "brakeBias": 4,
+        "frontRideHeight": 6,
+        "rearRideHeight": 6,
+        "suspensionStiffness": 6,
+        "camber": 11,
+        "toe": 11,
+        "gearRatios": 11
+      }
     },
-    "why": "Where the optimum moves with the conditions (plan 5.2: the ideal setup shifts with air and track temperature, wind and rain). The factory preset of the pack is the optimum at 35 °C of track, 15 km/h of wind and a dry surface; from there every degree hotter takes a quarter of a point off camber and a fifth off toe (a hot track overheats the tyre surface, so teams stop asking so much of it) and a tenth off each wing, while the car is lifted a tenth of a point to protect the floor. Wind is worth a tenth of a point of front wing and 0.15 of rear per km/h over the reference: a gusty track is won with stability, not with peak downforce. Rain moves everything at once — 8 to 10 points more wing, the car 7 points higher, the suspension 9 points softer, brake bias 6 points rearwards so the fronts do not lock — which is why a wet weekend makes Friday's numbers worthless."
+    "why": "Where the optimum moves with the conditions (plan 5.2: the ideal setup shifts with air and track temperature, wind and rain). The factory preset of the pack is the optimum at 35 °C of track, 15 km/h of wind and a dry surface; from there every degree hotter takes a quarter of a point off camber and a fifth off toe (a hot track overheats the tyre surface, so teams stop asking so much of it) and a tenth off each wing, while the car is lifted a tenth of a point to protect the floor. Wind is worth a tenth of a point of front wing and 0.15 of rear per km/h over the reference: a gusty track is won with stability, not with peak downforce. The preset itself is only decent, and how decent depends on the slider: the wings and the brakes are the same every year and the preset is 4 points off, the mechanical settings 6, and the fine three — camber, toe, gear ratios — 11, because those depend on this car and not on this track. The offset is drawn once per track per career, so a track is always wrong in the same direction, and a team that cannot touch the fine sliders carries that error all weekend: about a tenth of a second, which is what owning the third level is worth (plan 5.2). Rain moves everything at once — 8 to 10 points more wing, the car 7 points higher, the suspension 9 points softer, brake bias 6 points rearwards so the fronts do not lock — which is why a wet weekend makes Friday's numbers worthless."
   },
   "access": {
     "value": {
@@ -70,16 +81,16 @@
   },
   "reading": {
     "value": {
-      "baseSd": 14,
-      "perEngineerPoint": 0.12,
+      "baseSd": 13.5,
+      "perEngineerPoint": 0.05,
       "engineerRef": 70,
-      "perSimulatorLevel": 1.6,
-      "perFeedbackPoint": 0.05,
+      "perSimulatorLevel": 0.8,
+      "perFeedbackPoint": 0.02,
       "feedbackRef": 60,
       "lapScale": 6,
       "minSd": 2.5
     },
-    "why": "How well the engineer can say where the optimum is (plan 5.2: the recommendation is a range, and its width comes from the engineer, the simulator, the driver's feedback and the laps already run here). With nobody and nothing, the reading is 14 points wide — a quarter of the usable scale, which is honestly useless. A race engineer at 70 is the reference; each point above takes 0.12 off, each simulator level 1.6, each point of driver feedback over 60 another 0.05. Setup laps close the rest on a 6-lap scale: an hour of setup work is worth more than any of the three. The floor of 2.5 points is the tolerance itself — nobody finds the exact centre of the window, and with the plateau in the loss nobody needs to."
+    "why": "How well the engineer can say where the optimum is (plan 5.2: the recommendation is a range, and its width comes from the engineer, the simulator, the driver's feedback and the laps already run here). A car that arrives without having run is set up on that reading alone, so this is also what a weekend without practice costs: 13.5 points of reading error is about half a second a lap through the loss curve — the 0.5 s a car off the truck was worth in M5. The people move it by a few points either way (a race engineer at 70 is the reference, each point worth 0.05, a simulator level 0.8, a point of driver feedback 0.02), so a strong crew turns up at 9 points and a weak one at 14: worth a quarter of a second between them before anybody drives. Setup laps close the rest on a 6-lap scale — six laps of setup work take the reading to 8 points and half an hour of it to 4.5, which is inside the plateau where the loss is zero. That is the trade of plan 5.3: an hour of running is worth more than any amount of staff."
   },
   "feedback": {
     "value": {

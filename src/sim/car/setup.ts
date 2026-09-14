@@ -46,8 +46,11 @@ export function setupConditions(weather: WeatherTimeline): SetupConditions {
   };
 }
 
-/** Where the optimum sits today: the factory preset moved by heat, wind and water. */
-export function idealSetup(track: PackTrack, conditions: SetupConditions): Setup {
+/**
+ * Where the optimum sits today: the factory preset, the distance the preset itself is out by
+ * (`world.hidden.tracks`), and the move heat, wind and water make from there.
+ */
+export function idealSetup(track: PackTrack, conditions: SetupConditions, offset?: Setup): Setup {
   const i = balance.setup.ideal;
   const heat = conditions.trackTempC - i.referenceTrackTempC;
   const wind = conditions.windKph - i.windReferenceKph;
@@ -55,7 +58,11 @@ export function idealSetup(track: PackTrack, conditions: SetupConditions): Setup
   const ideal = {} as Setup;
   for (const p of SETUP_PARAMETERS) {
     const moved =
-      track.factorySetup[p] + heat * i.perTrackTempC[p] + wind * i.perWindKph[p] + wet * i.perWetness[p];
+      track.factorySetup[p] +
+      (offset?.[p] ?? 0) +
+      heat * i.perTrackTempC[p] +
+      wind * i.perWindKph[p] +
+      wet * i.perWetness[p];
     ideal[p] = clamp(moved);
   }
   return ideal;

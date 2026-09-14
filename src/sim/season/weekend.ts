@@ -10,12 +10,14 @@
  * is run session by session or in one go (a test pins that).
  */
 import type { Pack } from '@/data/schema/pack';
-import { buildRaceInput, type RaceControlInput } from '../race/build-input';
+import { buildRaceInput, type RaceControlInput, weekendPriors } from '../race/build-input';
 import { simulateRace } from '../race/simulate';
 import type { RaceCommand, RaceControl, RaceInput, RaceResult } from '../race/types';
 import type {
   DriverId,
   PracticePlan,
+  Setup,
+  SetupKnowledge,
   RaceWeekend,
   SessionKind,
   SessionResult,
@@ -26,6 +28,8 @@ import type {
 } from '../types/world';
 import { defaultPlan, type PracticeCommand, type PracticeResult, runPractice } from '../weekend/practice';
 import { type QualifyingCommand, type QualifyingResult, runQualifying } from '../weekend/qualifying';
+import { openParameters, withinAccess } from '../car/setup';
+import { capabilityOf, openSetups, refineSetups } from '../weekend/setup-work';
 import { declareTyres } from '../weekend/tyres';
 import { isPractice, WEEKEND_SESSIONS } from '../weekend/format';
 import { standings } from './standings';
@@ -87,13 +91,26 @@ export function openWeekend(world: World, pack: Pack, round: number, seed: strin
   const weekend = roundOf(world, round);
   const sessions = WEEKEND_SESSIONS[weekend.format];
   const regulation = pack.regulations.find((r) => r.season === world.season.year) ?? pack.regulations[0]!;
-  const tyres = declareTyres(
-    buildRaceInput(world, pack, round, seed),
-    sessions,
-    regulation.tyreSetsPerWeekend[weekend.format],
-  );
-  return {
+  const race = buildRaceInput(world, pack, round, seed);
+  const tyres = declareTyres(race, sessions, regulation.tyreSetsPerWeekend[weekend.format]);
+  // Every car is dialled in before anyone runs: the engineer reads the optimum, the delegate picks
+  // a setup off that reading (docs/systems/setup.md).
+  const dialled = openSetups(world, pack, race);
+  // The teams' priors are filed now, so the engineers' readings have somewhere to live. They are
+  // drawn from the streams the race would have drawn them from: storing them changes nothing.
+  const priors = weekendPriors(world, pack, round, seed);
+  const withPriors: World = {
     ...world,
+    knowledge: Object.fromEntries(
+      Object.entries(world.knowledge).map(([teamId, team]) => [
+        teamId,
+        team.weekend?.round === round ? team : { ...team, weekend: priors[teamId] ?? team.weekend },
+      ]),
+    ),
+  };
+  return {
+    ...withPriors,
+    knowledge: withSetupKnowledge(withPriors, round, dialled.knowledge),
     weekend: {
       round,
       seed,
@@ -101,6 +118,8 @@ export function openWeekend(world: World, pack: Pack, round: number, seed: strin
       tyres,
       sets: Object.fromEntries(Object.entries(tyres).map(([id, sets]) => [id, { ...sets }])),
       plans: {},
+      setups: dialled.setups,
+      notes: dialled.notes,
       grid: null,
       sprintGrid: null,
     },
@@ -122,6 +141,26 @@ export function setTyreEntry(world: World, driverId: DriverId, entry: TyreAlloca
       ...open,
       tyres: { ...open.tyres, [driverId]: entry },
       sets: { ...open.sets, [driverId]: { ...entry } },
+    },
+  };
+}
+
+/**
+ * The player's own setup for one of their cars, over what the engineer chose (docs/systems/setup.md).
+ * Sliders the car may not touch stay on the factory preset, whatever is asked for.
+ */
+export function setCarSetup(world: World, pack: Pack, driverId: DriverId, setup: Setup): World {
+  const open = mustBeOpen(world);
+  const weekend = roundOf(world, open.round);
+  const track = pack.tracks.find((t) => t.id === weekend.trackId)!;
+  const teamId = Object.values(world.teams).find((t) => t.drivers.race.includes(driverId))?.id;
+  if (!teamId) throw new Error(`No team races ${driverId}`);
+  const open2 = openParameters(capabilityOf(world, teamId, driverId));
+  return {
+    ...world,
+    weekend: {
+      ...open,
+      setups: { ...open.setups, [driverId]: withinAccess(setup, track.factorySetup, open2) },
     },
   };
 }
@@ -254,9 +293,7 @@ function practiceStage(
     known: Object.fromEntries(Object.keys(world.knowledge).map((id) => [id, knownOf(id)])),
     rivals: Object.fromEntries(Object.entries(world.knowledge).map(([id, k]) => [id, k.rivals])),
     // What a car has found so far this weekend shows in how quick it looks to everyone else.
-    setupLossS: Object.fromEntries(
-      race.entries.map((e) => [e.driverId, knownOf(e.teamId)?.setupLossS ?? e.setupLossS]),
-    ),
+    setupLossS: Object.fromEntries(race.entries.map((e) => [e.driverId, e.setupLossS])),
     sets: open.sets,
   });
 
@@ -265,9 +302,14 @@ function practiceStage(
     const team = knowledge[teamId];
     if (team) knowledge[teamId] = { ...team, weekend: learned, rivals: result.rivals[teamId] ?? team.rivals };
   }
+  // The session is over: setup running narrowed the readings, and every car is dialled in again.
+  const dialled = refineSetups({ ...world, knowledge }, pack, race, result.setupLaps, stage);
   return {
-    world: { ...world, knowledge },
-    progress: { ...open, sets: result.setsLeft },
+    world: {
+      ...world,
+      knowledge: withSetupKnowledge({ ...world, knowledge }, open.round, dialled.knowledge),
+    },
+    progress: { ...open, sets: result.setsLeft, setups: dialled.setups, notes: dialled.notes },
     session: result.session,
     detail: { kind: 'practice', practice: result },
   };
@@ -332,6 +374,21 @@ function raceInput(
 }
 
 // ── Plumbing ──────────────────────────────────────────────────────────────────────────────────
+
+/** Files each team's new readings of the optimum into its weekend knowledge, car by car. */
+function withSetupKnowledge(
+  world: World,
+  round: number,
+  setup: Record<TeamId, Record<DriverId, SetupKnowledge>>,
+): World['knowledge'] {
+  const knowledge = { ...world.knowledge };
+  for (const [teamId, cars] of Object.entries(setup)) {
+    const team = knowledge[teamId];
+    if (!team?.weekend || team.weekend.round !== round) continue;
+    knowledge[teamId] = { ...team, weekend: { ...team.weekend, setup: { ...team.weekend.setup, ...cars } } };
+  }
+  return knowledge;
+}
 
 const controlOf = (options: SessionOptions): RaceControlInput => ({
   control: options.control ?? null,

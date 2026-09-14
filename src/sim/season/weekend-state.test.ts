@@ -119,9 +119,14 @@ describe('what a weekend knows is its own', () => {
       // same amount. Anything else means last round's laps are still being counted.
       const alone = runWeekend(world, pack, round, `per-round-${round}`).world.knowledge[TEAM]!.weekend!;
       expect(known.round).toBe(round);
-      expect(known.setupLaps).toBe(alone.setupLaps);
       expect(known.laps).toBe(alone.laps);
-      expect(known.setupLossS).toBeCloseTo(alone.setupLossS, 9);
+      for (const driverId of world.teams[TEAM]!.drivers.race) {
+        expect(known.setup[driverId]!.laps).toBe(alone.setup[driverId]!.laps);
+        expect(known.setup[driverId]!.reading.frontWing.basis.sd).toBeCloseTo(
+          alone.setup[driverId]!.reading.frontWing.basis.sd,
+          9,
+        );
+      }
     }
   });
 

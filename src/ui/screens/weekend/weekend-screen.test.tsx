@@ -4,7 +4,7 @@
  * and the tyre entry is the player's to change until the first session runs.
  */
 import { createMemoryHistory } from '@tanstack/react-router';
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCareer } from '@/app/store/career';
@@ -17,6 +17,9 @@ import { createWorld } from '@/sim/world/create-world';
 import { App } from '@/ui/App';
 import { TooltipProvider } from '@/ui/design/Tooltip';
 import { createAppRouter } from '@/ui/router';
+import { openParameters } from '@/sim/car/setup';
+import { capabilityOf } from '@/sim/weekend/setup-work';
+import { SetupScreen } from './SetupScreen';
 import { StrategyScreen } from './StrategyScreen';
 
 const t = i18n.t.bind(i18n);
@@ -121,6 +124,48 @@ describe('qualifying on the clock', () => {
     expect(said).toHaveLength(1);
     expect(said[0]!.driverId).toBe(mine[0]);
     expect(said[0]!.part).toBe(0);
+  }, 30_000);
+});
+
+describe('the setup screen', () => {
+  it('shows the engineer’s range, locks what the car may not touch, and moves what it may', async () => {
+    const user = userEvent.setup();
+    await weekend().open();
+    render(
+      <TooltipProvider>
+        <SetupScreen />
+      </TooltipProvider>,
+    );
+
+    const world = useCareer.getState().world;
+    const driverId = mine[0];
+    const capability = capabilityOf(world, world.career.playerTeamId, driverId);
+    const open = openParameters(capability);
+    const card = screen.getByRole('region', { name: world.drivers[driverId]!.name });
+
+    // An open slider moves and the world follows; a closed one is there but disabled.
+    const front = within(card).getByLabelText(t('weekend.setup.parameter.frontWing'));
+    expect(front).toBeEnabled();
+    fireEvent.change(front, { target: { value: '41' } });
+    expect(useCareer.getState().world.weekend!.setups[driverId]!.frontWing).toBe(41);
+
+    const camber = within(card).getByLabelText(t('weekend.setup.parameter.camber'));
+    expect((camber as HTMLInputElement).disabled).toBe(!open.has('camber'));
+
+    // The engineer's recommendation is on the screen as a range, never as a bare number.
+    const reading = world.knowledge[world.career.playerTeamId]!.weekend!.setup[driverId]!.reading;
+    const band = t('weekend.setup.recommendation', {
+      low: Math.round(reading.frontWing.low),
+      high: Math.round(reading.frontWing.high),
+    });
+    expect(within(card).getByText(band)).toBeInTheDocument();
+
+    // And the autosetup buttons put a whole setup on the car.
+    await user.click(within(card).getByRole('button', { name: t('weekend.setup.source.factory') }));
+    const track = useCareer.getState().pack.tracks.find((tr) => tr.id === world.season.calendar[0]!.trackId)!;
+    expect(useCareer.getState().world.weekend!.setups[driverId]!.frontWing).toBe(
+      track.factorySetup.frontWing,
+    );
   }, 30_000);
 });
 

@@ -571,7 +571,8 @@
       "kgPerLap": "{{value}} kg/lap",
       "setupLoss": "Off the setup",
       "seconds": "{{value}} s",
-      "behind": "Laps behind it"
+      "behind": "Laps behind it",
+      "setupLaps": "Setup laps"
     },
     "qualifying": {
       "board": "Qualifying timing",
@@ -603,6 +604,85 @@
     "strategy": {
       "planLater": "The plan for the race is chosen once qualifying has set the grid.",
       "delegation": "Who makes the calls"
+    },
+    "setup": {
+      "title": "Setup",
+      "intro": "Nine parameters, an optimum nobody sees, and an engineer who can only give you a range. Practice narrows the range; the sliders are yours.",
+      "notOpen": "The setup is dialled in when a weekend is open.",
+      "level": {
+        "base": "Base",
+        "mechanical": "Mechanical",
+        "fine": "Fine tuning"
+      },
+      "locked": {
+        "mechanical": "Opens with a race engineer at {{engineer}} or a level-{{simulator}} simulator.",
+        "fine": "Opens with a race engineer at {{engineer}}, a level-{{simulator}} simulator and a driver whose feedback is {{feedback}}."
+      },
+      "recommendation": "Engineer: {{low}}–{{high}}",
+      "noRecommendation": "The engineer has nothing to say about this one.",
+      "source": {
+        "engineer": "Engineer’s advice",
+        "factory": "Factory preset",
+        "team-mate": "Team-mate’s car",
+        "stay": "Leave it",
+        "saved": "Saved",
+        "driver-note": "What the driver asked for"
+      },
+      "notes": {
+        "title": "After the last run",
+        "none": "The driver has not run yet."
+      },
+      "parameter": {
+        "frontWing": "Front wing",
+        "rearWing": "Rear wing",
+        "brakeBias": "Brake bias",
+        "frontRideHeight": "Front ride height",
+        "rearRideHeight": "Rear ride height",
+        "suspensionStiffness": "Suspension stiffness",
+        "camber": "Camber",
+        "toe": "Toe",
+        "gearRatios": "Gear ratios"
+      },
+      "note": {
+        "frontWing": {
+          "more": "It will not turn in.",
+          "less": "The front is too sharp and the rear steps out."
+        },
+        "rearWing": {
+          "more": "It is loose on the exits.",
+          "less": "We are losing the straights."
+        },
+        "brakeBias": {
+          "more": "It is unstable under braking, the rear moves around.",
+          "less": "I am locking the fronts."
+        },
+        "frontRideHeight": {
+          "more": "It is bottoming out on the bumps.",
+          "less": "No front end in the quick stuff."
+        },
+        "rearRideHeight": {
+          "more": "The rear is riding the bumps badly.",
+          "less": "No rear grip in the quick corners."
+        },
+        "suspensionStiffness": {
+          "more": "It floats over the kerbs.",
+          "less": "It is too stiff, no mechanical grip."
+        },
+        "camber": {
+          "more": "The fronts go off after three laps.",
+          "less": "No grip mid-corner."
+        },
+        "toe": {
+          "more": "It wanders under braking.",
+          "less": "The fronts are overheating."
+        },
+        "gearRatios": {
+          "more": "I am hitting the limiter on the straight.",
+          "less": "No acceleration out of the slow corners."
+        }
+      },
+      "delegation": "Who dials the car in",
+      "manualNote": "In manual setup the engineer still reads the track, but the car runs what you set."
     }
   }
 }

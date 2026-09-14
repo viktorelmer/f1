@@ -77,7 +77,7 @@ describe('commands', () => {
       { timeS: 300, kind: 'radio', driverId: CAR_A, radio: { pace: 'push', aggression: 'aggressive' } },
       { timeS: 900, kind: 'team-order', teamId: TEAM, order: 'swap' },
     ]);
-    expect(fingerprint(a)).toBe('08a11e01f839c1');
+    expect(fingerprint(a)).toBe('07731839dca747');
   });
 });
 

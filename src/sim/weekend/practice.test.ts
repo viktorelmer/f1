@@ -243,7 +243,7 @@ describe('reading the opposition (plan 5.13)', () => {
     const target = Object.keys(world.teams).find((id) => id !== observer)!;
     const estimate = after.knowledge[observer]!.rivals[target]!;
     const entry = input.entries.find((e) => e.teamId === target)!;
-    const truth = referencePaceS(input, entry, after.knowledge[target]!.weekend!.setupLossS);
+    const truth = referencePaceS(input, entry, entry.setupLossS);
     expect(estimate.basis.sd).toBeGreaterThan(0);
     expect(estimate.basis.mean).not.toBe(truth);
     // Three sessions of watching are worth more than one.

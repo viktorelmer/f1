@@ -22,9 +22,10 @@ import type {
   TeamHidden,
   TeamId,
   TeamKnowledge,
+  TrackHidden,
   World,
 } from '../types/world';
-import { drawDriverHidden, drawTeamHidden } from './hidden';
+import { drawDriverHidden, drawSetupOffset, drawTeamHidden } from './hidden';
 import { initialKnowledge } from './knowledge';
 
 export type CareerSetup =
@@ -91,6 +92,9 @@ export function createWorld(seed: string, pack: Pack, career: CareerSetup): Worl
       return [t.id, drawTeamHidden(rng(`world:hidden:team:${t.id}`), ranges)];
     }),
   );
+  const trackHidden: Record<string, TrackHidden> = Object.fromEntries(
+    pack.tracks.map((t) => [t.id, { setupOffset: drawSetupOffset(rng(`world:hidden:track:${t.id}`)) }]),
+  );
   const knowledge: Record<TeamId, TeamKnowledge> = Object.fromEntries(
     teams.map((t) => {
       const scout = staff.find((s) => s.contract?.teamId === t.id && s.role === 'scout');
@@ -119,7 +123,7 @@ export function createWorld(seed: string, pack: Pack, career: CareerSetup): Worl
     drivers: byId(drivers),
     staff: byId(staff),
     engineSuppliers: byId(pack.engineSuppliers.map((e) => clone(e))),
-    hidden: { drivers: driverHidden, teams: teamHidden },
+    hidden: { drivers: driverHidden, teams: teamHidden, tracks: trackHidden },
     knowledge,
     projects: [],
     news: [],

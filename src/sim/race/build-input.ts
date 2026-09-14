@@ -4,11 +4,12 @@
  * timeline will stretch across the whole weekend.
  */
 import { balance } from '@/data/balance';
-import type { Pack } from '@/data/schema/pack';
+import type { Pack, Setup } from '@/data/schema/pack';
 import { carPerformance } from '../car/performance';
+import { idealSetup, setupConditions, setupLossS } from '../car/setup';
 import { profileFromAttributes } from '../decide/decide';
 import { type Rng, streams } from '../rng/rng';
-import type { World } from '../types/world';
+import type { WeekendKnowledge, World } from '../types/world';
 import { carPaceFraction, driverPaceFraction, fuelPerLap, lapNoiseSd } from './pace';
 import { tyreLossS } from './tyres';
 import type { RaceCommand, RaceControl, RaceEntry, RaceInput } from './types';
@@ -47,6 +48,38 @@ export type RaceControlInput = {
   format?: 'race' | 'sprint';
 };
 
+/**
+ * What every team believes about a weekend before anyone has run: the prior each of them arrives
+ * with. The weekend files this into the world when it opens, drawn from the same streams the race
+ * would have drawn it from, so storing it changes nothing about what anybody knows.
+ */
+export function weekendPriors(
+  world: World,
+  pack: Pack,
+  round: number,
+  seed: string = world.seed,
+): Record<string, WeekendKnowledge> {
+  const season = world.season;
+  const weekend = season.calendar.find((r) => r.round === round);
+  if (!weekend) throw new RangeError(`No round ${round} in the ${season.year} calendar`);
+  const track = pack.tracks.find((t) => t.id === weekend.trackId)!;
+  const rng = streams(seed);
+  return Object.fromEntries(
+    Object.values(world.teams).map((team) => [
+      team.id,
+      priorKnowledge(
+        round,
+        {
+          tyreDegradation: track.profile.tyreDegFactor,
+          fuelPerLapKg: fuelPerLap(track, carPerformance(team.chassis, team.engine.spec).fuelEfficiency),
+        },
+        weekend.raceDate,
+        rng(`race:${season.year}:r${round}:prior:${team.id}`),
+      ),
+    ]),
+  );
+}
+
 export function buildRaceInput(
   world: World,
   pack: Pack,
@@ -62,6 +95,14 @@ export function buildRaceInput(
   const regulation = pack.regulations.find((r) => r.season === season.year) ?? pack.regulations[0]!;
   const rng = streams(seed);
   const stream = (name: string) => rng(`race:${season.year}:r${round}:${name}`);
+
+  // The weather is the weekend's, not the entries': it is drawn first so the setup can be judged
+  // against the optimum for these conditions (docs/systems/setup.md).
+  const weather = generateWeather(track, stream('weather'));
+  const ideal = idealSetup(track, setupConditions(weather), world.hidden.tracks[track.id]?.setupOffset);
+  /** What is on this car: the weekend's own setup, or the factory preset when no weekend is open. */
+  const setupOf = (driverId: string): Setup =>
+    (world.weekend?.round === round ? world.weekend.setups[driverId] : undefined) ?? track.factorySetup;
 
   /**
    * What a team believes about this weekend: what it learned in practice, or — when it has not run
@@ -128,14 +169,13 @@ export function buildRaceInput(
           : { skill: 0, consistency: 0, rapport: 0 },
         riskAppetite: team.character.riskAppetite,
         beliefs: beliefsOf(team.id),
-        setupLossS: weekendOf(team.id).setupLossS,
+        setupLossS: setupLossS(setupOf(driverId), ideal),
         // What the car has left of its entry, when there is a weekend open around this race.
         tyreSets: world.weekend?.round === round ? world.weekend.sets[driverId] : undefined,
       };
     });
   });
 
-  const weather = generateWeather(track, stream('weather'));
   return {
     seed,
     season: season.year,

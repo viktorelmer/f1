@@ -9,12 +9,14 @@
  * race's trick from M4 (docs/systems/race-control.md), because it is the same trick.
  */
 import { create } from 'zustand';
-import { closeWeekend, planPractice, setTyreEntry } from '@/sim/season/weekend';
+import type { DelegationArea, DelegationMode } from '@/sim/decide/delegation';
+import { closeWeekend, planPractice, setCarSetup, setTyreEntry } from '@/sim/season/weekend';
 import type {
   DriverId,
   PracticePlan,
   SessionKind,
   SessionResult,
+  Setup,
   TyreAllocation,
   World,
 } from '@/sim/types/world';
@@ -58,6 +60,10 @@ type WeekendStore = {
   setProgramme: (session: SessionKind, driverId: DriverId, runs: readonly Run[]) => void;
   /** The tyres this car declares for the weekend, over what its strategist would have taken. */
   setEntry: (driverId: DriverId, entry: TyreAllocation) => void;
+  /** The setup this car runs, over what its engineer dialled in (docs/systems/setup.md). */
+  setSetup: (driverId: DriverId, setup: Setup) => void;
+  /** Who decides in an area from now on (plan 5.19, 6.5): the career's own setting. */
+  setDelegation: (area: DelegationArea, mode: DelegationMode) => void;
   /** Opens the weekend of the round the season is waiting on, with the programmes chosen so far. */
   open: () => Promise<void>;
   /** Runs the session the weekend waits on and holds it for playback (practice and qualifying). */
@@ -171,6 +177,18 @@ export const useWeekend = create<WeekendStore>()((set, get) => {
       const { world } = useCareer.getState();
       if (!world.weekend) return;
       useCareer.setState({ world: setTyreEntry(world, driverId, entry) });
+    },
+
+    setDelegation: (area, mode) => {
+      const { world } = useCareer.getState();
+      const delegation = { ...world.career.delegation, [area]: mode };
+      useCareer.setState({ world: { ...world, career: { ...world.career, delegation } } });
+    },
+
+    setSetup: (driverId, setup) => {
+      const { world, pack } = useCareer.getState();
+      if (!world.weekend) return;
+      useCareer.setState({ world: setCarSetup(world, pack, driverId, setup) });
     },
 
     open: async () => {

@@ -125,6 +125,8 @@ export type PracticeResult = {
   rivals: Record<TeamId, Record<TeamId, Estimate>>;
   /** Who ran heavy to hide their hand this session. */
   hiding: TeamId[];
+  /** Laps each car spent working on its setup: what narrows the engineer's reading (plan 5.2). */
+  setupLaps: Record<DriverId, number>;
   /** What each car has left after the session, and the runs it could not go out on. */
   setsLeft: Record<DriverId, TyreAllocation>;
   skipped: { driverId: DriverId; programme: ProgrammeKind; compound: Compound }[];
@@ -166,6 +168,7 @@ export function runPractice(input: PracticeInput): PracticeResult {
   const stream = streams(race.seed);
   const laps: PracticeLap[] = [];
   const minutes: Record<DriverId, number> = {};
+  const setupLaps: Record<DriverId, number> = {};
   const setsLeft: Record<DriverId, TyreAllocation> = { ...input.sets };
   const skipped: PracticeResult['skipped'] = [];
   const runs: PracticeRunRecord[] = [];
@@ -323,8 +326,9 @@ export function runPractice(input: PracticeInput): PracticeResult {
         fuelLaps: run.programme === 'fuel-calibration' || run.programme === 'long-run' ? ran * worth : 0,
         // Setup work dials the car in; a qualifying simulation checks it and counts for half.
         setupLaps: run.programme === 'setup' ? ran : run.programme === 'qualifying-sim' ? ran / 2 : 0,
-        engineerSkill: 1 + entry.raceEngineer.skill * 99,
       };
+      // Setup laps belong to the car, not to the team: the two engineers dial in separately.
+      setupLaps[entry.driverId] = (setupLaps[entry.driverId] ?? 0) + learned.setupLaps;
       if (learned.degradationLaps + learned.fuelLaps + learned.setupLaps > 0) {
         knowledge[entry.teamId] = learnFromRunning(
           knowledge[entry.teamId]!,
@@ -391,6 +395,7 @@ export function runPractice(input: PracticeInput): PracticeResult {
     learned,
     rivals,
     hiding: [...hiding],
+    setupLaps,
     setsLeft,
     skipped,
     runs,

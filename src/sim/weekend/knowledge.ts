@@ -32,8 +32,8 @@ export function priorKnowledge(round: number, truth: WeekendTruth, at: GameDate,
   return {
     round,
     laps: 0,
-    setupLaps: 0,
-    setupLossS: balance.weekend.setup.rawLossS,
+    // The engineers' readings are added by the weekend when it opens: one per car, not per team.
+    setup: {},
     tyreDegradation: observe(truth.tyreDegradation, { sd: l.priorDegradationSd, bias: 0 }, rng, {
       quantity: q['track.tyreDegradation'],
       at,
@@ -47,26 +47,13 @@ export function priorKnowledge(round: number, truth: WeekendTruth, at: GameDate,
   };
 }
 
-/**
- * Seconds a lap the car is still off its optimum after `laps` of setup work (plan 5.3). A car off
- * the truck is `rawLossS` away; setup laps close that exponentially, and what is left depends on the
- * race engineer — the full nine-parameter setup of 5.2 arrives in M6 and replaces this one number.
- */
-export function setupLossS(laps: number, engineerSkill: number): number {
-  const s = balance.weekend.setup;
-  const floor = Math.max(0, s.floorAtRef - s.floorPerPoint * (engineerSkill - s.engineerRef));
-  return floor + (s.rawLossS - floor) * Math.exp(-Math.max(0, laps) / s.lapScale);
-}
-
 export type Learned = {
   /** Laps of the run that say something about tyre wear (a long run). */
   degradationLaps: number;
   /** Laps that say something about fuel use. */
   fuelLaps: number;
-  /** Laps spent working on the setup, over the whole weekend so far. */
+  /** Laps spent working on the setup: they narrow the engineer's reading, not this estimate. */
   setupLaps: number;
-  /** The race engineer who does the dialling in. */
-  engineerSkill: number;
 };
 
 /**
@@ -91,12 +78,10 @@ export function learnFromRunning(
     const sd = readingSd(l.fuelSdBase, learned.fuelLaps, department);
     fuelPerLapKg = refine(fuelPerLapKg, measure(truth.fuelPerLapKg, { sd, bias: 0 }, rng, at));
   }
-  const setupLaps = prior.setupLaps + learned.setupLaps;
   return {
     round: prior.round,
     laps: prior.laps + learned.degradationLaps + learned.fuelLaps + learned.setupLaps,
-    setupLaps,
-    setupLossS: setupLossS(setupLaps, learned.engineerSkill),
+    setup: prior.setup,
     tyreDegradation,
     fuelPerLapKg,
   };

@@ -180,8 +180,8 @@ describe('the seed (plan section 10: a fixed world)', () => {
 
   // Pinned for the default pack only: a local pack has other content and so other hashes.
   it.skipIf(isLocalPack)('pins the default pack’s worlds to fixed hashes', () => {
-    expect(fingerprint(createWorld('M1', pack, TAKEOVER))).toBe('10c65ccb060303');
-    expect(fingerprint(createWorld('M1', pack, FOUNDER))).toBe('0d25ab95cad21e');
+    expect(fingerprint(createWorld('M1', pack, TAKEOVER))).toBe('17379533d6d015');
+    expect(fingerprint(createWorld('M1', pack, FOUNDER))).toBe('14d064f992ea7d');
   });
 
   it('draws each driver from their own stream: adding a driver to the pack moves nobody else', () => {
