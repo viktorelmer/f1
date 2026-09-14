@@ -125,6 +125,6 @@ describe('M5 DoD: a season of 22 rounds', () => {
   });
 
   it.skipIf(isLocalPack)('is deterministic: the same seed gives the same championship', () => {
-    expect(fingerprint(season.season.standings)).toBe('14b76db1fb95b5');
+    expect(fingerprint(season.season.standings)).toBe('0dbeb9d9955a34');
   });
 });

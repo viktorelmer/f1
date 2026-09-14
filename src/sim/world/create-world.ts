@@ -6,6 +6,7 @@
  * only draws hidden values and each team's first estimates of them, through named streams.
  */
 import { balance } from '@/data/balance';
+import { CHASSIS_PARTS } from '@/data/schema/balance';
 import type { Pack, PackStaff, PackTeam, StaffRole } from '@/data/schema/pack';
 import { type DelegationPreset, resolveDelegation } from '../decide/delegation';
 import { streams } from '../rng/rng';
@@ -190,6 +191,8 @@ function teamFromPack(
     name: team.name,
     // A career starts with no direction taken: the player (or the AI) picks one (plan 5.1).
     philosophy: 'balanced',
+    // The car that turns up to the first test has been run all winter: nothing on it is green.
+    freshness: Object.fromEntries(CHASSIS_PARTS.map((part) => [part, 0])) as Team['freshness'],
     shortName: team.shortName,
     colours: { ...team.colours },
     base: { ...team.base },
@@ -260,6 +263,7 @@ function foundTeam(
     id: FOUNDER_TEAM_ID,
     name: career.team.name.trim(),
     philosophy: 'balanced',
+    freshness: Object.fromEntries(CHASSIS_PARTS.map((part) => [part, 0])) as Team['freshness'],
     shortName: career.team.shortName.trim(),
     colours: { ...career.team.colours },
     base: { country: career.team.baseCountry, city: career.team.baseCity.trim() },

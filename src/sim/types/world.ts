@@ -119,6 +119,11 @@ export type Team = {
   controller: 'player' | 'ai';
   engine: EngineDeal;
   chassis: Record<ChassisPart, number>;
+  /**
+   * How new each part is, 1 for one fitted today and 0 for one that has bedded in. A green part is
+   * quick and fragile (docs/systems/car-development.md).
+   */
+  freshness: Record<ChassisPart, number>;
   /** The direction this team is developing in this season (plan 5.1). */
   philosophy: Philosophy;
   facilities: Record<Facility, number>;

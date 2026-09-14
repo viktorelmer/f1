@@ -12,8 +12,11 @@ import { createWorld } from '../world/create-world';
 import {
   advanceDevelopment,
   aeroAllowance,
+  bedIn,
+  freshnessPenalty,
   installProject,
   isReady,
+  setPhilosophy,
   officeCapacity,
   projectCeiling,
   projectId,
@@ -98,6 +101,34 @@ describe('the months of work', () => {
       busy = startProject(busy, pack, TEAM, { ...plan, part }, at, rng(`start:${part}`));
     const crowded = advanceDevelopment(busy, pack, days, at).projects[0]!;
     expect(progressOf(crowded)).toBeLessThan(progressOf(one));
+  });
+});
+
+describe('a new part on the car', () => {
+  it('is green: it costs reliability and beds in over the weeks', () => {
+    const ready = advanceDevelopment(started, pack, 400, at);
+    const fitted = installProject(ready, idOf(ready));
+    expect(fitted.teams[TEAM]!.freshness.floor).toBe(1);
+    expect(freshnessPenalty(fitted, TEAM)).toBeCloseTo(balance.development.freshness.reliabilityCost, 9);
+
+    const later = bedIn(fitted, balance.development.freshness.beddedInAfterDays);
+    expect(later.teams[TEAM]!.freshness.floor).toBe(0);
+    expect(freshnessPenalty(later, TEAM)).toBe(0);
+  });
+});
+
+describe('the season’s direction', () => {
+  it('writes off part of the work in progress when it changes mid-season', () => {
+    const working = advanceDevelopment(started, pack, 15, at);
+    const before = working.projects[0]!.progress;
+    const turned = setPhilosophy(working, TEAM, 'low-drag');
+    expect(turned.teams[TEAM]!.philosophy).toBe('low-drag');
+    expect(turned.projects[0]!.progress).toBeCloseTo(
+      before * (1 - balance.development.philosophy.switchLossShare),
+      9,
+    );
+    // Turning to the same direction costs nothing.
+    expect(setPhilosophy(turned, TEAM, 'low-drag')).toBe(turned);
   });
 });
 

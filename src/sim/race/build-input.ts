@@ -6,6 +6,7 @@
 import { balance } from '@/data/balance';
 import type { Pack, Setup } from '@/data/schema/pack';
 import { carPerformance } from '../car/performance';
+import { freshnessPenalty } from '../car/development';
 import { idealSetup, setupConditions, setupLossS } from '../car/setup';
 import { profileFromAttributes } from '../decide/decide';
 import { type Rng, streams } from '../rng/rng';
@@ -137,7 +138,9 @@ export function buildRaceInput(
       ((chiefMechanic?.attributes.skill ?? balance.race.pit.crewWithoutChiefMechanic) +
         team.departments.raceTeam.quality) /
       2;
-    const car = carPerformance(team.chassis, team.engine.spec);
+    // A part fitted this week is quick and green: the car is less likely to see the flag.
+    const rated = carPerformance(team.chassis, team.engine.spec);
+    const car = { ...rated, reliability: Math.max(0, rated.reliability - freshnessPenalty(world, team.id)) };
     return team.drivers.race.map((driverId): RaceEntry => {
       const d = world.drivers[driverId]!;
       const engineer = staff.find((s) => s.role === 'race-engineer' && s.assignedDriverId === driverId);

@@ -228,6 +228,51 @@ export function advanceDevelopment(world: World, pack: Pack, days: number, at: G
   return { ...world, projects };
 }
 
+/**
+ * The season's direction (plan 5.1). Changing it mid-season writes off part of the progress of
+ * everything not yet built: the cost is real but survivable, so it stays a decision.
+ */
+export function setPhilosophy(world: World, teamId: TeamId, philosophy: Philosophy): World {
+  const team = world.teams[teamId];
+  if (!team || team.philosophy === philosophy) return world;
+  const share = balance.development.philosophy.switchLossShare;
+  const projects = world.projects.map((project) =>
+    project.teamId === teamId && isWorking(project.stage)
+      ? { ...project, progress: project.progress * (1 - share), philosophy }
+      : project,
+  );
+  return { ...world, teams: { ...world.teams, [teamId]: { ...team, philosophy } }, projects };
+}
+
+/** Miles put on the new parts: `days` of running takes the green off them. */
+export function bedIn(world: World, days: number): World {
+  const f = balance.development.freshness;
+  if (days <= 0) return world;
+  const teams = Object.fromEntries(
+    Object.entries(world.teams).map(([id, team]) => [
+      id,
+      {
+        ...team,
+        freshness: Object.fromEntries(
+          Object.entries(team.freshness).map(([part, value]) => [
+            part,
+            Math.max(0, value - days / f.beddedInAfterDays),
+          ]),
+        ) as typeof team.freshness,
+      },
+    ]),
+  );
+  return { ...world, teams };
+}
+
+/** What the newest parts on this car cost it in reliability right now. */
+export function freshnessPenalty(world: World, teamId: TeamId): number {
+  const team = world.teams[teamId];
+  if (!team) return 0;
+  const greenest = Math.max(0, ...Object.values(team.freshness));
+  return greenest * balance.development.freshness.reliabilityCost;
+}
+
 /** Whether a part is built and waiting to be fitted. */
 export function isReady(project: RnDProject): boolean {
   return project.stage === 'production' && project.progress >= 1;
@@ -243,9 +288,11 @@ export function installProject(world: World, id: string): World {
     ...team.chassis,
     [project.part]: Math.max(0, Math.min(100, team.chassis[project.part] + trueGain)),
   };
+  // Straight out of the box: quick, and not yet trusted (docs/systems/car-development.md).
+  const freshness = { ...team.freshness, [project.part]: 1 };
   return {
     ...world,
-    teams: { ...world.teams, [team.id]: { ...team, chassis } },
+    teams: { ...world.teams, [team.id]: { ...team, chassis, freshness } },
     projects: world.projects.map((p) => (p.id === id ? { ...p, stage: 'installed' as const } : p)),
   };
 }

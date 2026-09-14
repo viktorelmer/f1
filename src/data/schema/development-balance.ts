@@ -67,6 +67,13 @@ export const developmentBalanceSchema = z.strictObject({
       priorSd: z.number().positive(),
     }),
   ),
+  freshness: tuned(
+    z.strictObject({
+      /** Reliability a brand-new part costs, on the car's 0..1 scale. */
+      reliabilityCost: z.number().min(0).max(1),
+      beddedInAfterDays: z.number().positive(),
+    }),
+  ),
   philosophy: tuned(
     z.strictObject({
       matchBonus: z.number().min(0),

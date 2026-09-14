@@ -8,6 +8,7 @@
 import type { Pack } from '@/data/schema/pack';
 import {
   advanceDevelopment,
+  bedIn,
   installProject,
   isReady,
   startProject,
@@ -33,7 +34,7 @@ export function advanceTo(world: World, pack: Pack, date: GameDate): World {
     const toBoundary = 7 - (((cursor % 7) + 7) % 7);
     const step = Math.min(date - cursor, toBoundary === 0 ? 7 : toBoundary);
     cursor = addDays(cursor, step);
-    next = advanceDevelopment(next, pack, step, cursor);
+    next = bedIn(advanceDevelopment(next, pack, step, cursor), step);
     if (cursor % 7 === 0) {
       next = fitReadyParts(next);
       next = startNewProjects(next, pack, cursor);

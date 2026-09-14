@@ -684,5 +684,110 @@
       "delegation": "Who dials the car in",
       "manualNote": "In manual setup the engineer still reads the track, but the car runs what you set."
     }
+  },
+  "car": {
+    "specs": {
+      "title": "What the car is",
+      "intro": "Your own car, measured by your own people: no estimates here, these are the numbers the factory works to.",
+      "characteristic": "Characteristic",
+      "value": "Value",
+      "part": "Part",
+      "rating": "Rating",
+      "fresh": "new",
+      "characteristics": {
+        "downforceLow": "Downforce, slow corners",
+        "downforceHigh": "Downforce, fast corners",
+        "drag": "Drag",
+        "aeroEfficiency": "Aero efficiency",
+        "dirtyAirTolerance": "Dirty-air tolerance",
+        "mechanicalGrip": "Mechanical grip",
+        "brakingStability": "Braking stability",
+        "rideHeightSensitivity": "Porpoising",
+        "weight": "Weight over the minimum, kg",
+        "power": "Power",
+        "ersDeployment": "ERS deployment",
+        "fuelEfficiency": "Fuel efficiency",
+        "tyreManagement": "Tyre management",
+        "reliability": "Reliability"
+      },
+      "parts": {
+        "frontWing": "Front wing",
+        "rearWing": "Rear wing",
+        "floor": "Floor",
+        "sidepods": "Sidepods",
+        "suspension": "Suspension",
+        "brakes": "Brakes",
+        "gearbox": "Gearbox"
+      }
+    },
+    "development": {
+      "title": "Development",
+      "intro": "A part takes months and the tunnel is not the track. What you are shown is what the factory believes, and it narrows as the work goes on.",
+      "delegation": "Who runs development",
+      "resources": "The period",
+      "allowance": "Wind tunnel allowance",
+      "committed": "Committed to projects",
+      "office": "Design office",
+      "active": "Running now",
+      "stage": {
+        "concept": "Concept",
+        "research": "Research",
+        "design": "Design",
+        "production": "Production",
+        "installed": "On the car",
+        "validated": "Checked on track"
+      },
+      "gain": "Expected gain",
+      "gainPoints": "{{value}} pts",
+      "spent": "Spent",
+      "share": "Tunnel share",
+      "forSeason": "For {{season}}",
+      "none": "Nothing is being built. The office is idle.",
+      "start": "Start a project",
+      "startPart": "Part",
+      "startSeason": "Season",
+      "startShare": "Share of the tunnel",
+      "ready": "Built and waiting",
+      "alreadyStarted": "A project on that part was already signed off today."
+    },
+    "upgrades": {
+      "title": "Upgrades",
+      "intro": "Parts that are built, parts that are on the car, and what the track said about them.",
+      "fit": "Fit it",
+      "waiting": "Waiting in the garage",
+      "onCar": "On the car",
+      "checked": "Checked on track",
+      "none": "Nothing built yet.",
+      "greenWarning": "A part fitted now runs green: it costs {{points}} points of reliability until it beds in.",
+      "gave": "It gave",
+      "promised": "The tunnel promised"
+    },
+    "philosophy": {
+      "title": "Philosophy",
+      "intro": "The direction of the season. Projects that fit it find more; the rest find less. Changing it mid-season writes off part of the work in progress.",
+      "current": "Taken now",
+      "switchCost": "Changing direction now costs {{percent}}% of the progress of everything not yet built.",
+      "kind": {
+        "balanced": "No direction",
+        "low-drag": "Low drag",
+        "high-downforce": "Maximum downforce",
+        "braking-stability": "Braking stability"
+      },
+      "about": {
+        "balanced": "Nothing is favoured and nothing is punished.",
+        "low-drag": "Rear wing and sidepods.",
+        "high-downforce": "Front wing and floor.",
+        "braking-stability": "Brakes and suspension."
+      },
+      "choose": "Choose a direction"
+    },
+    "reliability": {
+      "title": "Reliability",
+      "intro": "How likely the car is to see the flag, and what the newest parts on it are costing you.",
+      "carReliability": "Car reliability",
+      "greenest": "Greenest part",
+      "cost": "Cost of running green",
+      "beddedIn": "All bedded in"
+    }
   }
 }

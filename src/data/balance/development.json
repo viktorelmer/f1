@@ -44,10 +44,10 @@
   "uncertainty": {
     "value": {
       "sdAtReference": 1.1,
-      "sdPerAeroPoint": 0.008,
-      "sdPerSimulatorLevel": 0.09,
-      "sdPerAtrShare": 0.35,
-      "minSd": 0.18,
+      "sdPerAeroPoint": 0.004,
+      "sdPerSimulatorLevel": 0.05,
+      "sdPerAtrShare": 0.2,
+      "minSd": 0.25,
       "stageSdFactor": {
         "concept": 1,
         "research": 0.65,
@@ -57,7 +57,7 @@
         "validated": 0
       }
     },
-    "why": "How well a team knows what it has built before it runs it (plan 5.1: the interval is the mechanic, and it narrows with the aerodynamicists, the simulator and the tunnel time spent). At the concept the expected gain is worth ±1.1 points at aero 60 — a third of the gain itself, so the decision is genuinely a bet; research cuts that to 65% and design to 40%. Each point of aero quality takes 0.008 off, each simulator level 0.09, and full tunnel time 0.35. Nothing goes under 0.18 points before the part runs: the tunnel is not the track, which is what the correlation below is about."
+    "why": "How well a team knows what it has built before it runs it (plan 5.1: the interval is the mechanic, and it narrows with the aerodynamicists, the simulator and the tunnel time spent). At the concept the expected gain is worth ±1.1 points at aero 60 — a third of the gain itself, so signing a project off is genuinely a bet; research cuts that to 65% and design to 40%, which is when a part stops being an argument and starts being a plan. The three sources of precision together are worth about a third of the width, not all of it: each point of aero quality takes off 0.004, each simulator level 0.05, full tunnel time 0.2, so even the best factory signs off a concept it is not sure about. Nothing goes under 0.25 points before the part runs: the tunnel is not the track, which is what the correlation below is about."
   },
   "correlation": {
     "value": {
@@ -74,5 +74,12 @@
       "switchLossShare": 0.35
     },
     "why": "The season's direction (plan 5.1). A project that fits the philosophy finds 20% more; one that pulls the other way 12% less. Changing philosophy mid-season writes off 35% of the progress of everything not yet built: the cost is real but survivable, so it is a decision and not a trap."
+  },
+  "freshness": {
+    "value": {
+      "reliabilityCost": 0.06,
+      "beddedInAfterDays": 28
+    },
+    "why": "What a part costs before it has any miles on it (plan 5.1: an upgrade is a risk as well as a gain). A brand-new part takes 6 percentage points off the car's reliability — with a car around 0.93 that roughly doubles the chance of a failure on the weekend it first runs, which is exactly the choice the plan wants: fit it now and race it green, or run the known part one more round. It beds in over four weeks, so a part fitted two races ago is as safe as anything else on the car."
   }
 }
