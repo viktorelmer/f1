@@ -187,26 +187,27 @@ function Slider({
           )}
         </span>
       </div>
-      <div className="relative h-4">
+      {/* The engineer's window, drawn on the same scale as the slider under it. */}
+      <div aria-hidden className="relative h-1.5 rounded-sm bg-raised">
         {band && (
           <div
-            aria-hidden
-            className="pointer-events-none absolute top-1.5 h-1 rounded-sm bg-accent/30"
+            className="absolute inset-y-0 rounded-sm bg-accent/40"
             style={{ left: `${band.low}%`, width: `${Math.max(1, band.high - band.low)}%` }}
           />
         )}
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={1}
-          value={Math.round(value)}
-          disabled={!open}
-          aria-label={label}
-          onChange={(e) => onChange(Number(e.target.value))}
-          className={cn('relative w-full accent-accent', !open && 'opacity-40')}
-        />
+        <div className="absolute -inset-y-0.5 w-0.5 bg-hi" style={{ left: `${value}%` }} />
       </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        step={1}
+        value={Math.round(value)}
+        disabled={!open}
+        aria-label={label}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className={cn('w-full accent-accent', !open && 'opacity-40')}
+      />
     </div>
   );
 }
