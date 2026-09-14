@@ -3,7 +3,7 @@
  * its own estimates — the AI decides on what its scouts believe, never on the truth (plan 5.10).
  */
 import { balance } from '@/data/balance';
-import { type Estimate, observe } from '../knowledge/estimate';
+import { type Estimate, estimateFromModel, observe } from '../knowledge/estimate';
 import type { Rng } from '../rng/rng';
 import type { GameDate } from '../types/game-date';
 import type { Driver, DriverHidden, DriverId, Staff, TeamId, TeamKnowledge } from '../types/world';
@@ -46,5 +46,11 @@ export function initialKnowledge(
     );
     return [driver.id, { potential }];
   });
-  return { drivers: Object.fromEntries(entries), rivals: {}, weekend: null };
+  // What the team makes of its own tunnel before it has checked a single part on track: nothing
+  // but the belief that it is honest (docs/systems/car-development.md).
+  const correlation = estimateFromModel(
+    { mean: 0, sd: balance.development.correlation.priorSd },
+    { quantity: balance.estimate.quantities['team.correlation'], at, sources: ['wind-tunnel'] },
+  );
+  return { drivers: Object.fromEntries(entries), correlation, rivals: {}, weekend: null };
 }

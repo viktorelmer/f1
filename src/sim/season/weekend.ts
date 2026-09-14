@@ -32,6 +32,7 @@ import { openParameters, withinAccess } from '../car/setup';
 import { capabilityOf, openSetups, refineSetups } from '../weekend/setup-work';
 import { declareTyres } from '../weekend/tyres';
 import { isPractice, WEEKEND_SESSIONS } from '../weekend/format';
+import { advanceTo, validateInstalled } from './advance';
 import { standings } from './standings';
 
 export { isPractice, PRACTICE_SESSIONS, WEEKEND_SESSIONS } from '../weekend/format';
@@ -197,8 +198,11 @@ export function runSession(world: World, pack: Pack, options: SessionOptions = {
   };
 }
 
-/** Closes a weekend whose sessions have all been run: the round is completed, the date is race day. */
-export function closeWeekend(world: World): World {
+/**
+ * Closes a weekend whose sessions have all been run: the round is completed, upgrades that ran are
+ * validated, and the clock moves to race day — through the factory, which worked all week.
+ */
+export function closeWeekend(world: World, pack: Pack): World {
   const open = mustBeOpen(world);
   if (open.stage !== 'done') throw new Error(`The weekend of round ${open.round} still has ${open.stage}`);
   const weekend = roundOf(world, open.round);
@@ -206,13 +210,12 @@ export function closeWeekend(world: World): World {
     r.round === open.round ? { ...r, status: 'completed' as const } : r,
   );
   const season = { ...world.season, calendar };
-  return {
+  const closed: World = {
     ...world,
     weekend: null,
-    // The clock never goes backwards: a weekend closed late leaves the later date standing.
-    date: world.date > weekend.raceDate ? world.date : weekend.raceDate,
     season: { ...season, standings: standings(season) },
   };
+  return advanceTo(validateInstalled(closed, pack, weekend.raceDate), pack, weekend.raceDate);
 }
 
 /**
@@ -254,7 +257,7 @@ export function runWeekend(
     }
     open = outcome.world;
   }
-  return { world: closeWeekend(open), sessions, input: race!.input, result: race!.result, sprint };
+  return { world: closeWeekend(open, pack), sessions, input: race!.input, result: race!.result, sprint };
 }
 
 // ── One session at a time ─────────────────────────────────────────────────────────────────────

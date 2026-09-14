@@ -4,6 +4,7 @@
  * moves the calendar's clock and says which round is waiting.
  */
 import { create } from 'zustand';
+import { advanceTo } from '@/sim/season/advance';
 import { nextEvent, type SeasonEvent, upcoming } from '@/sim/season/events';
 import type { World } from '@/sim/types/world';
 import { useCareer } from './career';
@@ -23,8 +24,9 @@ export function pendingRound(world: World): number | null {
 
 export const useSeason = create<SeasonStore>()(() => ({
   advance: () => {
-    const { world } = useCareer.getState();
+    const { world, pack } = useCareer.getState();
     const next = nextEvent(world);
-    if (next && next.date > world.date) useCareer.setState({ world: { ...world, date: next.date } });
+    // The clock does not move alone: the factory works through those weeks (car-development.md).
+    if (next && next.date > world.date) useCareer.setState({ world: advanceTo(world, pack, next.date) });
   },
 }));

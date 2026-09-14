@@ -53,6 +53,22 @@
         "wideSd": 18
       },
       "why": "One setup slider on the 0..100 scale the pack uses (plan 5.2). An sd of 18 points is what a crew knows before it has run here at all — through the loss curve that is half a second a lap — so confidence is zero there; an hour of setup work takes it to 4.5 points, which reads as high and costs nothing on the track."
+    },
+    "car.partGain": {
+      "value": {
+        "min": 0,
+        "max": 8,
+        "wideSd": 1.2
+      },
+      "why": "What an upgrade adds to a part's rating, in points of the 0..100 scale (plan 5.1). Nothing sensible gains more than 8 points in one step. An sd of 1.2 is a third of a typical upgrade — a team reading its own project that loosely is gambling, so confidence is zero there; by the time the part is designed it is near 0.4 and reads as high."
+    },
+    "team.correlation": {
+      "value": {
+        "min": -0.5,
+        "max": 0.5,
+        "wideSd": 0.15
+      },
+      "why": "How much of what the wind tunnel promises the track gives back, as realised over predicted minus one (plan 5.1, pack range -0.5..0.5). An sd of 0.15 covers most of that range, so a team that has never checked a part on track knows nothing about its own factory; a few validated upgrades take it to 0.05, which is the difference between trusting the tunnel and not."
     }
   },
   "scouting": {

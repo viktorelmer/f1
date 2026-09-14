@@ -19,7 +19,7 @@ const start = createWorld('season-tests', pack, {
 const season = (() => {
   let world: World = start;
   for (const round of start.season.calendar.map((r) => r.round)) {
-    world = advanceToNextEvent(world);
+    world = advanceToNextEvent(world, pack);
     world = runWeekend(world, pack, round, `M5-season-${round}`).world;
   }
   return world;
@@ -35,9 +35,9 @@ describe('the clock between races', () => {
   });
 
   it('moves to the day of the next event and never backwards', () => {
-    const moved = advanceToNextEvent(start);
+    const moved = advanceToNextEvent(start, pack);
     expect(moved.date).toBe(nextEvent(start)!.date);
-    expect(advanceToNextEvent(moved).date).toBe(moved.date);
+    expect(advanceToNextEvent(moved, pack).date).toBe(moved.date);
   });
 
   it('has nothing left but the end of the season once every round is run', () => {
@@ -125,6 +125,6 @@ describe('M5 DoD: a season of 22 rounds', () => {
   });
 
   it.skipIf(isLocalPack)('is deterministic: the same seed gives the same championship', () => {
-    expect(fingerprint(season.season.standings)).toBe('02926a438cfa87');
+    expect(fingerprint(season.season.standings)).toBe('14b76db1fb95b5');
   });
 });

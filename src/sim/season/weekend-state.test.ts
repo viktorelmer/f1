@@ -31,7 +31,7 @@ function play(from: World, round: number, seed: string): { world: World; stages:
     // notice. Everything a session needs is the world, the seed and the plans it carries.
     open = JSON.parse(JSON.stringify(outcome.world)) as World;
   }
-  return { world: closeWeekend(open), stages };
+  return { world: closeWeekend(open, pack), stages };
 }
 
 describe('a weekend played one session at a time', () => {
@@ -57,7 +57,7 @@ describe('a weekend played one session at a time', () => {
     const played = (() => {
       let w = open;
       while (w.weekend!.stage !== 'done') w = runSession(w, pack).world;
-      return closeWeekend(w);
+      return closeWeekend(w, pack);
     })();
     const whole = runWeekend(world, pack, standard, 'plans', {
       plans: { fp1: skipped, fp2: skipped, fp3: skipped },
@@ -82,7 +82,7 @@ describe('a weekend played one session at a time', () => {
     expect(seen).toEqual(WEEKEND_SESSIONS.sprint);
     // The round is only completed when the weekend is closed, and the clock moves to race day.
     expect(open.season.calendar.find((r) => r.round === sprint)!.status).toBe('upcoming');
-    const closed = closeWeekend(open);
+    const closed = closeWeekend(open, pack);
     expect(closed.season.calendar.find((r) => r.round === sprint)!.status).toBe('completed');
     expect(closed.date).toBe(closed.season.calendar.find((r) => r.round === sprint)!.raceDate);
     expect(closed.weekend).toBeNull();
@@ -104,7 +104,7 @@ describe('a weekend played one session at a time', () => {
     const open = openWeekend(world, pack, standard, 'guards');
     expect(openWeekend(open, pack, standard, 'guards')).toBe(open);
     expect(() => openWeekend(open, pack, sprint, 'guards')).toThrow(/still open/);
-    expect(() => closeWeekend(open)).toThrow(/still has fp1/);
+    expect(() => closeWeekend(open, pack)).toThrow(/still has fp1/);
     expect(() => openWeekend(world, pack, 99, 'guards')).toThrow(/No round 99/);
   });
 });

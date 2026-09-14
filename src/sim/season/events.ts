@@ -4,7 +4,9 @@
  * anything on the calendar that has not happened yet, so a new kind of event in M6–M9 is a new line
  * here and nothing else.
  */
+import type { Pack } from '@/data/schema/pack';
 import type { GameDate } from '../types/game-date';
+import { advanceTo } from './advance';
 import type { World } from '../types/world';
 
 export type SeasonEvent =
@@ -44,13 +46,11 @@ export function nextEvent(world: World): SeasonEvent | null {
   return upcoming(world)[0] ?? null;
 }
 
-/** Moves the clock to a day, never backwards. */
-export function advanceTo(world: World, date: GameDate): World {
-  return date <= world.date ? world : { ...world, date };
-}
-
-/** "Continue": to the day of the next event, leaving the event itself to be run. */
-export function advanceToNextEvent(world: World): World {
+/**
+ * "Continue": to the day of the next event, leaving the event itself to be run. The weeks in
+ * between are not empty — the factory works through them (docs/systems/car-development.md).
+ */
+export function advanceToNextEvent(world: World, pack: Pack): World {
   const next = nextEvent(world);
-  return next ? advanceTo(world, next.date) : world;
+  return next ? advanceTo(world, pack, next.date) : world;
 }

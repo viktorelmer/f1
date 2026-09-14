@@ -100,7 +100,8 @@ const enginer = () => (engine ??= createWorkerEngine());
  * closes itself — the round is completed and the clock is on race day (docs/systems/season.md).
  */
 export function commitSession(after: World) {
-  useCareer.setState({ world: after.weekend?.stage === 'done' ? closeWeekend(after) : after });
+  const { pack } = useCareer.getState();
+  useCareer.setState({ world: after.weekend?.stage === 'done' ? closeWeekend(after, pack) : after });
 }
 
 /** The session the open weekend is waiting on, or null when no weekend is open. */

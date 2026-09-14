@@ -1,0 +1,78 @@
+{
+  "stages": {
+    "value": {
+      "days": {
+        "concept": 10,
+        "research": 28,
+        "design": 32,
+        "production": 24
+      },
+      "atrShareOfWork": {
+        "concept": 0,
+        "research": 0.6,
+        "design": 0.4,
+        "production": 0
+      }
+    },
+    "why": "How long a part takes to go from an idea to a box in the garage (plan 5.1). At full capacity the four stages run 10, 28, 32 and 24 days: about three months, so a season fits four or five upgrades on one part and a team must choose where they go. Research and design are the stages the wind tunnel actually shortens — 60% and 40% of the work there is aero time, the rest is people — while a concept is a drawing and production is a shop floor, and neither goes faster for a bigger tunnel."
+  },
+  "capacity": {
+    "value": {
+      "referenceQuality": 60,
+      "referenceHeadcount": 80,
+      "qualityWeight": 0.6,
+      "projectsWithoutPenalty": 3,
+      "overloadPenalty": 0.22,
+      "minFactor": 0.25
+    },
+    "why": "What the design office gets through (plan 5.6: an overloaded department works slower and worse). A department of 80 people at quality 60 is the reference and does a stage in the days above; quality counts for 60% of the difference and headcount for 40%, so a small sharp office beats a big blunt one but not by everything. Three projects at once are free; every project over that costs 22% of the office's speed, down to a quarter — a team that runs eight projects finishes none of them on time, which is exactly the trap the plan wants available."
+  },
+  "gain": {
+    "value": {
+      "ceilingAtReference": 3.2,
+      "ceilingPerAeroPoint": 0.035,
+      "aeroReference": 60,
+      "ceilingPerAtrShare": 1.6,
+      "minCeiling": 0.4,
+      "spend": {
+        "perStageM": 1.4,
+        "perAtrShareM": 2.2
+      }
+    },
+    "why": "What an upgrade is worth in points of a part's rating (plan 5.1). A team with aerodynamics at 60 and a normal share of the tunnel finds about 3.2 points — a tenth of a second or so once it reaches the car — and each point of department quality adds 0.035, so a top aero group finds 4.6 where a weak one finds 1.8. Giving a project the whole tunnel adds up to 1.6 points on top: the allowance is the real currency of the season. Nothing ever returns less than 0.4 points, because a team that spends three months on a part does learn something. Money follows the same shape: 1.4M a stage plus up to 2.2M for the tunnel time, so a four-stage upgrade with half the tunnel costs about 6.7M of the cap."
+  },
+  "uncertainty": {
+    "value": {
+      "sdAtReference": 1.1,
+      "sdPerAeroPoint": 0.008,
+      "sdPerSimulatorLevel": 0.09,
+      "sdPerAtrShare": 0.35,
+      "minSd": 0.18,
+      "stageSdFactor": {
+        "concept": 1,
+        "research": 0.65,
+        "design": 0.4,
+        "production": 0.4,
+        "installed": 0.4,
+        "validated": 0
+      }
+    },
+    "why": "How well a team knows what it has built before it runs it (plan 5.1: the interval is the mechanic, and it narrows with the aerodynamicists, the simulator and the tunnel time spent). At the concept the expected gain is worth ±1.1 points at aero 60 — a third of the gain itself, so the decision is genuinely a bet; research cuts that to 65% and design to 40%. Each point of aero quality takes 0.008 off, each simulator level 0.09, and full tunnel time 0.35. Nothing goes under 0.18 points before the part runs: the tunnel is not the track, which is what the correlation below is about."
+  },
+  "correlation": {
+    "value": {
+      "noiseSd": 0.35,
+      "validationSd": 0.25,
+      "priorSd": 0.15
+    },
+    "why": "The gap between the tunnel and the track (plan 5.1, 5.17). A team's hidden correlation bias — realised gain over predicted, minus one, drawn at world creation in the pack's own -0.5..0.5 range — multiplies every upgrade it builds: a factory at -0.2 quietly gets a fifth less than it measured, an honest one gets what it measured. On top of that every part has its own 0.35-point surprise, so one good upgrade proves nothing. The team never sees the bias: it sees the part on track, measured to 0.25 points, and works the bias out over several upgrades from a prior 0.15 wide — which is why plan 5.17 makes the preseason test the moment of truth."
+  },
+  "philosophy": {
+    "value": {
+      "matchBonus": 0.2,
+      "mismatchPenalty": 0.12,
+      "switchLossShare": 0.35
+    },
+    "why": "The season's direction (plan 5.1). A project that fits the philosophy finds 20% more; one that pulls the other way 12% less. Changing philosophy mid-season writes off 35% of the progress of everything not yet built: the cost is real but survivable, so it is a decision and not a trap."
+  }
+}

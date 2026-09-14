@@ -10,6 +10,7 @@
  * plan already fixes; their milestones refine them.
  */
 import type { ChassisPart } from '@/data/schema/balance';
+import type { RnDStage } from '@/data/schema/development-balance';
 import type { Compound, DryCompound } from '@/data/schema/race-balance';
 import type { ProgrammeKind } from '@/data/schema/weekend-balance';
 import type {
@@ -118,6 +119,8 @@ export type Team = {
   controller: 'player' | 'ai';
   engine: EngineDeal;
   chassis: Record<ChassisPart, number>;
+  /** The direction this team is developing in this season (plan 5.1). */
+  philosophy: Philosophy;
   facilities: Record<Facility, number>;
   departments: Record<Department, DepartmentState>;
   finances: Finances;
@@ -229,19 +232,37 @@ export type Regulation = { season: number };
 
 // ── Later systems (sketched; refined by their milestones) ────────────────────────────────────
 
-export type RnDStage = 'concept' | 'research' | 'design' | 'production' | 'installed' | 'validated';
+export type { RnDStage };
 
-/** An R&D project (plan 5.1, M6). Its expected gain is an estimate; the true gain is hidden. */
+/**
+ * An R&D project (plan 5.1, docs/systems/car-development.md): one part, one target season, and a
+ * gain nobody is sure of. `expectedGain` is what the team believes; the truth lives in
+ * `world.hidden.projects` and is only learned by running the part.
+ */
 export type RnDProject = {
   id: string;
   teamId: TeamId;
   part: ChassisPart;
+  /** The season the part is built for: this one, or next year's car. */
   targetSeason: number;
   stage: RnDStage;
   startedOn: GameDate;
   spentM: number;
   expectedGain: Estimate;
+  /** How much of the current stage is done, 0..1. */
+  progress: number;
+  /** Share of the team's aero allowance this project is given, 0..1. */
+  atrShare: number;
+  /** The direction the team was running when the project started (plan 5.1). */
+  philosophy: Philosophy;
 };
+
+/** What a project is worth once it is on the car — the number the tunnel never quite predicts. */
+export type ProjectHidden = { trueGain: number };
+
+/** The season's direction (plan 5.1): a bonus to projects that fit it, a penalty to the rest. */
+export const PHILOSOPHIES = ['balanced', 'low-drag', 'high-downforce', 'braking-stability'] as const;
+export type Philosophy = (typeof PHILOSOPHIES)[number];
 
 /** A generated news story (plan 5.8, M9). Rumours may be false. */
 export type NewsItem = {
@@ -301,6 +322,8 @@ export type SetupNote = {
 
 export type TeamKnowledge = {
   drivers: Record<DriverId, { potential: Estimate }>;
+  /** What this team makes of its own wind tunnel: realised gain over predicted, minus one. */
+  correlation: Estimate;
   /** What this team makes of everyone else's pace at the weekend it is at (plan 5.13). */
   rivals: Record<TeamId, Estimate>;
   /** Null before the team has looked at the coming weekend at all. */
@@ -344,6 +367,8 @@ export type World = {
   hidden: {
     drivers: Record<DriverId, DriverHidden>;
     teams: Record<TeamId, TeamHidden>;
+    /** What every project is really worth (docs/systems/car-development.md). */
+    projects: Record<string, ProjectHidden>;
     /** How far each track's factory preset sits from its true optimum (docs/systems/setup.md). */
     tracks: Record<string, TrackHidden>;
   };

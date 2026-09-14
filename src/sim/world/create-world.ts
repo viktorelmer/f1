@@ -123,7 +123,7 @@ export function createWorld(seed: string, pack: Pack, career: CareerSetup): Worl
     drivers: byId(drivers),
     staff: byId(staff),
     engineSuppliers: byId(pack.engineSuppliers.map((e) => clone(e))),
-    hidden: { drivers: driverHidden, teams: teamHidden, tracks: trackHidden },
+    hidden: { drivers: driverHidden, teams: teamHidden, projects: {}, tracks: trackHidden },
     knowledge,
     projects: [],
     news: [],
@@ -188,6 +188,8 @@ function teamFromPack(
   return {
     id: team.id,
     name: team.name,
+    // A career starts with no direction taken: the player (or the AI) picks one (plan 5.1).
+    philosophy: 'balanced',
     shortName: team.shortName,
     colours: { ...team.colours },
     base: { ...team.base },
@@ -257,6 +259,7 @@ function foundTeam(
   return {
     id: FOUNDER_TEAM_ID,
     name: career.team.name.trim(),
+    philosophy: 'balanced',
     shortName: career.team.shortName.trim(),
     colours: { ...career.team.colours },
     base: { country: career.team.baseCountry, city: career.team.baseCity.trim() },
