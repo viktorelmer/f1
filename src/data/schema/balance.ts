@@ -43,6 +43,7 @@ export const estimateBalanceSchema = z.strictObject({
     'team.pace': quantitySchema,
     'track.tyreDegradation': quantitySchema,
     'car.fuelPerLap': quantitySchema,
+    'car.setupParameter': quantitySchema,
   }),
   scouting: z.strictObject({
     potentialSdAtSkill1: tuned(positive),

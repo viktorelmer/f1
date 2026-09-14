@@ -5,12 +5,14 @@ import {
   estimateBalanceSchema,
 } from '@/data/schema/balance';
 import { raceBalanceSchema, tyresBalanceSchema, weatherBalanceSchema } from '@/data/schema/race-balance';
+import { setupBalanceSchema } from '@/data/schema/setup-balance';
 import { weekendBalanceSchema } from '@/data/schema/weekend-balance';
 import car from './car.json';
 import career from './career.json';
 import decide from './decide.json';
 import estimate from './estimate.json';
 import race from './race.json';
+import setup from './setup.json';
 import tyres from './tyres.json';
 import weather from './weather.json';
 import weekend from './weekend.json';
@@ -26,6 +28,7 @@ export const balance = {
   career: careerBalanceSchema.parse(career),
   race: raceBalanceSchema.parse(race),
   tyres: tyresBalanceSchema.parse(tyres),
+  setup: setupBalanceSchema.parse(setup),
   weather: weatherBalanceSchema.parse(weather),
   weekend: weekendBalanceSchema.parse(weekend),
 };

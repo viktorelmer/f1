@@ -1,0 +1,93 @@
+{
+  "loss": {
+    "value": {
+      "seconds": {
+        "frontWing": 0.14,
+        "rearWing": 0.16,
+        "brakeBias": 0.08,
+        "frontRideHeight": 0.12,
+        "rearRideHeight": 0.12,
+        "suspensionStiffness": 0.1,
+        "camber": 0.07,
+        "toe": 0.06,
+        "gearRatios": 0.09
+      },
+      "tolerance": 18,
+      "plateau": 0.25,
+      "exponent": 2
+    },
+    "why": "What a wrong setup costs a lap (plan 5.2). Each parameter is worth its own seconds at full deviation, and the nine together add to 0.94 s — about the 0.5 s a car off the truck was worth in M5 once the factory preset is taken into account, and never more than a second even if every slider is at the wrong end. The wings and the floor (ride heights) matter most, camber and toe least: they are worth a tenth between them and are the hardest to find, which is exactly why they sit behind the third access level. Deviation is measured in points of the 0..100 scale: 18 points off is the full cost, and the quadratic with a 25% plateau means the last few points either side of the optimum are almost free — finding the window matters, hitting its centre does not."
+  },
+  "ideal": {
+    "value": {
+      "referenceTrackTempC": 35,
+      "perTrackTempC": {
+        "frontWing": -0.15,
+        "rearWing": -0.2,
+        "brakeBias": 0,
+        "frontRideHeight": 0.1,
+        "rearRideHeight": 0.1,
+        "suspensionStiffness": 0,
+        "camber": -0.25,
+        "toe": -0.2,
+        "gearRatios": 0
+      },
+      "perWindKph": {
+        "frontWing": -0.1,
+        "rearWing": 0.15,
+        "brakeBias": 0,
+        "frontRideHeight": 0,
+        "rearRideHeight": 0,
+        "suspensionStiffness": -0.1,
+        "camber": 0,
+        "toe": 0,
+        "gearRatios": 0
+      },
+      "perWetness": {
+        "frontWing": 8,
+        "rearWing": 10,
+        "brakeBias": -6,
+        "frontRideHeight": 7,
+        "rearRideHeight": 7,
+        "suspensionStiffness": -9,
+        "camber": -4,
+        "toe": 3,
+        "gearRatios": -5
+      },
+      "windReferenceKph": 15
+    },
+    "why": "Where the optimum moves with the conditions (plan 5.2: the ideal setup shifts with air and track temperature, wind and rain). The factory preset of the pack is the optimum at 35 °C of track, 15 km/h of wind and a dry surface; from there every degree hotter takes a quarter of a point off camber and a fifth off toe (a hot track overheats the tyre surface, so teams stop asking so much of it) and a tenth off each wing, while the car is lifted a tenth of a point to protect the floor. Wind is worth a tenth of a point of front wing and 0.15 of rear per km/h over the reference: a gusty track is won with stability, not with peak downforce. Rain moves everything at once — 8 to 10 points more wing, the car 7 points higher, the suspension 9 points softer, brake bias 6 points rearwards so the fronts do not lock — which is why a wet weekend makes Friday's numbers worthless."
+  },
+  "access": {
+    "value": {
+      "mechanicEngineer": 60,
+      "mechanicSimulator": 2,
+      "fineEngineer": 78,
+      "fineSimulator": 3,
+      "fineFeedback": 65
+    },
+    "why": "Who may touch what (plan 5.2, fixed in the plan's own table). Mechanical setup — ride heights and stiffness — opens with a race engineer at 60 or a level-2 simulator: either road is open to any team that decides to walk it. The fine level — camber, toe, gear ratios — needs a race engineer at 78 and a level-3 simulator and a driver who can describe what the car does (feedback 65): three conditions at once, because that level is the privilege of a mature team. The thresholds are read per car, from that car's engineer and that car's driver, so team-mates can have different levels — and they do."
+  },
+  "reading": {
+    "value": {
+      "baseSd": 14,
+      "perEngineerPoint": 0.12,
+      "engineerRef": 70,
+      "perSimulatorLevel": 1.6,
+      "perFeedbackPoint": 0.05,
+      "feedbackRef": 60,
+      "lapScale": 6,
+      "minSd": 2.5
+    },
+    "why": "How well the engineer can say where the optimum is (plan 5.2: the recommendation is a range, and its width comes from the engineer, the simulator, the driver's feedback and the laps already run here). With nobody and nothing, the reading is 14 points wide — a quarter of the usable scale, which is honestly useless. A race engineer at 70 is the reference; each point above takes 0.12 off, each simulator level 1.6, each point of driver feedback over 60 another 0.05. Setup laps close the rest on a 6-lap scale: an hour of setup work is worth more than any of the three. The floor of 2.5 points is the tolerance itself — nobody finds the exact centre of the window, and with the plateau in the loss nobody needs to."
+  },
+  "feedback": {
+    "value": {
+      "noticeableDeviation": 6,
+      "wrongCauseAtRef": 0.3,
+      "perFeedbackPoint": 0.006,
+      "minWrongCause": 0.05
+    },
+    "why": "What the driver says after a run (plan 5.2: the words point at a direction, never at a number). A parameter has to be at least 6 points out before it shows in the car at all — under that the driver has nothing to report. A driver with feedback at 60 blames the wrong thing three times in ten (\"no front end\" when the rear ride height is the problem); every point above takes 0.6% off that, down to a floor of 5%, because even the best driver describes a symptom and not a cause."
+  }
+}

@@ -45,6 +45,14 @@
         "wideSd": 15
       },
       "why": "Potential uses the 1..100 attribute scale. An sd of 15 points means the observer cannot tell a midfield driver from a future champion, so confidence is zero there."
+    },
+    "car.setupParameter": {
+      "value": {
+        "min": 0,
+        "max": 100,
+        "wideSd": 14
+      },
+      "why": "One setup slider on the 0..100 scale the pack uses (plan 5.2). An sd of 14 points is a quarter of the usable scale — a team reading its optimum that loosely is guessing, so confidence is zero there; a good engineer with a simulator and an hour of running lands near 3 points, which is inside the window where the loss plateaus."
     }
   },
   "scouting": {
